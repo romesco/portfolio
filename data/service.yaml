@@ -1,0 +1,11 @@
+organization:
+  - venue: IROS
+    year: "2019"
+    detail: Session on Semantic Scene Understanding
+    role: Chair
+
+refereeing:
+  ICRA: [2022, 2023, 2024]
+  IROS: [2019]
+  RO-MAN: [2017]
+  HRI: [2019, 2020]

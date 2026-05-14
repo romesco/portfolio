@@ -1,0 +1,11 @@
+# Used for <title> and meta description. Keep it short.
+description: Personal site of Rosario Scalise, PhD student at the University of Washington.
+
+# 2–3 sentences. YAML's `>` folds newlines into spaces, so you can wrap
+# freely in this file without affecting the rendered output.
+bio: >
+  Rosario is a PhD student at the University of Washington in
+  Machine Learning & Robotics. His research applies machine learning
+  and optimization to continual learning, reinforcement learning,
+  large-scale physics-based simulation, and the science of
+  transferring learned behaviors to physical systems.

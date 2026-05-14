@@ -1,0 +1,17 @@
+\resumeSubHeadingListStart
+\BLOCK{ if data.organization }
+\resumeSubheadingSingleLine{\textit{Conference Organization}}{}
+\vspace{3pt}
+\BLOCK{ for o in data.organization }
+\resumeSubheading
+{\VAR{ o.venue }}{\VAR{ o.year }}
+{\VAR{ o.detail or "" }}{\VAR{ o.role }}
+\BLOCK{ endfor }
+\vspace{-3pt}
+\BLOCK{ endif }
+\BLOCK{ if data.refereeing }
+\resumeSubheadingSingleLine{\textit{Conference Refereeing}}{}
+\resumeSubheadingSingleLine
+{\BLOCK{ for venue, years in data.refereeing.items() }\textbf{\VAR{ venue }}: \VAR{ years|join(", ") }\BLOCK{ if not loop.last }; \BLOCK{ endif }\BLOCK{ endfor }}{}
+\BLOCK{ endif }
+\resumeSubHeadingListEnd

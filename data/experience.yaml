@@ -1,0 +1,32 @@
+- org: UW Machine Learning \& Robotics
+  role: PhD Student
+  context: University of Washington
+  bullets:
+    - "Researching machine learning and optimization applied to: 1) Continual Learning Systems, 2) Reinforcement Learning, 3) Large-Scale Physics-based Simulation, and 4) Science of Transfer to Physical Systems."
+  subsections:
+    - heading: Technical Contracting / Internships
+      items:
+        - org: Nvidia
+          text: "Led the development of the first Digital Twin for a federal proving ground designed to be used as the basis of a DARPA program. Empirically studying long-horizon reasoning \\& planning in embodied AI."
+        - org: Toyota Research Institute
+          link: https://arxiv.org/pdf/2510.19495
+          text: "Co-authored novel application of OfflineRL to the problem of using suboptimal data to robustify imitation-based policies."
+
+- org: Personal Robotics Laboratory
+  role: Graduate Research Assistant
+  context: Carnegie Mellon University
+  bullets:
+    - "Researched human-robot interaction, enabling effective communication in human-robot collaborative manipulation tasks. Supported lab hardware and software infrastructure. Developed \\href{https://rosarioscalise.com/HERB}{HERB 3.0}."
+
+- org: Electric Space Propulsion Lab
+  role: Research Staff
+  context: UCLA
+  bullets:
+    - "Automated experimental fixtures for applied plasma physics research: 2-DoF linear actuators in cryo-vacuum chambers, high-voltage dielectric barrier discharge (DBD) devices, laser-induced fluorescence (LIF) spectroscopy."
+
+- org: General Electric
+  role: Summer Intern (x3)
+  context: Plainville, CT
+  bullets:
+    - "Supported Entellisys LV switchgear: a distributed network of industrial circuit breakers with real-time guarantees. Developed field testkit and Human-Machine Interface. Supported Arc-Vault: Low-impedance plasma chamber for arc-flash containment."
+  

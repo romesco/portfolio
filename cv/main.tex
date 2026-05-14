@@ -1,0 +1,68 @@
+\input{preamble.tex}
+
+\begin{document}
+\input{generated/identity.tex}
+
+%----------HEADING-----------------
+%HACK
+\hskip-20pt
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+\multirow{2}{*}{\textbf{\Huge \cvName}} 
+& \multicolumn{1}{l}{\href{\cvWebsite}{\cvWebsite}} \\
+& \multicolumn{1}{l}{\href{mailto:\cvEmail}{\cvEmail}}
+\end{tabular*}
+
+%-----------ONELINER-----------------
+%HACK
+\hskip-20pt
+\rule{0pt}{4ex}    
+\cvTagline
+%-----------EDUCATION-----------------
+\section{Education}
+\input{generated/education.tex}
+\vspace{0pt}
+  
+%--------TECHNICAL SKILLS------------
+\section{Technical Skills}
+ \resumeSubHeadingListStart
+   \item{
+     \textbf{Languages}{: Python, MATLAB, \LaTeX{}, C/C++, bash}
+     \textbf{Libraries}{: OpenCV, PyTorch, JAX, SciPy stack, Isaac}
+     \hfill\break
+     \textbf{Dev}{: Unix-like OS family, git, CI/CD, HPC for ML (SLURM), python: [pytest, uv/pip/poetry, setuptools] }
+     %\textbf{Robotics}{: ROS/ROS2, Perception, State-Estimation \& Sensor Fusion, Motion Planning, Kinematics, Control}
+   }
+ \resumeSubHeadingListEnd
+
+
+%-----------EXPERIENCE-----------------
+\section{Experience}
+\input{generated/experience.tex}
+
+
+%-----------PUBLICATIONS-----------------
+\section{Publications}
+\input{generated/publications.tex}
+
+%-----------HONORS-----------------
+\section{Honors \& Awards}
+\input{generated/honors.tex}
+\vspace{0pt}
+ 
+%-----------GRANT PROPOSALS-----------------
+
+%-----------TEACHING-----------------
+% & Invited Talks
+\section{Teaching}
+\input{generated/teaching.tex}
+
+%-----------MENTORING-----------------
+\label{sec:mentor}
+\section{Mentoring \& Outreach}
+\input{generated/mentoring.tex}
+
+%-----------Academic Service-----------------
+\section{Academic Service}
+\input{generated/service.tex}
+%-------------------------------------------
+\end{document}

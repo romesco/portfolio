@@ -1,0 +1,19 @@
+- org: UW Machine Learning \& Robotics
+  role: PhD Student
+  context: University of Washington
+  bullets:
+    - "Researching ML."
+  subsections:
+    - heading: Technical Contracting / Internships
+      items:
+        - org: Nvidia
+          text: "Led DT work."
+        - org: Toyota Research Institute
+          link: https://arxiv.org/pdf/2510.19495
+          text: "OfflineRL paper."
+
+- org: General Electric
+  role: Summer Intern (x3)
+  context: Plainville, CT
+  bullets:
+    - "Switchgear stuff."

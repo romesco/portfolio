@@ -1,0 +1,38 @@
+\BLOCK{ macro pub_block(p) }
+\item
+\VAR{ format_authors(p.authors) } (\VAR{ p.year }).
+\VAR{ p.title }.
+\BLOCK{ if p.venue }\textit{\VAR{ p.venue_full or p.venue }}. \BLOCK{ endif }\VAR{ format_links(p.links) }
+\BLOCK{ for award in p.awards }
+\textcolor{red}{\textbf{\VAR{ award }}}
+\BLOCK{ endfor }
+\vspace{-3pt}
+\BLOCK{ endmacro }
+\BLOCK{ if groups.preprint }
+\begin{enumerate}[label=P\arabic*]
+\BLOCK{ for p in groups.preprint }
+\VAR{ pub_block(p) }
+\BLOCK{ endfor }
+\end{enumerate}
+\BLOCK{ endif }
+\BLOCK{ if groups.journal }
+\begin{enumerate}[label=J\arabic*]
+\BLOCK{ for p in groups.journal }
+\VAR{ pub_block(p) }
+\BLOCK{ endfor }
+\end{enumerate}
+\BLOCK{ endif }
+\BLOCK{ if groups.conference }
+\begin{enumerate}[label=C\arabic*]
+\BLOCK{ for p in groups.conference }
+\VAR{ pub_block(p) }
+\BLOCK{ endfor }
+\end{enumerate}
+\BLOCK{ endif }
+\BLOCK{ if groups.workshop }
+\begin{enumerate}[label=W\arabic*]
+\BLOCK{ for p in groups.workshop }
+\VAR{ pub_block(p) }
+\BLOCK{ endfor }
+\end{enumerate}
+\BLOCK{ endif }

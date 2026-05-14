@@ -1,0 +1,9 @@
+\BLOCK{ if entries }
+\resumeSubHeadingListStart
+\BLOCK{ for e in entries }
+\resumeSubheading
+{\VAR{ e.degree }\BLOCK{ if e.field }, \VAR{ e.field }\BLOCK{ endif }, \VAR{ e.institution }}{\VAR{ e.year or "" }}
+{\VAR{ e.notes or "" }}{}
+\BLOCK{ endfor }
+\resumeSubHeadingListEnd
+\BLOCK{ endif }

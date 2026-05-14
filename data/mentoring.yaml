@@ -1,0 +1,36 @@
+mentees:
+  - name: Octi Zhang
+    project: Large-Scale Physics-based Simulation
+    current: "Now: Core IsaacLab/Newton @ NVIDIA"
+    years: 2023-2025
+  - name: Tao Jin
+    project: Safe Control \& Interaction for Assistive Manipulators
+    current: "Now: PhD @ CMU"
+    years: 2019-2020
+  - name: Venkatesh Varada
+    project: "Lovelace: The Autonomy-enabled Wheelchair"
+    years: 2018-2019
+  - name: Jeffrey Maxwell
+    project: "HERBTalk: A Natural Language Pipeline"
+    years: 2017-2019
+  - name: Yiren (Ramon) Qu
+    project: Streaming RGBD \& Tactile Data Wirelessly
+    current: "Now: Google"
+    years: 2017-2020
+  - name: Maha Alrashed
+    project: Crowdsourcing YCB Object Affordances
+    years: Summer 2018
+  - name: Abdullah Albakry
+    project: Reverse-engineering an R-net Wheelchair
+    years: Summer 2018
+
+other:
+  - K-12 Lab Demos
+
+leadership:
+  - role: Eta Kappa Nu (HKN) Chair
+    org: UConn Beta Omega Chapter
+    years: 2013-2015
+  - role: IEEE Vice-chair
+    org: UConn Chapter
+    years: 2012-2013

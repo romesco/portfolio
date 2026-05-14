@@ -1,0 +1,16 @@
+- degree: PhD
+  field: Machine Learning
+  institution: University of Washington
+  notes: "Advising: Dr. Byron Boots, Dr. Abhishek Gupta, Dr. Dieter Fox, Dr. Yejin Choi"
+- degree: MS
+  field: Robotics
+  institution: Carnegie Mellon University, \normalfont{SCS}
+  notes: "Advising: Dr. Siddhartha S. Srinivasa, Dr. Sanjiban Choudhury, Dr. Stefanos Nikolaidis"
+- degree: BS
+  field: Electrical Engineering
+  institution: University of Connecticut
+  notes: "Advising: Dr. Shalabh Gupta"
+- degree: BS
+  field: Computer Engineering
+  institution: University of Connecticut
+  notes: "Minors: Mathematics, Digital Arts"

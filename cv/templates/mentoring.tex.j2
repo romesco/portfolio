@@ -1,0 +1,17 @@
+\resumeSubHeadingListStart
+\BLOCK{ for m in data.mentees }
+\resumeSubheadingSingleLine
+{\textbf{\VAR{ m.name }} | \VAR{ m.project }\BLOCK{ if m.current } (\VAR{ m.current })\BLOCK{ endif }}{\VAR{ m.years.replace("-", " $\\rightarrow$ ") }}
+\BLOCK{ endfor }
+\BLOCK{ for o in data.other }
+\resumeSubheadingSingleLine{\textbf{\VAR{ o }}}{Monthly}
+\BLOCK{ endfor }
+\BLOCK{ if data.leadership }
+\resumeSubheadingSingleLine{}{}
+\BLOCK{ for r in data.leadership }
+\resumeSubheading
+{\VAR{ r.role }}{\VAR{ r.years.replace("-", " $\\rightarrow$ ") }}
+{\VAR{ r.org }}{}
+\BLOCK{ endfor }
+\BLOCK{ endif }
+\resumeSubHeadingListEnd

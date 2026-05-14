@@ -1,0 +1,333 @@
+# Publications. P/J/C/W series determined by `type`. Each series sorted
+# by `year` descending; equal years preserve YAML order.
+#
+# Author list grammar:
+#   - bare string                               → name as-is
+#   - {name: ..., me: true}                     → wraps in \textbf{...} (the user)
+#   - {name: ..., equal: true}                  → suffix `*` (co-first author)
+#   - "..."  (quoted, list element)             → literal ellipsis for abbreviated lists
+#
+# Links: any of arxiv, pdf, doi, ieee, github, project. arxiv: <id> expands
+# to https://arxiv.org/abs/<id>; arxiv: <full URL> passes through.
+
+# ---------- Preprints ----------
+
+- year: 2025
+  type: preprint
+  authors:
+    - M. G. Castro
+    - S. Rajagopal
+    - D. Gorbatov
+    - M. Schmittle
+    - R. Baijal
+    - O. Zhang
+    - {name: "R. Scalise", me: true}
+    - S. Talia
+    - E. Romig
+    - C. de Melo
+    - B. Boots
+    - A. Gupta
+  title: "VAMOS: A hierarchical vision-language-action model for capability-modulated and steerable navigation"
+  venue: arXiv
+  links: {arxiv: "2510.20818"}
+
+- year: 2019
+  type: preprint
+  authors:
+    - S.S. Srinivasa
+    - P. Lancaster
+    - "..."
+    - {name: "R. Scalise", me: true}
+    - "..."
+  title: "MuSHR: A low-cost, open-source robotic racecar for education and research"
+  venue: arXiv
+  links: {arxiv: "1908.08031"}
+
+# ---------- Journal ----------
+
+- year: 2018
+  type: journal
+  authors:
+    - {name: "R. Scalise", me: true}
+    - S. Li
+    - H. Admoni
+    - S. Rosenthal
+    - S.S. Srinivasa
+  featured: true
+  title: Natural language instructions for human-robot collaborative manipulation
+  venue: IJRR
+  venue_full: The International Journal of Robotics Research (IJRR)
+  links:
+    github: https://personalrobotics.github.io/collaborative_manipulation_corpus
+
+# ---------- Conferences ----------
+#
+- year: 2026
+  type: conference 
+  authors:
+    - {name: "K. Huang", equal: true}
+    - {name: "R. Scalise", me: true, equal: true}
+    - C. Winston
+    - A. Agrawal
+    - Y. Zhang
+    - R. Baijal
+    - M. Grotz
+    - B. Boots
+    - B. Burchfiel
+    - M. Itkina
+    - P. Shah
+    - A. Gupta
+  featured: true
+  title: Using non-expert data to robustify imitation learning via offline reinforcement learning
+  venue: ICRA 
+  venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
+  links: {arxiv: "2510.19495"}
+
+- year: 2026
+  type: conference 
+  authors:
+    - T. Han
+    - Y. Bao
+    - B. Mehta
+    - G. Guo
+    - A. Vishwakarma
+    - E. Kang
+    - S. Jung
+    - J. Zhou
+    - B. Xu
+    - {name: "R. Scalise", me: true}
+    - B. Boots
+  title: Model predictive adversarial imitation learning for planning from observation
+  venue: ICLR 
+  venue_full: International Conference on Learning Representations (ICLR)
+  links: {arxiv: "2507.21533"}
+
+- year: 2025
+  type: conference
+  authors:
+    - M. Schmittle
+    - R. Baijal
+    - N. Hatch
+    - {name: "R. Scalise", me: true}
+    - M. G. Castro
+    - S. Talia
+    - K. Khetarpal
+    - B. Boots
+    - S. Srinivasa
+  title: "Long Range Navigator (LRN): Extending robot planning horizons beyond metric maps"
+  venue: CoRL
+  venue_full: 2025 Conference on Robot Learning (CoRL)
+
+- year: 2025
+  type: conference
+  authors:
+    - Y. Yang
+    - G. Shi
+    - C. Lin
+    - X. Meng
+    - {name: "R. Scalise", me: true}
+    - M. G. Castro
+    - W. Yu
+    - T. Zhang
+    - D. Zhao
+    - J. Tan
+    - B. Boots
+  title: Agile continuous jumping in discontinuous terrains
+  venue: ICRA
+  venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
+
+- year: 2025
+  type: conference
+  authors:
+    - T. Han
+    - P. Shah
+    - S. Rajagopaal
+    - Y. Bao
+    - S. K. Jung
+    - S. S. Talia
+    - G. Guo
+    - B. Xu
+    - B. Mehta
+    - E. Romig
+    - {name: "R. Scalise", me: true}
+    - B. Boots
+  title: "Demonstrating Wheeled Lab: Modern Sim2Real for Low-cost, Open-source Wheeled Robotics"
+  venue: CoRL
+  venue_full: Conference on Robot Learning (CoRL)
+
+- year: 2025
+  type: conference
+  authors:
+    - A. Nanavati
+    - E.K. Gordon
+    - T. Faulkner
+    - B. Zhu
+    - T. Schrenk
+    - J. Ko
+    - A. Kashyap
+    - R. Karim
+    - H. Bolotski
+    - {name: "R. Scalise", me: true}
+    - H. Song
+    - Y. Qu
+    - M. Cakmak
+    - S.S. Srinivasa
+  title: Lessons Learned from Designing and Evaluating a Robot-Assisted Feeding System for Out-of-Lab Use
+  venue: HRI
+  venue_full: Conference on Human Robot Interaction (HRI)
+  awards: ["Best Systems Paper Award Nominee"]
+
+- year: 2024
+  type: conference
+  authors:
+    - {name: "R. Scalise", me: true}
+    - E. Caglar
+    - B. Boots
+    - C.C. Kessens
+  featured: true
+  title: "Toward Self-Righting and Recovery in the Wild: Challenges and Benchmarks"
+  venue: ICRA
+  venue_full: International Conference on Robotics \& Automation (ICRA)
+
+- year: 2024
+  type: conference
+  authors:
+    - "..."
+    - {name: "R. Scalise", me: true}
+    - "..."
+  featured: true
+  title: "Open X-Embodiment: Robotic learning datasets and RT-X models"
+  venue: ICRA
+  venue_full: International Conference on Robotics \& Automation (ICRA)
+  awards: ["Best Paper Award"]
+
+- year: 2024
+  type: conference
+  authors:
+    - {name: "A. Khazatsky", equal: true}
+    - {name: "K. Pertsch", equal: true}
+    - "..."
+    - {name: "R. Scalise", me: true}
+    - "..."
+    - C. Finn
+  featured: true
+  title: "DROID: A large-scale in-the-wild robot manipulation dataset"
+  media:
+    src: https://droid-dataset.github.io/videos/droid_teaser_animated.mp4
+    autoplay: true
+  venue: RSS
+  venue_full: "Robotics: Science \\& Systems (RSS)"
+
+- year: 2023
+  type: conference
+  authors:
+    - {name: "R. Scalise", me: true}
+    - A. Mandalika
+    - B. Hou
+    - S. Choudhury
+    - S.S. Srinivasa
+  featured: true
+  title: "GuILD: Guided Incremental Local Densification for Accelerated Sampling-based Motion Planning"
+  venue: ICRA
+  venue_full: International Conference on Robotics \& Automation (ICRA)
+  links: {ieee: "https://ieeexplore.ieee.org/document/10161028"}
+
+- year: 2022
+  type: conference
+  authors:
+    - A. Lambert
+    - B. Hou
+    - {name: "R. Scalise", me: true}
+    - S.S. Srinivasa
+    - B. Boots
+  title: Stein Variational Probabilistic Roadmaps
+  venue: ICRA
+  venue_full: International Conference on Robotics \& Automation (ICRA)
+  links: {arxiv: "2111.02972"}
+
+- year: 2020
+  type: conference
+  authors:
+    - T. Bhattacharjee
+    - E. Gordon
+    - {name: "R. Scalise", me: true}
+    - M. Cabrera
+    - A. Caspi
+    - M. Cakmak
+    - S.S. Srinivasa
+  title: "Is more autonomy always better? Exploring preferences of users with mobility impairments in robot-assisted feeding"
+  venue: HRI
+  venue_full: International Conference on Human-Robot Interaction (HRI)
+  links: {pdf: "https://personalrobotics.cs.washington.edu/publications/bhattacharjee2020userpref.pdf"}
+  awards: ["Best Demonstration Award @ NeurIPS"]
+
+- year: 2019
+  type: conference
+  authors:
+    - {name: "R. Scalise", me: true}
+    - J. Thomason
+    - Y. Bisk
+    - S.S. Srinivasa
+  title: Improving Robot Success Detection using Static Object Data
+  venue: IROS
+  venue_full: International Conference on Intelligent Robots and Systems (IROS)
+  links: {arxiv: "1904.01650"}
+
+- year: 2017
+  type: conference
+  authors:
+    - {name: "S. Li", equal: true}
+    - {name: "R. Scalise", me: true, equal: true}
+    - H. Admoni
+    - S. Rosenthal
+    - S.S. Srinivasa
+  title: Evaluating critical points in trajectories
+  venue: RO-MAN
+  venue_full: Robot and Human Interactive Communication (RO-MAN)
+
+- year: 2016
+  type: conference
+  authors:
+    - {name: "R. Scalise", me: true, equal: true}
+    - {name: "S. Li", equal: true}
+    - H. Admoni
+    - S. Rosenthal
+    - S.S. Srinivasa
+  title: Spatial references and perspective in natural language instructions for collaborative manipulation
+  venue: RO-MAN
+  venue_full: Robot and Human Interactive Communication (RO-MAN)
+
+# ---------- Workshops ----------
+
+- year: 2024
+  type: workshop
+  authors:
+    - O. Zheng
+    - Q. Peng
+    - {name: "R. Scalise", me: true}
+    - B. Boots
+  title: "Parental Guidance: Efficient Lifelong Learning through Evolutionary Distillation"
+  venue: Evolutionary Robotics Workshop @ CoRL
+  venue_full: Evolutionary Robotics Workshop at Conference on Robot Learning (CoRL)
+  awards: ["Best Paper Award"]
+
+- year: 2017
+  type: workshop
+  authors:
+    - {name: "R. Scalise", me: true}
+    - S. Rosenthal
+    - S.S. Srinivasa
+  title: Natural Language Explanations in Human-Collaborative Systems
+  venue: Pioneers Workshop @ HRI
+  venue_full: Proceedings of the Pioneers Workshop at (HRI)
+
+- year: 2016
+  type: workshop
+  authors:
+    - {name: "S. Li", equal: true}
+    - {name: "R. Scalise", me: true, equal: true}
+    - S. Rosenthal
+    - S.S. Srinivasa
+  title: Perspective in Natural Language Instructions for Collaborative Manipulation
+  venue: Workshop on Model Learning @ RSS
+  venue_full: Workshop on Model Learning for Human-Robot Communication at (RSS)

@@ -1,0 +1,400 @@
+/* ----------------------------------------------------------------
+   Tokens
+---------------------------------------------------------------- */
+
+:root {
+  --measure: 85ch;
+  --pad-x: clamp(1.25rem, 4vw, 2rem);
+  --pad-y: clamp(2.5rem, 7vw, 4.5rem);
+
+  /* Paper-warm light surface; never pure white */
+  --bg:        oklch(0.975 0.012 80);
+  --fg:        oklch(0.225 0.008 80);
+  --fg-muted:  oklch(0.500 0.012 80);
+  --rule:      oklch(0.860 0.012 80);
+  --accent:        oklch(0.420 0.130 250);
+  --accent-strong: oklch(0.320 0.150 250);
+
+  --leading: 1.7;
+  --leading-tight: 1.25;
+
+  /* System serif stack — faithful to classic faculty pages.
+     Iowan on macOS/iOS, Palatino on Windows, Georgia as floor. */
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino,
+           "Hoefler Text", "Sitka Text", Cambria, ui-serif, Georgia, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        oklch(0.180 0.008 80);
+    --fg:        oklch(0.920 0.006 80);
+    --fg-muted:  oklch(0.640 0.012 80);
+    --rule:      oklch(0.310 0.012 80);
+    --accent:        oklch(0.780 0.120 250);
+    --accent-strong: oklch(0.880 0.120 250);
+    /* Light type on dark needs a touch more leading */
+    --leading: 1.75;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Base
+---------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: var(--leading);
+  /* oldstyle figures + ligatures everywhere by default */
+  font-feature-settings: "kern", "liga", "onum";
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 480px) {
+  html { font-size: 16px; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+main {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--pad-y) var(--pad-x);
+}
+
+/* ----------------------------------------------------------------
+   Masthead — photo + identity
+---------------------------------------------------------------- */
+
+.masthead {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1.5rem;
+  row-gap: 1rem;
+  align-items: center;
+  margin-bottom: 2.25rem;
+}
+
+.portrait {
+  display: block;
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 3px;
+  background: var(--rule);
+}
+
+@media (min-width: 600px) {
+  .portrait { width: 120px; height: 120px; }
+}
+
+.identity h1 {
+  margin: 0 0 0.2rem;
+  font-size: clamp(1.7rem, 4.5vw, 2.125rem);
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: var(--leading-tight);
+}
+
+.identity .title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.identity .affiliation {
+  margin: 0.1rem 0 0;
+  font-size: 1rem;
+  color: var(--fg-muted);
+}
+
+/* Stack on the narrowest screens so neither the photo nor the
+   identity gets squeezed. */
+@media (max-width: 380px) {
+  .masthead {
+    grid-template-columns: 1fr;
+    row-gap: 0.75rem;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Bio
+---------------------------------------------------------------- */
+
+.bio {
+  margin: 0 0 0.5rem;
+  font-size: 1.0625rem;
+}
+
+/* ----------------------------------------------------------------
+   Sections (Selected works, Elsewhere)
+---------------------------------------------------------------- */
+
+section {
+  margin-top: 0.5rem;
+}
+
+section h2 {
+  margin: 2.5rem 0 1.1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--rule);
+
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-style: italic;
+  text-transform: lowercase;
+  letter-spacing: 0;
+  color: var(--fg-muted);
+}
+
+/* ----------------------------------------------------------------
+   Selected works — numbered, content-dense
+---------------------------------------------------------------- */
+
+.works-list {
+  margin: 0;
+  padding-left: 2rem;
+  list-style-type: decimal;
+  /* Lining + tabular figures look cleanest in numbered markers */
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.works-list li {
+  margin-bottom: 1.1rem;
+  padding-left: 0.25rem;
+}
+
+.works-list li::marker {
+  color: var(--fg-muted);
+  font-size: 0.9em;
+}
+
+.work-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.work-meta {
+  margin: 0.1rem 0 0;
+  font-size: 0.95rem;
+  color: var(--fg-muted);
+}
+
+.work-meta cite {
+  font-style: italic;
+}
+
+.work-meta .award {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.work-meta strong {
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------
+   Work expandable — <details>/<summary> with media drop-down
+
+   Structure per <li>:
+     <details class="work">
+       <summary class="work-summary"> [chevron] title + meta </summary>
+       <div class="work-media"> placeholder (later: video/gif) </div>
+     </details>
+
+   Native disclosure: clicking the summary toggles open/closed.
+   Links inside the meta still navigate normally (click events on <a>
+   don't propagate to the summary's toggle).
+---------------------------------------------------------------- */
+
+.work-summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.45em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.work-summary::-webkit-details-marker {
+  display: none;
+}
+
+.work-summary::before {
+  content: "▸";
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--fg-muted);
+  font-size: 0.85em;
+  align-self: center;
+  transition: transform 180ms ease-out;
+  user-select: none;
+}
+
+details[open] > .work-summary::before {
+  transform: rotate(90deg);
+}
+
+.work-summary .work-title {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.work-summary .work-meta {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 0.1rem;
+}
+
+.work-media {
+  /* Pad so the placeholder aligns with the meta column (chevron + gap). */
+  margin-top: 0.85rem;
+  padding-left: 1.3em;
+}
+
+.work-media-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: var(--rule);
+  color: var(--fg-muted);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+/* Real media — video, image (incl. gif), or iframe embed. The 16:9 box
+   is enforced; non-matching aspects letterbox via object-fit: contain
+   rather than crop. Background shows through letterboxing and during
+   load. */
+.work-media :where(video, img) {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: var(--rule);
+  border-radius: 4px;
+}
+
+.work-media iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 4px;
+}
+
+/* Smooth open/close animation in browsers with ::details-content +
+   interpolate-size (Chromium 131+ at the time of writing). Older
+   browsers ignore the @supports block and keep the native snap. */
+@supports selector(::details-content) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  .work::details-content {
+    /* `display: flow-root` establishes a new block formatting context so
+       the first child's margin-top doesn't escape the height collapse —
+       without it, that leaked margin snaps out at the end of the
+       transition, producing a visible jitter on close. */
+    display: flow-root;
+    opacity: 0;
+    height: 0;
+    overflow: clip;
+    /* Sync opacity to the height duration + curve — a single coherent
+       motion rather than two staggered ones. */
+    transition:
+      content-visibility 280ms allow-discrete,
+      opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .work[open]::details-content {
+    opacity: 1;
+    height: auto;
+  }
+
+  /* Establishes the "from" state when a closed details first matches
+     [open] — without this, the transition has nothing to interpolate
+     from on the very first open. */
+  @starting-style {
+    .work[open]::details-content {
+      opacity: 0;
+      height: 0;
+    }
+  }
+}
+
+/* ----------------------------------------------------------------
+   Elsewhere — inline link list with middot separators
+---------------------------------------------------------------- */
+
+.elsewhere {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9875rem;
+}
+
+.elsewhere li {
+  display: inline;
+}
+
+.elsewhere li + li::before {
+  content: "·";
+  color: var(--fg-muted);
+  margin: 0 0.55em;
+}
+
+/* ----------------------------------------------------------------
+   Links
+---------------------------------------------------------------- */
+
+a {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color 120ms ease, text-decoration-thickness 120ms ease;
+}
+
+a:hover {
+  color: var(--accent-strong);
+  text-decoration-thickness: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ----------------------------------------------------------------
+   Selection
+---------------------------------------------------------------- */
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ----------------------------------------------------------------
+   Reduced motion
+---------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

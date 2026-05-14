@@ -1,0 +1,9 @@
+\BLOCK{ if entries }
+\resumeSubHeadingListStart
+\BLOCK{ for t in entries }
+\resumeSubheading
+{\VAR{ t.course }}{\VAR{ t.role }}
+{\VAR{ t.institution }}{\VAR{ t.term or "" }}
+\BLOCK{ endfor }
+\resumeSubHeadingListEnd
+\BLOCK{ endif }

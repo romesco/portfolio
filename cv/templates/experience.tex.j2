@@ -1,0 +1,22 @@
+\BLOCK{ if entries }
+\resumeSubHeadingListStart
+\BLOCK{ for e in entries }
+\resumeSubheading
+{\VAR{ e.org }}{\VAR{ e.role }}
+{\VAR{ e.context }}{\VAR{ e.dates or "" }}
+\BLOCK{ if e.bullets or e.subsections }
+\resumeItemListStart
+\BLOCK{ for b in e.bullets }
+\resumeItem{\VAR{ b }}
+\BLOCK{ endfor }
+\BLOCK{ for s in e.subsections }
+\vspace{6pt}\item[] \textbf{\VAR{ s.heading }}:
+\BLOCK{ for i in s.items }
+\resumeItem{\textbf{\VAR{ i.org }}\BLOCK{ if i.link } \href{\VAR{ i.link }}{[link]}\BLOCK{ endif }: \VAR{ i.text }}
+\BLOCK{ endfor }
+\BLOCK{ endfor }
+\resumeItemListEnd
+\BLOCK{ endif }
+\BLOCK{ endfor }
+\resumeSubHeadingListEnd
+\BLOCK{ endif }
