@@ -12,7 +12,7 @@ site:
 	uv run python website/build.py
 
 serve: site
-	cd website && python -m http.server 8000 --bind 127.0.0.1
+	cd website && python3 -m http.server 8000 --bind 127.0.0.1
 
 watch:
 	find data/ cv/templates/ -type f | entr make all
