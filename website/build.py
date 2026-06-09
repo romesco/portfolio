@@ -150,6 +150,18 @@ def render_links(links) -> Markup:
     return Markup(" · ".join(parts))
 
 
+def cname_from_website(url: str | None) -> str | None:
+    """Derive the bare host for a GitHub Pages CNAME file from the identity
+    `website` URL. `https://rosarioscalise.com/` -> `rosarioscalise.com`.
+    Returns None when no website is set (so the default *.github.io URL is
+    used)."""
+    if not url:
+        return None
+    # Fall back to a scheme-less parse so a bare host (no `https://`) works.
+    host = urlparse(url).netloc or urlparse(f"//{url}").netloc
+    return host or None
+
+
 def main() -> int:
     if not SITE_YAML.exists():
         print(f"error: {SITE_YAML} not found.", file=sys.stderr)
@@ -205,6 +217,17 @@ def main() -> int:
     )
     (ROOT / "index.html").write_text(html)
     print(f"wrote index.html ({len(featured)} publications)")
+
+    # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
+    # domain stays single-sourced. Removed if `website` is cleared.
+    cname = cname_from_website(identity.get("website"))
+    cname_path = ROOT / "CNAME"
+    if cname:
+        cname_path.write_text(cname + "\n")
+        print(f"wrote CNAME ({cname})")
+    elif cname_path.exists():
+        cname_path.unlink()
+
     return 0
 
 

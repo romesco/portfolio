@@ -23,4 +23,4 @@ test:
 clean:
 	rm -f cv/generated/*.tex cv/main.pdf cv/main.aux cv/main.log cv/main.out
 	rm -f cv/main.fdb_latexmk cv/main.fls cv/main.synctex.gz
-	rm -f website/index.html website/headshot.jpg
+	rm -f website/index.html website/headshot.jpg website/CNAME

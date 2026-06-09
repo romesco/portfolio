@@ -18,6 +18,7 @@ cv/main.synctex.gz
 # Website artifact (regenerated)
 website/index.html
 website/headshot.jpg
+website/CNAME
 
 # Memory & harness
 .claude-memory/
