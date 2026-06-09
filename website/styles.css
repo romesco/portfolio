@@ -14,6 +14,7 @@
   --rule:      oklch(0.860 0.012 80);
   --accent:        oklch(0.420 0.130 250);
   --accent-strong: oklch(0.320 0.150 250);
+  color-scheme: light;
 
   --leading: 1.7;
   --leading-tight: 1.25;
@@ -24,17 +25,18 @@
            "Hoefler Text", "Sitka Text", Cambria, ui-serif, Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:        oklch(0.180 0.008 80);
-    --fg:        oklch(0.920 0.006 80);
-    --fg-muted:  oklch(0.640 0.012 80);
-    --rule:      oklch(0.310 0.012 80);
-    --accent:        oklch(0.780 0.120 250);
-    --accent-strong: oklch(0.880 0.120 250);
-    /* Light type on dark needs a touch more leading */
-    --leading: 1.75;
-  }
+/* Dark theme is opt-in via the toggle (sets data-theme="dark" on <html>).
+   Light is the default; we deliberately do NOT follow prefers-color-scheme. */
+:root[data-theme="dark"] {
+  --bg:        oklch(0.180 0.008 80);
+  --fg:        oklch(0.920 0.006 80);
+  --fg-muted:  oklch(0.640 0.012 80);
+  --rule:      oklch(0.310 0.012 80);
+  --accent:        oklch(0.780 0.120 250);
+  --accent-strong: oklch(0.880 0.120 250);
+  color-scheme: dark;
+  /* Light type on dark needs a touch more leading */
+  --leading: 1.75;
 }
 
 /* ----------------------------------------------------------------
@@ -69,6 +71,70 @@ main {
   max-width: var(--measure);
   margin: 0 auto;
   padding: var(--pad-y) var(--pad-x);
+  position: relative;
+}
+
+/* ----------------------------------------------------------------
+   Theme toggle — subtle sun/moon morph in the top-right of the column
+---------------------------------------------------------------- */
+
+.theme-toggle {
+  position: absolute;
+  top: clamp(0.9rem, 3vw, 1.5rem);
+  right: var(--pad-x);
+  z-index: 1;
+
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0.3rem;
+  cursor: pointer;
+  color: var(--fg-muted);
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+
+  transition: color 160ms ease;
+}
+
+.theme-toggle:hover { color: var(--fg); }
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Both icons occupy the same cell and cross-fade + rotate on toggle. */
+.theme-toggle svg {
+  grid-area: 1 / 1;
+  transition:
+    opacity 350ms ease,
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-toggle .icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+.theme-toggle .icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
 }
 
 /* ----------------------------------------------------------------
