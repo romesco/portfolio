@@ -415,22 +415,27 @@ details[open] > .work-summary::before {
 }
 
 .mentee {
-  margin-bottom: 0.85rem;
+  margin-bottom: 1.05rem;
 }
 
-.mentee-line {
-  display: block;
-}
-
+/* Name anchors the entry; project sits below in body tone; trajectory and
+   years are a quiet meta line. No markers. */
 .mentee-name {
+  display: block;
   font-weight: 600;
+}
+
+.mentee-project {
+  display: block;
+  margin-top: 0.05rem;
 }
 
 .mentee-meta {
   display: block;
-  margin-top: 0.1rem;
-  font-size: 0.9rem;
+  margin-top: 0.15rem;
+  font-size: 0.85rem;
   color: var(--fg-muted);
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* ----------------------------------------------------------------

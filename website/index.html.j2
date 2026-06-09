@@ -71,9 +71,10 @@
     <ul class="mentoring">
       {% for m in mentees %}
       <li class="mentee">
-        <span class="mentee-line"><span class="mentee-name">{{ m.name }}</span>{% if m.project %}, {{ m.project }}{% endif %}</span>
+        <span class="mentee-name">{{ m.name }}</span>
+        {% if m.project %}<span class="mentee-project">{{ m.project }}</span>{% endif %}
         {% if m.current or m.years %}
-        <span class="mentee-meta">{{ m.current }}{% if m.current and m.years %} · {% endif %}{{ m.years }}</span>
+        <span class="mentee-meta">{% if m.current %}{{ m.current }}{% endif %}{% if m.current and m.years %} · {% endif %}{% if m.years %}{{ m.years }}{% endif %}</span>
         {% endif %}
       </li>
       {% endfor %}

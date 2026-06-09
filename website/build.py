@@ -26,6 +26,7 @@ with `title:`/`description:`). It renders to `website/<slug>.html`, served at
 from __future__ import annotations
 
 import datetime
+import hashlib
 import re
 import shutil
 import sys
@@ -243,7 +244,8 @@ def split_front_matter(text: str) -> tuple[dict, str]:
     return meta, text[m.end():]
 
 
-def render_pages(env: Environment, identity: dict, default_description: str) -> list[str]:
+def render_pages(env: Environment, identity: dict, default_description: str,
+                 css_version: str) -> list[str]:
     """Render every website/pages/*.md to website/<slug>.html via page.html.j2.
     Returns the slugs written."""
     if not PAGES_DIR.is_dir():
@@ -261,6 +263,7 @@ def render_pages(env: Environment, identity: dict, default_description: str) -> 
             title=title,
             description=description,
             content_html=Markup(md(body)),
+            css_version=css_version,
         )
         (ROOT / f"{slug}.html").write_text(html)
         written.append(slug)
@@ -304,6 +307,9 @@ def main() -> int:
 
     news = load_news()
     mentees = load_mentoring()
+    # Content hash of the stylesheet, appended to its URL so browsers fetch
+    # the new CSS immediately instead of serving a stale cached copy.
+    css_version = hashlib.sha256((ROOT / "styles.css").read_bytes()).hexdigest()[:8]
 
     env = Environment(
         loader=FileSystemLoader(ROOT),
@@ -324,11 +330,12 @@ def main() -> int:
         links=links,
         news=news,
         mentees=mentees,
+        css_version=css_version,
     )
     (ROOT / "index.html").write_text(html)
     print(f"wrote index.html ({len(featured)} publications, {len(news)} news)")
 
-    pages = render_pages(env, identity, site.get("description", ""))
+    pages = render_pages(env, identity, site.get("description", ""), css_version)
     if pages:
         print(f"wrote {len(pages)} page(s): {', '.join(pages)}")
 
