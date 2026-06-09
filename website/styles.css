@@ -71,18 +71,15 @@ main {
   max-width: var(--measure);
   margin: 0 auto;
   padding: var(--pad-y) var(--pad-x);
-  position: relative;
 }
 
 /* ----------------------------------------------------------------
-   Theme toggle — subtle sun/moon morph in the top-right of the column
+   Theme toggle — subtle sun/moon morph, sitting on the name's line
+   (see .identity-head) so it tracks the name at every screen size.
 ---------------------------------------------------------------- */
 
 .theme-toggle {
-  position: absolute;
-  top: clamp(0.9rem, 3vw, 1.5rem);
-  right: var(--pad-x);
-  z-index: 1;
+  flex-shrink: 0;
 
   appearance: none;
   -webkit-appearance: none;
@@ -161,6 +158,13 @@ main {
 
 @media (min-width: 600px) {
   .portrait { width: 120px; height: 120px; }
+}
+
+.identity-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .identity h1 {
