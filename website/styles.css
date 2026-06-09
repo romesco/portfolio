@@ -398,3 +398,78 @@ a:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* ----------------------------------------------------------------
+   News — single-line updates, date pinned to the right
+---------------------------------------------------------------- */
+
+.news {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1rem;
+}
+
+.news-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.news-date {
+  flex-shrink: 0;
+  color: var(--fg-muted);
+  font-size: 0.85rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------
+   Standalone pages — back link + Markdown prose
+
+   Content headings are normal prose, deliberately distinct from the
+   italic/lowercase section *labels* used on the homepage.
+---------------------------------------------------------------- */
+
+.backlink {
+  margin: 0 0 1.75rem;
+  font-size: 0.9rem;
+}
+
+.page-content { font-size: 1.0625rem; }
+.page-content > :first-child { margin-top: 0; }
+.page-content p { margin: 0 0 1rem; }
+
+.page-content h1,
+.page-content h2,
+.page-content h3 {
+  margin: 1.75rem 0 0.6rem;
+  border-top: 0;
+  padding-top: 0;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.page-content h1 { font-size: 1.4rem; }
+.page-content h2 { font-size: 1.2rem; }
+.page-content h3 { font-size: 1.05rem; }
+
+.page-content ul,
+.page-content ol {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+}
+
+.page-content li { margin-bottom: 0.3rem; }
+
+.page-content blockquote {
+  margin: 0 0 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--rule);
+  color: var(--fg-muted);
+}

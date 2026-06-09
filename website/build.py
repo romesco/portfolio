@@ -1,6 +1,8 @@
-"""Generate index.html from index.html.j2 + shared portfolio YAML.
-Identity lives in data/identity.yaml, and entries in data/publications.yaml
-with `featured: true` are rendered, sorted year-desc.
+"""Generate index.html from index.html.j2 + shared portfolio YAML, plus any
+standalone "hidden" pages from Markdown in website/pages/.
+
+Identity lives in data/identity.yaml, news in data/news.yaml, and entries in
+data/publications.yaml with `featured: true` are rendered, sorted year-desc.
 
 Run: `make site` or `uv run python website/build.py`.
 
@@ -16,14 +18,21 @@ build):
     poster: ./media/foo-poster.jpg # optional (video only)
     autoplay: true                 # optional (video) — implies muted/loop
     alt: "Caption text"            # optional (image)
+
+Standalone pages: drop `website/pages/<slug>.md` (optional YAML front-matter
+with `title:`/`description:`). It renders to `website/<slug>.html`, served at
+`/<slug>`, styled like the homepage, not linked from it, and marked noindex.
 """
 from __future__ import annotations
 
+import datetime
+import re
 import shutil
 import sys
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+import mistune
 import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from markupsafe import Markup, escape
@@ -33,6 +42,8 @@ DATA_DIR = ROOT.parent / "data"
 SITE_YAML = ROOT / "site.yaml"
 IDENTITY_YAML = DATA_DIR / "identity.yaml"
 PUBS_YAML = DATA_DIR / "publications.yaml"
+NEWS_YAML = DATA_DIR / "news.yaml"
+PAGES_DIR = ROOT / "pages"
 HEADSHOT_SRC = ROOT.parent / "assets" / "headshot.jpg"
 HEADSHOT_DEST = ROOT / "headshot.jpg"
 
@@ -40,6 +51,8 @@ ELLIPSIS_OUT = "…"
 
 VIDEO_EXTS = {".mp4", ".webm", ".mov", ".m4v"}
 IMAGE_EXTS = {".gif", ".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg"}
+
+FRONT_MATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 
 
 def _detect_media_type(src: str) -> str:
@@ -162,6 +175,66 @@ def cname_from_website(url: str | None) -> str | None:
     return host or None
 
 
+def load_news() -> list[dict]:
+    """Load data/news.yaml into render-ready dicts, newest first. Each source
+    item is `{date: YYYY-MM-DD, text: ..., link?: ...}`. We add `iso` (for the
+    <time datetime>) and `date_display` ("Jun 2026")."""
+    if not NEWS_YAML.exists():
+        return []
+    raw = yaml.safe_load(NEWS_YAML.read_text()) or []
+    items: list[dict] = []
+    for n in raw:
+        d = n.get("date")
+        if isinstance(d, datetime.date):
+            iso = d.isoformat()
+            display = d.strftime("%b %Y")
+        else:
+            iso = str(d or "")
+            display = str(d or "")
+        items.append({
+            "text": n.get("text", ""),
+            "link": n.get("link"),
+            "iso": iso,
+            "date_display": display,
+        })
+    items.sort(key=lambda x: x["iso"], reverse=True)
+    return items
+
+
+def split_front_matter(text: str) -> tuple[dict, str]:
+    """Split optional leading `--- ... ---` YAML front-matter from a Markdown
+    document. Returns (metadata, body)."""
+    m = FRONT_MATTER_RE.match(text)
+    if not m:
+        return {}, text
+    meta = yaml.safe_load(m.group(1)) or {}
+    return meta, text[m.end():]
+
+
+def render_pages(env: Environment, identity: dict, default_description: str) -> list[str]:
+    """Render every website/pages/*.md to website/<slug>.html via page.html.j2.
+    Returns the slugs written."""
+    if not PAGES_DIR.is_dir():
+        return []
+    md = mistune.create_markdown(escape=False)
+    template = env.get_template("page.html.j2")
+    written: list[str] = []
+    for path in sorted(PAGES_DIR.glob("*.md")):
+        slug = path.stem
+        meta, body = split_front_matter(path.read_text())
+        title = meta.get("title") or slug.replace("-", " ").title()
+        description = meta.get("description") or default_description
+        html = template.render(
+            identity=identity,
+            title=title,
+            description=description,
+            content_html=Markup(md(body)),
+        )
+        (ROOT / f"{slug}.html").write_text(html)
+        written.append(slug)
+    return written
+
+
 def main() -> int:
     if not SITE_YAML.exists():
         print(f"error: {SITE_YAML} not found.", file=sys.stderr)
@@ -197,6 +270,8 @@ def main() -> int:
         p.setdefault("awards", [])
         p["media"] = normalize_media(p.get("media"))
 
+    news = load_news()
+
     env = Environment(
         loader=FileSystemLoader(ROOT),
         trim_blocks=True,
@@ -214,9 +289,14 @@ def main() -> int:
         description=site.get("description", ""),
         bio=site.get("bio", ""),
         links=links,
+        news=news,
     )
     (ROOT / "index.html").write_text(html)
-    print(f"wrote index.html ({len(featured)} publications)")
+    print(f"wrote index.html ({len(featured)} publications, {len(news)} news)")
+
+    pages = render_pages(env, identity, site.get("description", ""))
+    if pages:
+        print(f"wrote {len(pages)} page(s): {', '.join(pages)}")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.

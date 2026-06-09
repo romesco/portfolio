@@ -1,0 +1,18 @@
+{# Standalone "hidden" page (e.g. /bio, /twitter). Extends the shared base
+   layout. Rendered from a Markdown file in website/pages/<slug>.md by
+   build.py; not linked from the homepage and marked noindex. #}
+{% extends "_layout.html.j2" %}
+
+{% block title %}{{ title }} · {{ identity.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+{% block head_extra %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block topbar %}
+  <p class="backlink"><a href="/">← {{ identity.name }}</a></p>
+{% endblock %}
+
+{% block content %}
+  <div class="page-content">
+{{ content_html }}
+  </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+# News / updates shown near the top of the homepage (first section after the
+# bio). Newest first — build.py sorts by `date` descending. Each item:
+#   - date: YYYY-MM-DD        # rendered right-aligned as "Jun 2026"
+#     text: one-line update
+#     link: https://...       # optional; wraps the text in a link
+#
+# Placeholder entries below — edit the text/dates (and add more) freely.
+- date: 2026-06-01
+  text: Invited talk at the NVIDIA Seattle Robotics Laboratory
+- date: 2026-05-15
+  text: Completed my Generals (PhD candidacy exam)

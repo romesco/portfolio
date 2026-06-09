@@ -15,8 +15,10 @@ cv/main.fdb_latexmk
 cv/main.fls
 cv/main.synctex.gz
 
-# Website artifact (regenerated)
-website/index.html
+# Website artifacts (regenerated). website/*.html covers index.html and every
+# generated standalone page (bio.html, twitter.html, ...). Sources are the
+# .j2 templates and website/pages/*.md, which are tracked.
+website/*.html
 website/headshot.jpg
 website/CNAME
 

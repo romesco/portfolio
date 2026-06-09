@@ -1,0 +1,32 @@
+{# Base layout shared by the homepage (index.html.j2) and standalone pages
+   (page.html.j2). The generated *.html files are built from these by
+   build.py and must NOT be hand-edited. #}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ identity.name }}{% endblock %}</title>
+<meta name="description" content="{% block description %}{{ description }}{% endblock %}">
+{% block head_extra %}{% endblock %}
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main>
+{% block topbar %}{% endblock %}
+  <header class="masthead">
+    <img class="portrait" src="{{ identity.headshot }}"
+         alt="{{ identity.alt }}"
+         width="120" height="120">
+    <div class="identity">
+      <h1>{{ identity.name }}</h1>
+      <p class="title">{{ identity.title }}</p>
+      <p class="affiliation">{{ identity.affiliation }}</p>
+    </div>
+  </header>
+
+{% block content %}{% endblock %}
+</main>
+{% block scripts %}{% endblock %}
+</body>
+</html>
