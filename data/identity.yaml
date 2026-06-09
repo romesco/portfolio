@@ -1,5 +1,5 @@
 name: Rosario Scalise
-title: PhD Student
+title: PhD Candidate
 affiliation: Machine Learning & Robotics, University of Washington
 email: rosario@cs.uw.edu
 website: https://rosarioscalise.com/
@@ -8,5 +8,5 @@ headshot: ./headshot.jpg
 alt: Portrait of Rosario Scalise
 links:
   github: https://github.com/romesco
-  scholar: null
+  scholar: https://scholar.google.com/citations?user=vHs01IMAAAAJ&hl=en
   orcid: null
