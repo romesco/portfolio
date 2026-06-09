@@ -405,6 +405,35 @@ details[open] > .work-summary::before {
 }
 
 /* ----------------------------------------------------------------
+   Mentoring — name + project, with trajectory/years as muted meta
+---------------------------------------------------------------- */
+
+.mentoring {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mentee {
+  margin-bottom: 0.85rem;
+}
+
+.mentee-line {
+  display: block;
+}
+
+.mentee-name {
+  font-weight: 600;
+}
+
+.mentee-meta {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+}
+
+/* ----------------------------------------------------------------
    Elsewhere — inline link list with middot separators
 ---------------------------------------------------------------- */
 

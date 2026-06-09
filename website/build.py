@@ -43,6 +43,7 @@ SITE_YAML = ROOT / "site.yaml"
 IDENTITY_YAML = DATA_DIR / "identity.yaml"
 PUBS_YAML = DATA_DIR / "publications.yaml"
 NEWS_YAML = DATA_DIR / "news.yaml"
+MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 PAGES_DIR = ROOT / "pages"
 HEADSHOT_SRC = ROOT.parent / "assets" / "headshot.jpg"
 HEADSHOT_DEST = ROOT / "headshot.jpg"
@@ -201,6 +202,37 @@ def load_news() -> list[dict]:
     return items
 
 
+# The shared data/ YAML is authored for the LaTeX CV, so a few values carry
+# LaTeX escapes. Undo the common ones for HTML (Jinja then re-escapes safely).
+_LATEX_UNESCAPE = {r"\&": "&", r"\%": "%", r"\#": "#", r"\_": "_", r"\$": "$"}
+
+
+def _delatex(s: str) -> str:
+    for k, v in _LATEX_UNESCAPE.items():
+        s = s.replace(k, v)
+    return s
+
+
+def load_mentoring() -> list[dict]:
+    """Load mentees from data/mentoring.yaml (file order preserved). Cleans
+    LaTeX escapes and stray whitespace, and renders `->` / year ranges with
+    proper arrows/en dashes for the web."""
+    if not MENTORING_YAML.exists():
+        return []
+    data = yaml.safe_load(MENTORING_YAML.read_text()) or {}
+    mentees: list[dict] = []
+    for m in data.get("mentees") or []:
+        current = _delatex(str(m.get("current") or "").strip()).replace("->", "→")
+        years = str(m.get("years") or "").strip().replace("-", "–")
+        mentees.append({
+            "name": _delatex(str(m.get("name") or "").strip()),
+            "project": _delatex(str(m.get("project") or "").strip()),
+            "current": current,
+            "years": years,
+        })
+    return mentees
+
+
 def split_front_matter(text: str) -> tuple[dict, str]:
     """Split optional leading `--- ... ---` YAML front-matter from a Markdown
     document. Returns (metadata, body)."""
@@ -271,6 +303,7 @@ def main() -> int:
         p["media"] = normalize_media(p.get("media"))
 
     news = load_news()
+    mentees = load_mentoring()
 
     env = Environment(
         loader=FileSystemLoader(ROOT),
@@ -290,6 +323,7 @@ def main() -> int:
         bio=site.get("bio", ""),
         links=links,
         news=news,
+        mentees=mentees,
     )
     (ROOT / "index.html").write_text(html)
     print(f"wrote index.html ({len(featured)} publications, {len(news)} news)")

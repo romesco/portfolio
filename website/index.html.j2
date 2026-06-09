@@ -65,6 +65,22 @@
     {% endif %}
   </section>
 
+  {% if mentees %}
+  <section class="mentoring-section">
+    <h2>Mentoring</h2>
+    <ul class="mentoring">
+      {% for m in mentees %}
+      <li class="mentee">
+        <span class="mentee-line"><span class="mentee-name">{{ m.name }}</span>{% if m.project %}, {{ m.project }}{% endif %}</span>
+        {% if m.current or m.years %}
+        <span class="mentee-meta">{{ m.current }}{% if m.current and m.years %} · {% endif %}{{ m.years }}</span>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
   <section class="elsewhere-section">
     <h2>Elsewhere</h2>
     <ul class="elsewhere">
