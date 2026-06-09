@@ -13,8 +13,8 @@
     <ul class="news">
       {% for n in news %}
       <li class="news-item">
-        <span class="news-text">{% if n.link %}<a href="{{ n.link }}">{{ n.text }}</a>{% else %}{{ n.text }}{% endif %}</span>
         <time class="news-date" datetime="{{ n.iso }}">{{ n.date_display }}</time>
+        <span class="news-text">{% if n.link %}<a href="{{ n.link }}">{{ n.text }}</a>{% else %}{{ n.text }}{% endif %}</span>
       </li>
       {% endfor %}
     </ul>

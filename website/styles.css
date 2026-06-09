@@ -407,23 +407,32 @@ a:focus-visible {
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 1rem;
 }
 
+/* Each update is a two-column row: a fixed, aligned date column on the left
+   (so dates stack into a clean vertical rule of their own) and the update
+   text on the right. No list markers. */
 .news-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 4.75rem 1fr;
+  column-gap: 1.25rem;
   align-items: baseline;
-  gap: 1.5rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .news-date {
-  flex-shrink: 0;
   color: var(--fg-muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.02em;
   white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .news-item {
+    grid-template-columns: 4rem 1fr;
+    column-gap: 0.9rem;
+  }
 }
 
 /* ----------------------------------------------------------------
