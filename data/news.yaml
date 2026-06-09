@@ -5,7 +5,7 @@
 #     link: https://...       # optional; wraps the text in a link
 #
 # Placeholder entries below — edit the text/dates (and add more) freely.
-- date: 2026-06-01
-  text: Invited talk at the NVIDIA Seattle Robotics Laboratory
-- date: 2026-05-15
-  text: Completed my Generals (PhD candidacy exam)
+#- date: 2026-06-17
+#  text: (TBA) Invited talk at the NVIDIA Seattle Robotics Laboratory
+- date: 2026-04-30
+  text: Passed my Generals! (PhD Candidacy Exam)

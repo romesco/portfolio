@@ -1,4 +1,12 @@
 mentees:
+  - name: Cleah Winston 
+    project: Using Non-Expert Data to Robustify Imitation Learning via Offline RL (RISE) 
+    current: "Undergrad -> Now: MS @ UW CS"
+    years: 2024-2025
+  - name: Ayush Agrawal 
+    project: Using Non-Expert Data to Robustify Imitation Learning via Offline RL (RISE)
+    current: "BS/MS -> Now: Google"
+    years: 2024-2025
   - name: Octi Zhang
     project: Large-Scale Physics-based Simulation
     current: "Now: Core IsaacLab/Newton @ NVIDIA"
