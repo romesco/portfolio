@@ -466,13 +466,31 @@ details[open] > .work-summary::before {
   border-radius: 2px;
 }
 
-/* Hover whisper: the chevron drifts the way it will travel. */
+/* Hover whisper (a touch of Option 2): on pointer devices, hovering the
+   collapsed section eases the fade down so the cut-off tail sharpens into
+   view, brightens the control, and drifts the chevron. The cue spans the
+   whole section, not just the small toggle, so it's discoverable. No layout
+   shift, so it never jumps while reading. Click stays the real action. */
 .expandable-chevron {
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .expandable-toggle:hover .expandable-chevron {
   transform: translateY(2px);
+}
+
+@media (hover: hover) {
+  .expandable.is-collapsed:hover .expandable-viewport {
+    --expandable-fade: 82%;
+  }
+
+  .expandable.is-collapsed:hover .expandable-toggle {
+    color: var(--accent);
+  }
+
+  .expandable.is-collapsed:hover .expandable-chevron {
+    transform: translateY(3px);
+  }
 }
 
 .expandable.is-open .expandable-chevron {
