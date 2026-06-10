@@ -151,6 +151,10 @@
       var peek = parseInt(wrap.getAttribute('data-peek'), 10) || 3;
       var items = list.children;
       var open = false;
+      var peekPx = null;                       // current collapsed height (px)
+      var BUMP = 24;                            // px the bottom eases down on hover
+      var canHover = false;
+      try { canHover = window.matchMedia('(hover: hover)').matches; } catch (e) {}
 
       // Height that shows the first `peek` items fully, plus a small bleed so
       // the next item peeks under the fade as a hint. Measured live so it
@@ -169,13 +173,18 @@
           wrap.classList.remove('is-collapsed', 'is-open');
           vp.style.maxHeight = '';
           vp.style.overflow = '';
+          peekPx = null;
           return;
         }
         open = false;
+        peekPx = h;
         wrap.classList.add('is-collapsed');
         wrap.classList.remove('is-open');
         vp.style.overflow = 'clip';
-        vp.style.maxHeight = h + 'px';
+        // Keep the hover bump if the pointer is already over the section, so
+        // collapsing via "Show less" doesn't snap flat under the cursor.
+        var hovering = canHover && !reduce && wrap.matches(':hover');
+        vp.style.maxHeight = (hovering ? h + BUMP : h) + 'px';
         btn.setAttribute('aria-expanded', 'false');
         label.textContent = 'Show ' + (items.length - peek) + ' more';
         btn.hidden = false;
@@ -215,6 +224,17 @@
 
       collapse();
 
+      // Hover whisper (a touch of Option 2): the bottom eases down a little
+      // on pointer hover, revealing a bit more under the (also-easing) fade.
+      if (canHover && !reduce) {
+        wrap.addEventListener('mouseenter', function () {
+          if (!open && peekPx != null) vp.style.maxHeight = (peekPx + BUMP) + 'px';
+        });
+        wrap.addEventListener('mouseleave', function () {
+          if (!open && peekPx != null) vp.style.maxHeight = peekPx + 'px';
+        });
+      }
+
       // Re-measure the peek when width changes (text re-wraps). Only while
       // collapsed; an open section is free-flowing.
       var raf = 0;
@@ -223,8 +243,10 @@
         if (raf) cancelAnimationFrame(raf);
         raf = requestAnimationFrame(function () {
           var h = peekHeight();
-          if (h == null) collapse();
-          else vp.style.maxHeight = h + 'px';
+          if (h == null) { collapse(); return; }
+          peekPx = h;
+          var hovering = canHover && !reduce && wrap.matches(':hover');
+          vp.style.maxHeight = (hovering ? h + BUMP : h) + 'px';
         });
       });
     });
