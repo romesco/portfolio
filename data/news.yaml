@@ -8,6 +8,8 @@
 # Placeholder entries below — edit the text/dates (and add more) freely.
 #- date: 2026-06-17
 #  text: (TBA) Invited talk at the NVIDIA Seattle Robotics Laboratory
+- date: 2026-05-30
+  text: "[Nam Pho](https://scholar.google.com/citations?user=QHUk6wgAAAAJ&hl=en) ((UW Cluster)[hyak.uw.edu] Director) and I wrote and won an NSF Grant for 50,000 GPU-hours via (ACCESS)[access-ci.org]!"
 - date: 2026-04-30
   text: Passed my Generals! (PhD Candidacy Exam)
 - date: 2025-06-10
@@ -16,3 +18,5 @@
   text: Best Paper Award @ MAPoDeL workshop @ CoRL 
 - date: 2024-11-10
   text: Invited Talk @ Franka Emika (Near Munich)
+- date: 2024-11-10
+  text: Best Paper Award @ MAPoDeL workshop @ CoRL 
