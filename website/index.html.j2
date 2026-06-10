@@ -152,7 +152,6 @@
       var items = list.children;
       var open = false;
       var peekPx = null;                       // current collapsed height (px)
-      var BUMP = 24;                            // px the bottom eases down on hover
       var canHover = false;
       try { canHover = window.matchMedia('(hover: hover)').matches; } catch (e) {}
 
@@ -164,6 +163,16 @@
         var top = vp.getBoundingClientRect().top;
         var nth = items[peek - 1];
         return Math.round(nth.getBoundingClientRect().bottom - top + 14);
+      }
+
+      // How far the bottom eases down on hover: a fixed *fraction* of the
+      // next hidden item rather than a flat distance, so short-item sections
+      // (News) reveal a gentle sliver instead of lurching a whole line, while
+      // tall sections (Mentoring) keep their fuller motion. Clamped for taste.
+      function bumpPx() {
+        var next = items[peek];                // first hidden item
+        var ih = next ? next.getBoundingClientRect().height : 24;
+        return Math.round(Math.min(24, Math.max(12, ih * 0.5)));
       }
 
       function collapse() {
@@ -184,7 +193,7 @@
         // Keep the hover bump if the pointer is already over the section, so
         // collapsing via "Show less" doesn't snap flat under the cursor.
         var hovering = canHover && !reduce && wrap.matches(':hover');
-        vp.style.maxHeight = (hovering ? h + BUMP : h) + 'px';
+        vp.style.maxHeight = (hovering ? h + bumpPx() : h) + 'px';
         btn.setAttribute('aria-expanded', 'false');
         label.textContent = 'Show ' + (items.length - peek) + ' more';
         btn.hidden = false;
@@ -228,7 +237,7 @@
       // on pointer hover, revealing a bit more under the (also-easing) fade.
       if (canHover && !reduce) {
         wrap.addEventListener('mouseenter', function () {
-          if (!open && peekPx != null) vp.style.maxHeight = (peekPx + BUMP) + 'px';
+          if (!open && peekPx != null) vp.style.maxHeight = (peekPx + bumpPx()) + 'px';
         });
         wrap.addEventListener('mouseleave', function () {
           if (!open && peekPx != null) vp.style.maxHeight = peekPx + 'px';
@@ -246,7 +255,7 @@
           if (h == null) { collapse(); return; }
           peekPx = h;
           var hovering = canHover && !reduce && wrap.matches(':hover');
-          vp.style.maxHeight = (hovering ? h + BUMP : h) + 'px';
+          vp.style.maxHeight = (hovering ? h + bumpPx() : h) + 'px';
         });
       });
     });
