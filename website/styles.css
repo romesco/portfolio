@@ -405,6 +405,85 @@ details[open] > .work-summary::before {
 }
 
 /* ----------------------------------------------------------------
+   Expandable — "peek + fade" disclosure for long sections
+
+   A section body is wrapped in .expandable-viewport; the index script
+   collapses it to ~data-peek items, masks the cut-off into a soft fade,
+   and reveals the rest on click. The mask fades content alpha (not a
+   colored overlay), so it works in light and dark with no per-theme
+   tuning. With no JS nothing is clipped and the toggle stays hidden.
+---------------------------------------------------------------- */
+
+/* Animatable fade depth: 100% = fully opaque (no visible fade); lower
+   values start the gradient higher, so more of the tail dissolves. The
+   @property declaration is what lets it transition smoothly on open. */
+@property --expandable-fade {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+.expandable-viewport {
+  -webkit-mask-image: linear-gradient(to bottom, #000 var(--expandable-fade), transparent);
+          mask-image: linear-gradient(to bottom, #000 var(--expandable-fade), transparent);
+  transition:
+    max-height 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    --expandable-fade 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.expandable.is-collapsed .expandable-viewport {
+  --expandable-fade: 55%;
+}
+
+.expandable-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  margin: 0.6rem 0 0;
+  padding: 0.2rem 0;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+
+  font: inherit;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--fg-muted);
+
+  transition: color 160ms ease;
+}
+
+.expandable-toggle[hidden] { display: none; }
+
+.expandable-toggle:hover { color: var(--accent); }
+
+.expandable-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Hover whisper: the chevron drifts the way it will travel. */
+.expandable-chevron {
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.expandable-toggle:hover .expandable-chevron {
+  transform: translateY(2px);
+}
+
+.expandable.is-open .expandable-chevron {
+  transform: rotate(180deg);
+}
+
+.expandable.is-open .expandable-toggle:hover .expandable-chevron {
+  transform: rotate(180deg) translateY(2px);
+}
+
+/* ----------------------------------------------------------------
    Mentoring — name + project, with trajectory/years as muted meta
 ---------------------------------------------------------------- */
 
