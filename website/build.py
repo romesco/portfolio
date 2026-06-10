@@ -177,6 +177,21 @@ def cname_from_website(url: str | None) -> str | None:
     return host or None
 
 
+# News text is rendered as inline Markdown so an entry can link just part of
+# the line (e.g. a single name) rather than the whole thing. Raw HTML is
+# escaped; only Markdown syntax (links, emphasis) is honored.
+_NEWS_MD = mistune.create_markdown(escape=True)
+
+
+def _render_news_text(text: str) -> Markup:
+    """Render a one-line news update as inline HTML, stripping the single
+    enclosing <p> mistune adds so it sits inline in the row."""
+    html = _NEWS_MD(text or "").strip()
+    if html.startswith("<p>") and html.endswith("</p>"):
+        html = html[3:-4]
+    return Markup(html)
+
+
 def load_news() -> list[dict]:
     """Load data/news.yaml into render-ready dicts, newest first. Each source
     item is `{date: YYYY-MM-DD, text: ..., link?: ...}`. We add `iso` (for the
@@ -195,6 +210,7 @@ def load_news() -> list[dict]:
             display = str(d or "")
         items.append({
             "text": n.get("text", ""),
+            "html": _render_news_text(n.get("text", "")),
             "link": n.get("link"),
             "iso": iso,
             "date_display": display,

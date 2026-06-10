@@ -31,7 +31,7 @@
       {% for n in news %}
       <li class="news-item">
         <time class="news-date" datetime="{{ n.iso }}">{{ n.date_display }}</time>
-        <span class="news-text">{% if n.link %}<a href="{{ n.link }}">{{ n.text }}</a>{% else %}{{ n.text }}{% endif %}</span>
+        <span class="news-text">{% if n.link %}<a href="{{ n.link }}">{{ n.html }}</a>{% else %}{{ n.html }}{% endif %}</span>
       </li>
       {% endfor %}
     </ul>

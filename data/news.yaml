@@ -1,8 +1,9 @@
 # News / updates shown near the top of the homepage (first section after the
 # bio). Newest first — build.py sorts by `date` descending. Each item:
-#   - date: YYYY-MM-DD        # rendered right-aligned as "Jun 2026"
-#     text: one-line update
-#     link: https://...       # optional; wraps the text in a link
+#   - date: YYYY-MM-DD        # rendered as "Jun 2026" in the left column
+#     text: one-line update   # supports inline Markdown, e.g. [Octi](https://…)
+#     link: https://...       # optional; links the WHOLE line (use the inline
+#                             #   Markdown form above to link just part of it)
 #
 # Placeholder entries below — edit the text/dates (and add more) freely.
 #- date: 2026-06-17
@@ -10,8 +11,7 @@
 - date: 2026-04-30
   text: Passed my Generals! (PhD Candidacy Exam)
 - date: 2025-06-10
-  text: Octi got a job at NVIDIA! Congrats Octi!!
-  link: https://zoctipus.github.io/
+  text: "[Octi](https://zoctipus.github.io/) got a job at NVIDIA! Congrats Octi!!"
 - date: 2024-11-10
   text: Best Paper Award @ MAPoDeL workshop @ CoRL 
 - date: 2024-11-10
