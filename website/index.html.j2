@@ -21,6 +21,30 @@
   </div>
   {% endmacro %}
 
+  {# Render a single media item (video / image / youtube / placeholder).
+     Used standalone for one item and per-slide inside the carousel. #}
+  {% macro media_item(m, title) %}
+  {% if m and m.type == "video" %}
+    {% if m.autoplay %}
+  <video src="{{ m.src }}"{% if m.poster %} poster="{{ m.poster }}"{% endif %}
+         muted loop playsinline preload="metadata" data-autoplay-on-open></video>
+    {% else %}
+  <video src="{{ m.src }}"{% if m.poster %} poster="{{ m.poster }}"{% endif %}
+         controls preload="metadata" playsinline></video>
+    {% endif %}
+  {% elif m and m.type == "image" %}
+  <img src="{{ m.src }}" alt="{{ m.alt or title }}" loading="lazy">
+  {% elif m and m.type == "youtube" and m.id %}
+  <iframe src="https://www.youtube-nocookie.com/embed/{{ m.id }}"
+          loading="lazy"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="Video: {{ title }}"></iframe>
+  {% else %}
+  <div class="work-media-placeholder" aria-label="Media placeholder">▶ media &middot; 16:9</div>
+  {% endif %}
+  {% endmacro %}
+
   <p class="bio">{{ bio }}</p>
 
   {% if news %}
@@ -51,27 +75,37 @@
             <span class="work-meta">{{ p.authors | authors }} <cite>{{ p.venue }}</cite>, {{ p.year }}.{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}</span>
           </summary>
           <div class="work-media">
-            {% if p.media and p.media.type == "video" %}
-              {% if p.media.autoplay %}
-              <video src="{{ p.media.src }}"
-                     {% if p.media.poster %}poster="{{ p.media.poster }}"{% endif %}
-                     muted loop playsinline preload="metadata"
-                     data-autoplay-on-open></video>
-              {% else %}
-              <video src="{{ p.media.src }}"
-                     {% if p.media.poster %}poster="{{ p.media.poster }}"{% endif %}
-                     controls preload="metadata" playsinline></video>
-              {% endif %}
-            {% elif p.media and p.media.type == "image" %}
-              <img src="{{ p.media.src }}" alt="{{ p.media.alt or p.title }}" loading="lazy">
-            {% elif p.media and p.media.type == "youtube" and p.media.id %}
-              <iframe src="https://www.youtube-nocookie.com/embed/{{ p.media.id }}"
-                      loading="lazy"
-                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                      title="Video: {{ p.title }}"></iframe>
+            {% set media = p.media_list %}
+            {% if media | length > 1 %}
+            <div class="carousel" data-carousel>
+              <div class="carousel-viewport">
+                <div class="carousel-track">
+                  {% for m in media %}
+                  <div class="carousel-slide" data-label="{{ m.label or '' }}" aria-hidden="{{ 'false' if loop.first else 'true' }}">
+                    {{ media_item(m, p.title) }}
+                  </div>
+                  {% endfor %}
+                </div>
+                <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous clip">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="carousel-arrow carousel-next" type="button" aria-label="Next clip">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+              </div>
+              <div class="carousel-bar">
+                <span class="carousel-caption">{{ media[0].label or '' }}</span>
+                <div class="carousel-dots">
+                  {% for m in media %}
+                  <button class="carousel-dot{% if loop.first %} is-active{% endif %}" type="button" aria-label="{{ m.label or ('Clip ' ~ loop.index) }}"></button>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            {% elif media | length == 1 %}
+            {{ media_item(media[0], p.title) }}
             {% else %}
-              <div class="work-media-placeholder" aria-label="Media placeholder">▶ media &middot; 16:9</div>
+            <div class="work-media-placeholder" aria-label="Media placeholder">▶ media &middot; 16:9</div>
             {% endif %}
           </div>
         </details>
@@ -115,22 +149,63 @@
 
 {% block scripts %}
 <script>
-  // Wire up <details> open/close to play/pause any <video> inside that's
-  // marked data-autoplay-on-open. We don't use the HTML `autoplay`
-  // attribute because it fires on page load — we want play to start
-  // when the user actually opens the dropdown.
-  for (const v of document.querySelectorAll('details video[data-autoplay-on-open]')) {
-    const d = v.closest('details');
-    if (!d) continue;
-    d.addEventListener('toggle', () => {
-      if (d.open) {
-        v.play().catch(() => {});
+  // Media inside each work's <details> dropdown. A single autoplay video
+  // plays when the dropdown opens and resets on close. A carousel (multiple
+  // clips) gets prev/next + dots, and only the active slide's video plays.
+  // We avoid the HTML `autoplay` attribute (it fires on page load) — playback
+  // starts when the user actually opens the dropdown.
+  (function () {
+    function setupCarousel(root, details) {
+      var track = root.querySelector('.carousel-track');
+      var slides = Array.prototype.slice.call(root.querySelectorAll('.carousel-slide'));
+      var dots = Array.prototype.slice.call(root.querySelectorAll('.carousel-dot'));
+      var caption = root.querySelector('.carousel-caption');
+      var prev = root.querySelector('.carousel-prev');
+      var next = root.querySelector('.carousel-next');
+      var n = slides.length, i = 0;
+
+      function sync() {
+        track.style.transform = 'translateX(' + (-i * 100) + '%)';
+        for (var k = 0; k < n; k++) {
+          if (dots[k]) dots[k].classList.toggle('is-active', k === i);
+          slides[k].setAttribute('aria-hidden', String(k !== i));
+          var v = slides[k].querySelector('video');
+          if (v) {
+            if (k === i && details.open && v.hasAttribute('data-autoplay-on-open')) {
+              v.play().catch(function () {});
+            } else {
+              v.pause();
+              if (k !== i) { try { v.currentTime = 0; } catch (e) {} }
+            }
+          }
+        }
+        if (caption) caption.textContent = slides[i].getAttribute('data-label') || '';
+      }
+
+      function go(step) { i = (i + step + n) % n; sync(); }
+      if (prev) prev.addEventListener('click', function () { go(-1); });
+      if (next) next.addEventListener('click', function () { go(1); });
+      dots.forEach(function (dot, k) { dot.addEventListener('click', function () { i = k; sync(); }); });
+
+      sync();
+      return sync;
+    }
+
+    document.querySelectorAll('details.work').forEach(function (d) {
+      var carouselEl = d.querySelector('[data-carousel]');
+      if (carouselEl) {
+        var refresh = setupCarousel(carouselEl, d);
+        d.addEventListener('toggle', refresh);
       } else {
-        v.pause();
-        v.currentTime = 0;
+        var v = d.querySelector('video[data-autoplay-on-open]');
+        if (!v) return;
+        d.addEventListener('toggle', function () {
+          if (d.open) { v.play().catch(function () {}); }
+          else { v.pause(); try { v.currentTime = 0; } catch (e) {} }
+        });
       }
     });
-  }
+  })();
 </script>
 <script>
   // Expandable "peek + fade" sections. Each [data-expandable] collapses its

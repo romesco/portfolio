@@ -98,6 +98,7 @@ class Author(BaseModel):
     name: str
     me: bool = False
     equal: bool = False  # co-first-author asterisk
+    dagger: bool = False  # e.g. co-advisor / corresponding (†)
 
 
 # Sentinel for ellipses in author lists — represented as the literal string "...".
@@ -262,6 +263,8 @@ def format_authors(authors: list) -> str:
             name = f"\\textbf{{{a.name}}}" if a.me else a.name
             if a.equal:
                 name = name + "*"
+            if a.dagger:
+                name = name + "\\dag"
             pieces.append(name)
     if not pieces:
         return ""

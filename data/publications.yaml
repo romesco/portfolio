@@ -5,12 +5,41 @@
 #   - bare string                               → name as-is
 #   - {name: ..., me: true}                     → wraps in \textbf{...} (the user)
 #   - {name: ..., equal: true}                  → suffix `*` (co-first author)
+#   - {name: ..., dagger: true}                 → suffix `†` (e.g. co-advisor)
 #   - "..."  (quoted, list element)             → literal ellipsis for abbreviated lists
 #
 # Links: any of arxiv, pdf, doi, ieee, github, project. arxiv: <id> expands
 # to https://arxiv.org/abs/<id>; arxiv: <full URL> passes through.
+#
+# Website only: `featured: true` shows the entry on the homepage. `media:` may
+# be a single video/image/youtube OR a LIST of them — a list renders as a
+# carousel in the dropdown. Each item: {src, type?, poster?, autoplay?, alt?,
+# label?}. `label` captions the slide in a carousel.
 
 # ---------- Preprints ----------
+
+- year: 2026
+  type: preprint
+  authors:
+    - {name: "O. Zhang", equal: true}
+    - {name: "M. G. Castro", equal: true}
+    - {name: "P. Yin", equal: true}
+    - A. Gupta
+    - {name: "R. Scalise", me: true, equal: true, dagger: true}
+    - {name: "B. Boots", dagger: true}
+  featured: true
+  title: "A Balanced Data Diet: Mega-Scale RL for Robot Control"
+  venue: Preprint
+  media:
+    - src: https://sgs-rl.github.io/locomotion.mp4
+      poster: https://sgs-rl.github.io/poster.jpg
+      label: Locomotion
+      autoplay: true
+    - src: https://sgs-rl.github.io/manipulation.mp4
+      poster: https://sgs-rl.github.io/manipulation-poster.jpg
+      label: Manipulation
+      autoplay: true
+  links: {project: "https://sgs-rl.github.io"}
 
 - year: 2025
   type: preprint

@@ -102,9 +102,20 @@ def normalize_media(m) -> dict | None:
     m.setdefault("poster", None)
     m.setdefault("autoplay", False)
     m.setdefault("alt", None)
+    m.setdefault("label", None)  # caption shown in a multi-item carousel
     if m["type"] == "youtube" and not m.get("id"):
         m["id"] = _extract_youtube_id(m["src"])
     return m
+
+
+def normalize_media_list(m) -> list[dict]:
+    """Coerce the optional `media:` value into a list of media dicts (0, 1, or
+    many). A single string/dict becomes a one-item list; a YAML list of items
+    becomes many — the template renders >1 as a carousel."""
+    if m is None:
+        return []
+    items = m if isinstance(m, list) else [m]
+    return [nm for nm in (normalize_media(it) for it in items) if nm]
 
 
 def render_authors(authors) -> Markup:
@@ -127,6 +138,8 @@ def render_authors(authors) -> Markup:
             name = f"<strong>{name}</strong>"
         if a.get("equal"):
             name = f"{name}*"
+        if a.get("dagger"):
+            name = f"{name}†"
         pieces.append(name)
 
     if not pieces:
@@ -324,7 +337,7 @@ def main() -> int:
     for p in featured:
         p.setdefault("links", {})
         p.setdefault("awards", [])
-        p["media"] = normalize_media(p.get("media"))
+        p["media_list"] = normalize_media_list(p.get("media"))
 
     news = load_news()
     mentees = load_mentoring()
