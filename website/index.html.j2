@@ -86,6 +86,7 @@
                   </div>
                   {% endfor %}
                 </div>
+                <div class="carousel-peek" aria-hidden="true"></div>
                 <button class="carousel-arrow carousel-prev" type="button" aria-label="Previous clip">
                   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
@@ -160,6 +161,7 @@
       var slides = Array.prototype.slice.call(root.querySelectorAll('.carousel-slide'));
       var dots = Array.prototype.slice.call(root.querySelectorAll('.carousel-dot'));
       var caption = root.querySelector('.carousel-caption');
+      var peek = root.querySelector('.carousel-peek');
       var prev = root.querySelector('.carousel-prev');
       var next = root.querySelector('.carousel-next');
       var n = slides.length, i = 0, hinted = false, reduce = false;
@@ -193,13 +195,17 @@
       if (next) next.addEventListener('click', function () { go(1); });
       dots.forEach(function (dot, k) { dot.addEventListener('click', function () { i = k; sync(); }); });
 
-      // One-time "there's more" nudge: on first open, peek the next slide and
-      // settle back, so a second clip is obviously there to discover.
+      // One-time "there's more" hint: on first open, slide a center-cropped
+      // sliver of the next clip's frame in from the right (with a drop shadow
+      // so it reads as another video tucked behind this one), then retract it.
       function hint() {
-        if (reduce || hinted || n < 2) return;
+        if (reduce || hinted || n < 2 || !peek) return;
         hinted = true;
-        track.style.transform = 'translateX(' + (rest() - 14) + '%)';
-        setTimeout(function () { track.style.transform = 'translateX(' + rest() + '%)'; }, 600);
+        var nextEl = slides[(i + 1) % n].querySelector('video, img');
+        var frame = nextEl ? (nextEl.getAttribute('poster') || nextEl.getAttribute('src')) : '';
+        if (frame) peek.style.backgroundImage = "url('" + frame + "')";
+        peek.classList.add('is-hinting');
+        setTimeout(function () { peek.classList.remove('is-hinting'); }, 950);
       }
 
       sync();

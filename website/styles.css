@@ -399,6 +399,28 @@ details[open] > .work-summary::before {
   border-radius: 0;
 }
 
+/* One-time discovery hint: a center-cropped sliver of the next clip's frame
+   slides in from the right with a drop shadow, so it reads as another video
+   tucked behind the current one. `background-position: center` keeps the
+   subject (not the edge) in view. Driven by the carousel script. */
+.carousel-peek {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 26%;
+  background-size: cover;
+  background-position: center;
+  transform: translateX(102%);
+  box-shadow: -8px 0 18px oklch(0 0 0 / 0.3);
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.carousel-peek.is-hinting {
+  transform: translateX(0);
+}
+
 .carousel-arrow {
   position: absolute;
   top: 50%;
