@@ -94,7 +94,7 @@
                 </button>
               </div>
               <div class="carousel-bar">
-                <span class="carousel-caption">{{ media[0].label or '' }}</span>
+                <span class="carousel-caption">{{ media[0].label or '' }}{% if media | length > 1 %} · 1 / {{ media | length }}{% endif %}</span>
                 <div class="carousel-dots">
                   {% for m in media %}
                   <button class="carousel-dot{% if loop.first %} is-active{% endif %}" type="button" aria-label="{{ m.label or ('Clip ' ~ loop.index) }}"></button>
@@ -162,10 +162,13 @@
       var caption = root.querySelector('.carousel-caption');
       var prev = root.querySelector('.carousel-prev');
       var next = root.querySelector('.carousel-next');
-      var n = slides.length, i = 0;
+      var n = slides.length, i = 0, hinted = false, reduce = false;
+      try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+      function rest() { return -i * 100; }
 
       function sync() {
-        track.style.transform = 'translateX(' + (-i * 100) + '%)';
+        track.style.transform = 'translateX(' + rest() + '%)';
         for (var k = 0; k < n; k++) {
           if (dots[k]) dots[k].classList.toggle('is-active', k === i);
           slides[k].setAttribute('aria-hidden', String(k !== i));
@@ -179,7 +182,10 @@
             }
           }
         }
-        if (caption) caption.textContent = slides[i].getAttribute('data-label') || '';
+        if (caption) {
+          var label = slides[i].getAttribute('data-label') || '';
+          caption.textContent = (label ? label + ' · ' : '') + (i + 1) + ' / ' + n;
+        }
       }
 
       function go(step) { i = (i + step + n) % n; sync(); }
@@ -187,8 +193,17 @@
       if (next) next.addEventListener('click', function () { go(1); });
       dots.forEach(function (dot, k) { dot.addEventListener('click', function () { i = k; sync(); }); });
 
+      // One-time "there's more" nudge: on first open, peek the next slide and
+      // settle back, so a second clip is obviously there to discover.
+      function hint() {
+        if (reduce || hinted || n < 2) return;
+        hinted = true;
+        track.style.transform = 'translateX(' + (rest() - 14) + '%)';
+        setTimeout(function () { track.style.transform = 'translateX(' + rest() + '%)'; }, 600);
+      }
+
       sync();
-      return sync;
+      return function () { sync(); if (details.open) hint(); };
     }
 
     document.querySelectorAll('details.work').forEach(function (d) {
