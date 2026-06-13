@@ -21,6 +21,23 @@
   })();
 </script>
 <link rel="stylesheet" href="./styles.css?v={{ css_version }}">
+<script>
+  // Pick a random emoji from the pool (site.yaml `favicons:`) on each load
+  // and render it as an inline SVG favicon — no asset files, no extra
+  // requests. With JS off there's simply no custom icon.
+  (function () {
+    var icons = {{ favicons | tojson }};
+    if (!icons || !icons.length) return;
+    var emoji = icons[Math.floor(Math.random() * icons.length)];
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+      + '<text x="50" y="54" font-size="78" text-anchor="middle" '
+      + 'dominant-baseline="central">' + emoji + '</text></svg>';
+    var link = document.querySelector('link[rel~="icon"]') || document.createElement('link');
+    link.setAttribute('rel', 'icon');
+    link.setAttribute('href', 'data:image/svg+xml,' + encodeURIComponent(svg));
+    document.head.appendChild(link);
+  })();
+</script>
 </head>
 <body>
 <main>

@@ -54,6 +54,10 @@ ELLIPSIS_OUT = "…"
 VIDEO_EXTS = {".mp4", ".webm", ".mov", ".m4v"}
 IMAGE_EXTS = {".gif", ".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg"}
 
+# Fallback favicon pool if site.yaml doesn't define `favicons`. A random one
+# is rendered as an inline SVG emoji on each page load.
+DEFAULT_FAVICONS = ["🤖", "🦾", "🧠", "🧬", "⚙️", "🛰️", "🔬", "🔭", "⚛️", "✨"]
+
 FRONT_MATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 
 
@@ -261,7 +265,7 @@ def split_front_matter(text: str) -> tuple[dict, str]:
 
 
 def render_pages(env: Environment, identity: dict, default_description: str,
-                 css_version: str) -> list[str]:
+                 css_version: str, favicons: list[str]) -> list[str]:
     """Render every website/pages/*.md to website/<slug>.html via page.html.j2.
     Returns the slugs written."""
     if not PAGES_DIR.is_dir():
@@ -280,6 +284,7 @@ def render_pages(env: Environment, identity: dict, default_description: str,
             description=description,
             content_html=Markup(md(body)),
             css_version=css_version,
+            favicons=favicons,
         )
         (ROOT / f"{slug}.html").write_text(html)
         written.append(slug)
@@ -323,6 +328,7 @@ def main() -> int:
 
     news = load_news()
     mentees = load_mentoring()
+    favicons = site.get("favicons") or DEFAULT_FAVICONS
     # Content hash of the stylesheet, appended to its URL so browsers fetch
     # the new CSS immediately instead of serving a stale cached copy.
     css_version = hashlib.sha256((ROOT / "styles.css").read_bytes()).hexdigest()[:8]
@@ -347,11 +353,13 @@ def main() -> int:
         news=news,
         mentees=mentees,
         css_version=css_version,
+        favicons=favicons,
     )
     (ROOT / "index.html").write_text(html)
     print(f"wrote index.html ({len(featured)} publications, {len(news)} news)")
 
-    pages = render_pages(env, identity, site.get("description", ""), css_version)
+    pages = render_pages(env, identity, site.get("description", ""),
+                         css_version, favicons)
     if pages:
         print(f"wrote {len(pages)} page(s): {', '.join(pages)}")
 

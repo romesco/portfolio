@@ -9,3 +9,8 @@ bio: >
   and optimization to continual learning, reinforcement learning,
   large-scale physics-based simulation, and the science of
   transferring learned behaviors to physical systems.
+
+# Favicon pool — a random one is rendered as an inline SVG emoji on every
+# page load (see the head script in _layout.html.j2). Add/remove freely;
+# emoji that stay legible at ~16px work best.
+favicons: ["🤖", "🦾", "🧠", "🧬", "⚙️", "🛰️", "🔬", "🔭", "⚛️", "✨"]
