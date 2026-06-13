@@ -28,7 +28,7 @@
     - {name: "R. Scalise", me: true, equal: true, dagger: true}
     - {name: "B. Boots", dagger: true}
   featured: true
-  title: "A Balanced Data Diet: Mega-Scale RL for Robot Control"
+  title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
   venue: Preprint
   media:
     - src: https://sgs-rl.github.io/locomotion.mp4

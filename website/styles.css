@@ -271,6 +271,13 @@ section h2 {
   font-weight: 600;
 }
 
+/* Contribution markers (* / †) — superscript, sized down, and zeroed
+   line-height so the raised glyph doesn't stretch the author line. */
+.work-meta sup {
+  font-size: 0.7em;
+  line-height: 0;
+}
+
 /* ----------------------------------------------------------------
    Work expandable — <details>/<summary> with media drop-down
 

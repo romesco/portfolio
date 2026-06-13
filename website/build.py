@@ -136,10 +136,11 @@ def render_authors(authors) -> Markup:
         name = str(escape(a["name"]))
         if a.get("me"):
             name = f"<strong>{name}</strong>"
-        if a.get("equal"):
-            name = f"{name}*"
-        if a.get("dagger"):
-            name = f"{name}†"
+        # Contribution markers (* equal, † e.g. co-advisor) as a single
+        # superscript, kept outside any <strong> so they aren't bolded.
+        marks = ("*" if a.get("equal") else "") + ("†" if a.get("dagger") else "")
+        if marks:
+            name = f"{name}<sup>{marks}</sup>"
         pieces.append(name)
 
     if not pieces:
