@@ -124,6 +124,30 @@ def normalize_media_list(m) -> list[dict]:
     return [nm for nm in (normalize_media(it) for it in items) if nm]
 
 
+def normalize_coverage(items) -> list[dict]:
+    """Coerce the optional `coverage:` value into a list of {outlet, url} dicts.
+    A bare string becomes {outlet: <string>}; entries without an outlet drop. An
+    optional `date` (date or string) becomes `date_display` for the archive."""
+    out: list[dict] = []
+    for it in items or []:
+        if isinstance(it, str):
+            it = {"outlet": it}
+        if not isinstance(it, dict) or not it.get("outlet"):
+            continue
+        d = it.get("date")
+        if isinstance(d, (datetime.date, datetime.datetime)):
+            iso, disp = d.isoformat(), d.strftime("%b %Y")
+        else:
+            iso = disp = str(d) if d else ""
+        out.append({
+            "outlet": str(it["outlet"]),
+            "url": it.get("url"),
+            "iso": iso,
+            "date_display": disp,
+        })
+    return out
+
+
 def render_authors(authors) -> Markup:
     """HTML port of the CV's format_authors. `me: true` wraps in <strong>;
     `equal: true` appends `*`; bare `"..."` becomes a literal ellipsis.
@@ -187,6 +211,35 @@ def render_links(links) -> Markup:
     if v := links.get("project"):
         parts.append(f'<a href="{escape(v)}">project</a>')
     return Markup(" · ".join(parts))
+
+
+# The hidden archive page that lists every press hit; the inline "press" line
+# on featured works links here.
+PRESS_PAGE_URL = "/inthepress"
+
+
+def render_coverage_inline(coverage, cap: int = 3) -> Markup:
+    """Quiet "press" line for a featured work: up to `cap` outlet links joined by
+    middots, with a "+N more" pointer to the full /inthepress archive when the
+    list is longer. The "press" label always links there too."""
+    if not coverage:
+        return Markup("")
+    shown = coverage[:cap]
+    parts: list[str] = []
+    for c in shown:
+        if c.get("url"):
+            parts.append(f'<a href="{escape(c["url"])}">{escape(c["outlet"])}</a>')
+        else:
+            parts.append(str(escape(c["outlet"])))
+    extra = len(coverage) - len(shown)
+    more = (f' <a class="work-press-more" href="{PRESS_PAGE_URL}">+{extra} more</a>'
+            if extra > 0 else "")
+    return Markup(
+        '<span class="work-press">'
+        f'<a class="work-press-label" href="{PRESS_PAGE_URL}">press</a> '
+        f'<span class="work-press-outlets">{" · ".join(parts)}{more}</span>'
+        "</span>"
+    )
 
 
 def cname_from_website(url: str | None) -> str | None:
@@ -424,6 +477,26 @@ def load_reading() -> list[dict]:
 _LATEX_UNESCAPE = {r"\&": "&", r"\%": "%", r"\#": "#", r"\_": "_", r"\$": "$"}
 
 
+def load_press() -> list[dict]:
+    """Collect every publication carrying a `coverage:` list into render-ready
+    works for the /inthepress archive, newest first. Coverage lives on the
+    publication entries (single source of truth) — this is just a view over it."""
+    raw = yaml.safe_load(PUBS_YAML.read_text()) or []
+    works: list[dict] = []
+    for p in raw:
+        cov = normalize_coverage(p.get("coverage"))
+        if not cov:
+            continue
+        works.append({
+            "title": _delatex(str(p.get("title") or "")),
+            "venue": _delatex(str(p.get("venue") or "")),
+            "year": p.get("year"),
+            "coverage": cov,
+        })
+    works.sort(key=lambda w: -(w["year"] or 0))
+    return works
+
+
 def _delatex(s: str) -> str:
     for k, v in _LATEX_UNESCAPE.items():
         s = s.replace(k, v)
@@ -521,6 +594,7 @@ def main() -> int:
         p.setdefault("links", {})
         p.setdefault("awards", [])
         p["media_list"] = normalize_media_list(p.get("media"))
+        p["coverage"] = normalize_coverage(p.get("coverage"))
 
     news = load_news()
     mentees = load_mentoring()
@@ -538,6 +612,7 @@ def main() -> int:
     )
     env.filters["authors"] = render_authors
     env.filters["links"] = render_links
+    env.filters["coverage"] = render_coverage_inline
 
     shutil.copy2(HEADSHOT_SRC, HEADSHOT_DEST)
     html = env.get_template("index.html.j2").render(
@@ -601,6 +676,22 @@ def main() -> int:
         )
         (ROOT / "reading.html").write_text(html)
         print(f"wrote reading.html ({sum(len(g['links']) for g in groups)} links)")
+
+    # In the press — every publication's real media coverage, an exhaustive
+    # YAML-driven hidden page at /inthepress (sourced from publications.yaml).
+    press_works = load_press()
+    if press_works:
+        html = env.get_template("inthepress.html.j2").render(
+            identity=identity,
+            title="In the Press",
+            description=f"Press and media coverage of {identity.get('name', '')}'s work.".strip(),
+            works=press_works,
+            css_version=css_version,
+            favicons=favicons,
+        )
+        (ROOT / "inthepress.html").write_text(html)
+        hits = sum(len(w["coverage"]) for w in press_works)
+        print(f"wrote inthepress.html ({hits} hits across {len(press_works)} works)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.

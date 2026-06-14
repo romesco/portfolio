@@ -15,6 +15,11 @@
 # be a single video/image/youtube OR a LIST of them — a list renders as a
 # carousel in the dropdown. Each item: {src, type?, poster?, autoplay?, alt?,
 # label?}. `label` captions the slide in a carousel.
+#
+# `coverage:` is an optional list of real press/media hits — {outlet, url} (a
+# bare string also works). Featured works render a quiet "press" line; ALL works
+# with coverage are collected on the hidden /inthepress page. Only add genuine
+# third-party coverage (not the project's own page).
 
 # ---------- Preprints ----------
 
@@ -59,6 +64,10 @@
   title: "VAMOS: A hierarchical vision-language-action model for capability-modulated and steerable navigation"
   venue: arXiv
   links: {arxiv: "2510.20818"}
+  awards: ["Madrona Prize Runner-Up"]
+  coverage:
+    - {outlet: Allen School News, url: "https://news.cs.washington.edu/2025/11/06/2025-research-showcase-highlights-faculty-and-student-innovation-across-ai-robotics-neuroscience/"}
+    - {outlet: Madrona, url: "https://www.madrona.com/madrona-prize-2025-celebrating-innovation-allen-school-research-showcase/"}
 
 - year: 2019
   type: preprint
@@ -71,6 +80,9 @@
   title: "MuSHR: A low-cost, open-source robotic racecar for education and research"
   venue: arXiv
   links: {arxiv: "1908.08031"}
+  coverage:
+    - {outlet: GeekWire, url: "https://www.geekwire.com/2019/robotic-race-car-platform-univ-washington-designed-speed-research-around/"}
+    - {outlet: Allen School News, url: "https://news.cs.washington.edu/2019/08/21/allen-school-releases-mushr-robotic-race-car-platform-to-drive-advances-in-ai-research-and-education"}
 
 # ---------- Journal ----------
 
@@ -206,6 +218,11 @@
   venue: HRI
   venue_full: Conference on Human Robot Interaction (HRI)
   awards: ["Best Systems Paper Award Finalist"]
+  coverage:
+    - {outlet: UW News, url: "https://www.washington.edu/news/2025/03/04/assistive-feeding-robot-gets-tested-outside-the-lab/"}
+    - {outlet: OPB, url: "https://www.opb.org/article/2025/03/31/think-out-loud-robotic-feeding-assistant-robotics-motot-impairments-food-disabilities-caregivers/"}
+    - {outlet: NIH/NIBIB, url: "https://www.nibib.nih.gov/news-events/newsroom/assistive-robot-learns-feed"}
+    - {outlet: Newswise, url: "https://www.newswise.com/articles/video-the-uw-s-assistive-feeding-robot-gets-tested-outside-the-lab"}
 
 - year: 2024
   type: conference
@@ -230,6 +247,12 @@
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   awards: ["Best Paper Award"]
+  coverage:
+    - {outlet: IEEE Spectrum, url: "https://spectrum.ieee.org/global-robotic-brain"}
+    - {outlet: TechCrunch, url: "https://techcrunch.com/2023/11/04/google-deepminds-robotics-head-on-general-purpose-robots-generative-ai-and-office-ai/"}
+    - {outlet: Google DeepMind, url: "https://deepmind.google/blog/scaling-up-learning-across-many-different-robot-types/"}
+    - {outlet: AI News, url: "https://www.artificialintelligence-news.com/news/open-x-embodiment-dataset-rt-x-model-aim-revolutionise-robotics/"}
+    - {outlet: Synced, url: "https://syncedreview.com/2023/10/06/general-purpose-robot-rt-x-a-collaboration-between-deepmind-and-33-academic-labs/"}
 
 - year: 2024
   type: conference
@@ -289,7 +312,10 @@
   venue: HRI
   venue_full: International Conference on Human-Robot Interaction (HRI)
   links: {pdf: "https://personalrobotics.cs.washington.edu/publications/bhattacharjee2020userpref.pdf"}
-  awards: ["Best Demonstration Award @ NeurIPS"]
+  coverage:
+    - {outlet: Futurism, url: "https://futurism.com/autonomous-robot-arm-feeds-people"}
+    - {outlet: New Atlas, url: "https://newatlas.com/autonomous-robot-arm-feeding/58844/"}
+    - {outlet: AAU, url: "https://www.aau.edu/research-scholarship/featured-research-topics/how-train-your-robot-feed-you-dinner"}
 
 - year: 2019
   type: conference
@@ -337,8 +363,8 @@
     - {name: "R. Scalise", me: true}
     - B. Boots
   title: "Parental Guidance: Efficient Lifelong Learning through Evolutionary Distillation"
-  venue: Evolutionary Robotics Workshop @ CoRL
-  venue_full: Evolutionary Robotics Workshop at Conference on Robot Learning (CoRL)
+  venue: MAPoDeL Workshop @ CoRL
+  venue_full: Workshop on Morphology-Aware Policy and Design Learning at Conference on Robot Learning (CoRL)
   awards: ["Best Paper Award"]
 
 - year: 2017

@@ -1,0 +1,40 @@
+{# Hidden page: /inthepress. An exhaustive archive of real press/media coverage,
+   grouped by publication. Sourced from the `coverage:` lists in
+   data/publications.yaml (single source of truth). Extends the shared layout;
+   not linked from the homepage nav, marked noindex. Generated to inthepress.html
+   by build.py — do NOT hand-edit. #}
+{% extends "_layout.html.j2" %}
+
+{% block title %}{{ title }} · {{ identity.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+{% block head_extra %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block topbar %}
+  <p class="backlink"><a href="/">← {{ identity.name }}</a></p>
+{% endblock %}
+
+{% block content %}
+  <section class="press-section">
+    <h2>{{ title }}</h2>
+    {% if works %}
+    <ul class="press-list">
+      {% for w in works %}
+      <li class="press-work">
+        <span class="press-work-title">{{ w.title }}</span>
+        <span class="press-work-meta"><cite>{{ w.venue }}</cite>, {{ w.year }}</span>
+        <ul class="press-outlets">
+          {% for c in w.coverage %}
+          <li class="press-outlet">
+            {% if c.url %}<a class="press-outlet-name" href="{{ c.url }}">{{ c.outlet }}</a>{% else %}<span class="press-outlet-name">{{ c.outlet }}</span>{% endif %}
+            {% if c.date_display %}<time class="press-outlet-date"{% if c.iso %} datetime="{{ c.iso }}"{% endif %}>{{ c.date_display }}</time>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="bio"><em>No press coverage recorded yet — add <code>coverage:</code> to entries in <code>data/publications.yaml</code>.</em></p>
+    {% endif %}
+  </section>
+{% endblock %}

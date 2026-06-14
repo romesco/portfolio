@@ -278,6 +278,40 @@ section h2 {
   line-height: 0;
 }
 
+/* Quiet "in the press" line under a featured work — a muted label plus outlet
+   names as understated links that warm to the accent on hover. Rendered only
+   where genuine coverage exists; the label + "+N more" point to /inthepress. */
+.work-press {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
+.work-press-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.work-press-label:hover { color: var(--accent); }
+
+.work-press-outlets { margin-left: 0.55em; }
+
+.work-press-outlets a {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.work-press-outlets a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.work-press-more { font-style: italic; white-space: nowrap; }
+
 /* ----------------------------------------------------------------
    Work expandable — <details>/<summary> with media drop-down
 
@@ -1117,4 +1151,72 @@ a:focus-visible {
   margin-left: 0.45rem;
   font-variant-numeric: lining-nums tabular-nums;
   white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------
+   In the press — /inthepress (hidden page). The exhaustive archive: each
+   publication that has coverage, with its outlets listed as a middot row.
+---------------------------------------------------------------- */
+
+.press-list {
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.press-work {
+  margin: 0 0 1.5rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.press-work:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+
+.press-work-title {
+  display: block;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.press-work-meta {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+}
+
+.press-work-meta cite { font-style: italic; }
+
+.press-outlets {
+  margin: 0.55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.press-outlet { display: inline; }
+
+.press-outlet:not(:last-child)::after {
+  content: "·";
+  margin: 0 0.55rem;
+  color: var(--fg-muted);
+}
+
+.press-outlet-name {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+a.press-outlet-name:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.press-outlet-date {
+  margin-left: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  font-variant-numeric: lining-nums tabular-nums;
 }
