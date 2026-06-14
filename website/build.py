@@ -144,11 +144,14 @@ def normalize_coverage(items) -> list[dict]:
         host = urlparse(str(it.get("url") or "")).netloc
         if host.startswith("www."):
             host = host[4:]
+        auto = f"https://www.google.com/s2/favicons?domain={host}&sz=64" if host else None
         out.append({
             "outlet": str(it["outlet"]),
             "url": it.get("url"),
             "domain": host,
-            "favicon": f"https://www.google.com/s2/favicons?domain={host}&sz=64" if host else None,
+            # Explicit `favicon:` wins (some sites have no good auto-favicon —
+            # e.g. a subdomain that only resolves to a generic globe).
+            "favicon": it.get("favicon") or auto,
             "iso": iso,
             "date_display": disp,
         })
