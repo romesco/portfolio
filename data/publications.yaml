@@ -68,7 +68,7 @@
   links: {arxiv: "2510.20818"}
   awards: ["Madrona Prize Runner-Up"]
   coverage:
-    - {outlet: Allen School News, url: "https://news.cs.washington.edu/2025/11/06/2025-research-showcase-highlights-faculty-and-student-innovation-across-ai-robotics-neuroscience/", favicon: "https://www.cs.washington.edu/sites/default/files/favicon_3.ico"}
+    - {outlet: Allen School News, url: "https://news.cs.washington.edu/2025/11/06/2025-research-showcase-highlights-faculty-and-student-innovation-across-ai-robotics-neuroscience/", favicon: "/img/allen-school.png"}
     - {outlet: Madrona, url: "https://www.madrona.com/madrona-prize-2025-celebrating-innovation-allen-school-research-showcase/"}
 
 - year: 2019
@@ -84,7 +84,7 @@
   links: {arxiv: "1908.08031"}
   coverage:
     - {outlet: GeekWire, url: "https://www.geekwire.com/2019/robotic-race-car-platform-univ-washington-designed-speed-research-around/"}
-    - {outlet: Allen School News, url: "https://news.cs.washington.edu/2019/08/21/allen-school-releases-mushr-robotic-race-car-platform-to-drive-advances-in-ai-research-and-education", favicon: "https://www.cs.washington.edu/sites/default/files/favicon_3.ico"}
+    - {outlet: Allen School News, url: "https://news.cs.washington.edu/2019/08/21/allen-school-releases-mushr-robotic-race-car-platform-to-drive-advances-in-ai-research-and-education", favicon: "/img/allen-school.png"}
 
 # ---------- Journal ----------
 
