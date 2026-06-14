@@ -834,28 +834,25 @@ a:focus-visible {
 }
 
 /* ----------------------------------------------------------------
-   Bucket list — /bucketlist (hidden page). A simple checklist driven by
-   data/bucketlist.yaml: an open circle for open items, a check for done.
+   Bucket list — /bucketlist (hidden page). A numbered list driven by
+   data/bucketlist.yaml; done items are muted and struck through.
 ---------------------------------------------------------------- */
 
 .bucketlist {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  padding-left: 1.9rem;
+  list-style-type: decimal;
+  /* lining + tabular figures read cleanest as list numbers */
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .bucket-item {
-  position: relative;
-  padding-left: 1.6rem;
   margin-bottom: 0.7rem;
+  padding-left: 0.25rem;
   font-size: 1.0625rem;
 }
 
-.bucket-item::before {
-  content: "○";
-  position: absolute;
-  left: 0;
-  top: 0;
+.bucket-item::marker {
   color: var(--fg-muted);
 }
 
@@ -863,9 +860,4 @@ a:focus-visible {
   color: var(--fg-muted);
   text-decoration: line-through;
   text-decoration-color: var(--rule);
-}
-
-.bucket-item.is-done::before {
-  content: "✓";
-  color: var(--accent);
 }

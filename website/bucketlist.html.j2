@@ -15,11 +15,11 @@
   <section class="bucketlist-section">
     <h2>{{ title }}</h2>
     {% if items %}
-    <ul class="bucketlist">
+    <ol class="bucketlist">
       {% for it in items %}
       <li class="bucket-item{% if it.done %} is-done{% endif %}">{{ it.html }}</li>
       {% endfor %}
-    </ul>
+    </ol>
     {% else %}
     <p class="bio"><em>No items yet — add some in <code>data/bucketlist.yaml</code>.</em></p>
     {% endif %}
