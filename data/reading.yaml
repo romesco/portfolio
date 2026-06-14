@@ -1,0 +1,30 @@
+# Reading — a curated blogroll shown at rosarioscalise.com/reading (a hidden
+# page, not linked from the site). Group your links by topic; each entry is
+# {name, url, note?}. The display domain is derived from the URL automatically.
+# Inline Markdown works in `note`. Add/reorder freely.
+#
+# These are starter examples — edit or replace with the people/sites YOU read.
+groups:
+  - name: Robotics & ML
+    links:
+      - name: The Gradient
+        url: https://thegradient.pub
+        note: Long-form, accessible essays on machine-learning research.
+      - name: Distill
+        url: https://distill.pub
+        note: Interactive explainers for ML ideas — archived, still some of the clearest around.
+
+  - name: Writing & the web
+    links:
+      - name: Julia Evans
+        url: https://jvns.ca
+        note: Illustrated deep-dives on how computers actually work.
+      - name: Maggie Appleton
+        url: https://maggieappleton.com
+        note: Essays and visual notes on tools for thought.
+
+  - name: Tools & craft
+    links:
+      - name: Simon Willison
+        url: https://simonwillison.net
+        note: Daily working notes on LLMs, SQLite, and the open web.

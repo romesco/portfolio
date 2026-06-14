@@ -47,6 +47,7 @@ NEWS_YAML = DATA_DIR / "news.yaml"
 MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
 TWITTER_YAML = DATA_DIR / "twitter.yaml"
+READING_YAML = DATA_DIR / "reading.yaml"
 PAGES_DIR = ROOT / "pages"
 HEADSHOT_SRC = ROOT.parent / "assets" / "headshot.jpg"
 HEADSHOT_DEST = ROOT / "headshot.jpg"
@@ -315,6 +316,33 @@ def load_twitter() -> tuple[str, list[dict]]:
     return handle, posts
 
 
+def load_reading() -> list[dict]:
+    """Load data/reading.yaml — `{groups: [{name, links: [{name, url, note}]}]}`
+    — into a curated, grouped blogroll. Derives a bare display domain from each
+    URL; renders notes as inline Markdown. Preserves file order."""
+    if not READING_YAML.exists():
+        return []
+    data = yaml.safe_load(READING_YAML.read_text()) or {}
+    groups: list[dict] = []
+    for g in data.get("groups") or []:
+        links: list[dict] = []
+        for ln in g.get("links") or []:
+            url = str(ln.get("url") or "")
+            host = urlparse(url).netloc or urlparse(f"//{url}").netloc
+            if host.startswith("www."):
+                host = host[4:]
+            note = ln.get("note")
+            links.append({
+                "name": str(ln.get("name") or host or url),
+                "url": url,
+                "domain": host,
+                "note": _render_inline_md(note) if note else None,
+            })
+        if links:
+            groups.append({"name": str(g.get("name") or ""), "links": links})
+    return groups
+
+
 # The shared data/ YAML is authored for the LaTeX CV, so a few values carry
 # LaTeX escapes. Undo the common ones for HTML (Jinja then re-escapes safely).
 _LATEX_UNESCAPE = {r"\&": "&", r"\%": "%", r"\#": "#", r"\_": "_", r"\$": "$"}
@@ -483,6 +511,20 @@ def main() -> int:
         )
         (ROOT / "twitter.html").write_text(html)
         print(f"wrote twitter.html ({len(posts)} posts)")
+
+    # Reading — a curated blogroll, YAML-driven hidden page at /reading.
+    if READING_YAML.exists():
+        groups = load_reading()
+        html = env.get_template("reading.html.j2").render(
+            identity=identity,
+            title="Reading",
+            description=f"Blogs and feeds {identity.get('name', '')} reads.".strip(),
+            groups=groups,
+            css_version=css_version,
+            favicons=favicons,
+        )
+        (ROOT / "reading.html").write_text(html)
+        print(f"wrote reading.html ({sum(len(g['links']) for g in groups)} links)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.
