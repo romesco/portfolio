@@ -1,0 +1,24 @@
+# Microblog feed shown at rosarioscalise.com/twitter (a hidden page, not linked
+# from the site). It looks like a Twitter/X timeline but in the site's style.
+# Newest first (sorted by `at`). To post, add an entry:
+#
+#   - at: 2026-06-14 09:12:00      # date + time (the timeline shows "2h"/"3d"/date)
+#     text: "Your short post. Inline [links](https://example.com) and *emphasis* work."
+#
+handle: rosarioscalise
+
+posts:
+  - at: 2026-06-14 09:12:00
+    text: "Morning thought: the real bottleneck in mega-scale RL is the *data diet*, not the compute. More on this soon."
+
+  - at: 2026-06-13 17:40:00
+    text: "Spent the afternoon chasing a sim2real gap. 90% of robotics is plumbing — and I mean that lovingly."
+
+  - at: 2026-06-11 11:05:00
+    text: "New preprint is up: [A Balanced Data Diet](https://sgs-rl.github.io). Locomotion + manipulation from one recipe. Thread soon."
+
+  - at: 2026-06-08 20:15:00
+    text: "If you work on large-scale physics simulation for robot learning, say hi — always up to compare notes."
+
+  - at: 2026-06-02 14:30:00
+    text: "Hello, world. Standing up a little corner of the web for short thoughts on robots, RL, and research life."

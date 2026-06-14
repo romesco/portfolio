@@ -1,0 +1,63 @@
+{# Hidden page: /twitter. A Twitter/X-style microblog feed driven by
+   data/twitter.yaml, in the site's own style. Extends the shared layout;
+   not linked from the site, marked noindex. Generated to twitter.html by
+   build.py — do NOT hand-edit. #}
+{% extends "_layout.html.j2" %}
+
+{% block title %}{{ title }} · {{ identity.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+{% block head_extra %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block topbar %}
+  <p class="backlink"><a href="/">← {{ identity.name }}</a></p>
+{% endblock %}
+
+{% block content %}
+  <section class="feed-section">
+    <h2>{{ title }}</h2>
+    {% if posts %}
+    <div class="feed">
+      {% for p in posts %}
+      <article class="post">
+        <img class="post-avatar" src="{{ identity.headshot }}" alt="" width="40" height="40">
+        <div class="post-body">
+          <div class="post-head">
+            <span class="post-name">{{ identity.name }}</span>
+            {% if handle %}<span class="post-handle">@{{ handle }}</span>{% endif %}
+            <span class="post-sep" aria-hidden="true">·</span>
+            <time class="post-time" datetime="{{ p.iso }}" title="{{ p.full }}">{{ p.display }}</time>
+          </div>
+          <div class="post-text">{{ p.html }}</div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="bio"><em>No posts yet — add some in <code>data/twitter.yaml</code>.</em></p>
+    {% endif %}
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Turn each post's absolute timestamp into a live relative one ("now", "5m",
+  // "3h", "2d"), falling back to an absolute date past a week. Runs at view
+  // time, so it's always current; the server-rendered date is the no-JS value.
+  (function () {
+    function rel(d) {
+      var s = (Date.now() - d.getTime()) / 1000;
+      if (s < 45) return 'now';
+      if (s < 3600) return Math.max(1, Math.floor(s / 60)) + 'm';
+      if (s < 86400) return Math.floor(s / 3600) + 'h';
+      if (s < 604800) return Math.floor(s / 86400) + 'd';
+      var o = { month: 'short', day: 'numeric' };
+      if (d.getFullYear() !== new Date().getFullYear()) o.year = 'numeric';
+      return d.toLocaleDateString(undefined, o);
+    }
+    document.querySelectorAll('.post-time[datetime]').forEach(function (t) {
+      var d = new Date(t.getAttribute('datetime'));
+      if (!isNaN(d.getTime())) t.textContent = rel(d);
+    });
+  })();
+</script>
+{% endblock %}

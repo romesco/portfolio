@@ -46,6 +46,7 @@ PUBS_YAML = DATA_DIR / "publications.yaml"
 NEWS_YAML = DATA_DIR / "news.yaml"
 MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
+TWITTER_YAML = DATA_DIR / "twitter.yaml"
 PAGES_DIR = ROOT / "pages"
 HEADSHOT_SRC = ROOT.parent / "assets" / "headshot.jpg"
 HEADSHOT_DEST = ROOT / "headshot.jpg"
@@ -256,6 +257,35 @@ def load_bucketlist() -> list[dict]:
     return items
 
 
+def load_twitter() -> tuple[str, list[dict]]:
+    """Load data/twitter.yaml — `{handle, posts: [{at, text}]}` — into a feed,
+    newest first. `at` is a date or datetime; we emit `iso` (for <time> and the
+    client-side relative clock), a short `display` fallback, and a `full` title.
+    Returns (handle, posts)."""
+    if not TWITTER_YAML.exists():
+        return "", []
+    data = yaml.safe_load(TWITTER_YAML.read_text()) or {}
+    handle = str(data.get("handle") or "").lstrip("@")
+    posts: list[dict] = []
+    for p in data.get("posts") or []:
+        at = p.get("at")
+        if isinstance(at, datetime.datetime):
+            iso, display, full = (at.isoformat(), at.strftime("%b %-d"),
+                                  at.strftime("%b %-d, %Y · %-I:%M %p"))
+        elif isinstance(at, datetime.date):
+            iso, display, full = at.isoformat(), at.strftime("%b %-d"), at.strftime("%b %-d, %Y")
+        else:
+            iso = display = full = str(at or "")
+        posts.append({
+            "html": _render_inline_md(p.get("text", "")),
+            "iso": iso,
+            "display": display,
+            "full": full,
+        })
+    posts.sort(key=lambda x: x["iso"], reverse=True)
+    return handle, posts
+
+
 # The shared data/ YAML is authored for the LaTeX CV, so a few values carry
 # LaTeX escapes. Undo the common ones for HTML (Jinja then re-escapes safely).
 _LATEX_UNESCAPE = {r"\&": "&", r"\%": "%", r"\#": "#", r"\_": "_", r"\$": "$"}
@@ -409,6 +439,21 @@ def main() -> int:
         )
         (ROOT / "bucketlist.html").write_text(html)
         print(f"wrote bucketlist.html ({len(bucket)} items)")
+
+    # Twitter-style microblog feed — a YAML-driven hidden page at /twitter.
+    if TWITTER_YAML.exists():
+        handle, posts = load_twitter()
+        html = env.get_template("twitter.html.j2").render(
+            identity=identity,
+            title="Twitter",
+            description=f"Short posts from {identity.get('name', '')}.".strip(),
+            handle=handle,
+            posts=posts,
+            css_version=css_version,
+            favicons=favicons,
+        )
+        (ROOT / "twitter.html").write_text(html)
+        print(f"wrote twitter.html ({len(posts)} posts)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.
