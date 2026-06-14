@@ -868,20 +868,60 @@ a:focus-visible {
    @handle + relative time, then the post, separated by hairlines.
 ---------------------------------------------------------------- */
 
-.post {
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  column-gap: 0.85rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--rule);
+.feed {
+  position: relative;
+  margin-top: 0.5rem;
 }
 
+/* One continuous thread line down the rail, fading in/out at the ends so the
+   posts read as a single stream of thoughts rather than repeated cards. */
+.feed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 21px;
+  width: 2px;
+  z-index: 0;
+  background: linear-gradient(to bottom,
+    transparent 0,
+    var(--rule) 2.2rem,
+    var(--rule) calc(100% - 2.2rem),
+    transparent 100%);
+}
+
+.post {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  column-gap: 0.85rem;
+  padding: 0.85rem 0;
+}
+
+.post-rail {
+  display: flex;
+  justify-content: center;
+}
+
+/* The poster's image appears once, as the head of the thread (newest post). */
 .post-avatar {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  background: var(--rule);
+  background: var(--bg);
+  box-shadow: 0 0 0 4px var(--bg);   /* clean gap over the thread line */
+}
+
+/* Older posts get a quiet node on the line instead of a repeated avatar. */
+.post-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 0.5rem;
+  border-radius: 50%;
+  background: var(--fg-muted);
+  box-shadow: 0 0 0 4px var(--bg);
 }
 
 .post-head {

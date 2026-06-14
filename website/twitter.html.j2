@@ -19,12 +19,20 @@
     <div class="feed">
       {% for p in posts %}
       <article class="post">
-        <img class="post-avatar" src="{{ identity.headshot }}" alt="" width="40" height="40">
+        <div class="post-rail">
+          {% if loop.first %}
+          <img class="post-avatar" src="{{ identity.headshot }}" alt="" width="44" height="44">
+          {% else %}
+          <span class="post-dot" aria-hidden="true"></span>
+          {% endif %}
+        </div>
         <div class="post-body">
           <div class="post-head">
+            {% if loop.first %}
             <span class="post-name">{{ identity.name }}</span>
             {% if handle %}<span class="post-handle">@{{ handle }}</span>{% endif %}
             <span class="post-sep" aria-hidden="true">·</span>
+            {% endif %}
             <time class="post-time" datetime="{{ p.iso }}" title="{{ p.full }}">{{ p.display }}</time>
           </div>
           <div class="post-text">{{ p.html }}</div>

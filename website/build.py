@@ -445,7 +445,7 @@ def main() -> int:
         handle, posts = load_twitter()
         html = env.get_template("twitter.html.j2").render(
             identity=identity,
-            title="Twitter",
+            title="en mi mente",
             description=f"Short posts from {identity.get('name', '')}.".strip(),
             handle=handle,
             posts=posts,
