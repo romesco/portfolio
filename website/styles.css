@@ -832,3 +832,40 @@ a:focus-visible {
   border-left: 2px solid var(--rule);
   color: var(--fg-muted);
 }
+
+/* ----------------------------------------------------------------
+   Bucket list — /bucketlist (hidden page). A simple checklist driven by
+   data/bucketlist.yaml: an open circle for open items, a check for done.
+---------------------------------------------------------------- */
+
+.bucketlist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bucket-item {
+  position: relative;
+  padding-left: 1.6rem;
+  margin-bottom: 0.7rem;
+  font-size: 1.0625rem;
+}
+
+.bucket-item::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--fg-muted);
+}
+
+.bucket-item.is-done {
+  color: var(--fg-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--rule);
+}
+
+.bucket-item.is-done::before {
+  content: "✓";
+  color: var(--accent);
+}

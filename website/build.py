@@ -45,6 +45,7 @@ IDENTITY_YAML = DATA_DIR / "identity.yaml"
 PUBS_YAML = DATA_DIR / "publications.yaml"
 NEWS_YAML = DATA_DIR / "news.yaml"
 MENTORING_YAML = DATA_DIR / "mentoring.yaml"
+BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
 PAGES_DIR = ROOT / "pages"
 HEADSHOT_SRC = ROOT.parent / "assets" / "headshot.jpg"
 HEADSHOT_DEST = ROOT / "headshot.jpg"
@@ -195,16 +196,16 @@ def cname_from_website(url: str | None) -> str | None:
     return host or None
 
 
-# News text is rendered as inline Markdown so an entry can link just part of
-# the line (e.g. a single name) rather than the whole thing. Raw HTML is
-# escaped; only Markdown syntax (links, emphasis) is honored.
-_NEWS_MD = mistune.create_markdown(escape=True)
+# One-liners (news updates, bucket-list items) are rendered as inline Markdown
+# so they can carry a link or emphasis. Raw HTML is escaped; only Markdown
+# syntax is honored.
+_INLINE_MD = mistune.create_markdown(escape=True)
 
 
-def _render_news_text(text: str) -> Markup:
-    """Render a one-line news update as inline HTML, stripping the single
-    enclosing <p> mistune adds so it sits inline in the row."""
-    html = _NEWS_MD(text or "").strip()
+def _render_inline_md(text: str) -> Markup:
+    """Render a single line as inline HTML, stripping the enclosing <p> that
+    mistune adds so it sits inline."""
+    html = _INLINE_MD(text or "").strip()
     if html.startswith("<p>") and html.endswith("</p>"):
         html = html[3:-4]
     return Markup(html)
@@ -228,12 +229,30 @@ def load_news() -> list[dict]:
             display = str(d or "")
         items.append({
             "text": n.get("text", ""),
-            "html": _render_news_text(n.get("text", "")),
+            "html": _render_inline_md(n.get("text", "")),
             "link": n.get("link"),
             "iso": iso,
             "date_display": display,
         })
     items.sort(key=lambda x: x["iso"], reverse=True)
+    return items
+
+
+def load_bucketlist() -> list[dict]:
+    """Load data/bucketlist.yaml in file order. Each item is a line of text, or
+    `{text: ..., done: true}` to check it off. Returns `{html, done}` dicts."""
+    if not BUCKETLIST_YAML.exists():
+        return []
+    raw = yaml.safe_load(BUCKETLIST_YAML.read_text()) or []
+    items: list[dict] = []
+    for it in raw:
+        if isinstance(it, dict):
+            text, done = str(it.get("text") or ""), bool(it.get("done"))
+        else:
+            text, done = str(it), False
+        if not text.strip():
+            continue
+        items.append({"html": _render_inline_md(text), "done": done})
     return items
 
 
@@ -376,6 +395,20 @@ def main() -> int:
                          css_version, favicons)
     if pages:
         print(f"wrote {len(pages)} page(s): {', '.join(pages)}")
+
+    # Bucket list — a YAML-driven hidden page at /bucketlist.
+    if BUCKETLIST_YAML.exists():
+        bucket = load_bucketlist()
+        html = env.get_template("bucketlist.html.j2").render(
+            identity=identity,
+            title="Bucket List",
+            description=f"{identity.get('name', '')}'s bucket list.".strip(),
+            items=bucket,
+            css_version=css_version,
+            favicons=favicons,
+        )
+        (ROOT / "bucketlist.html").write_text(html)
+        print(f"wrote bucketlist.html ({len(bucket)} items)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.

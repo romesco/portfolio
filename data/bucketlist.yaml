@@ -1,0 +1,12 @@
+# Bucket list — shown at rosarioscalise.com/bucketlist (a hidden page, not
+# linked from the site). Add items freely. Each item is a line of text:
+#
+#   - A thing I want to do.
+#
+# or, to check one off:
+#
+#   - text: A thing I have now done.
+#     done: true
+#
+# Inline Markdown works too (e.g. a [link](https://example.com) or *emphasis*).
+- Contribute to equitable, stable nuclear fusion.
