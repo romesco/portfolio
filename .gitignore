@@ -22,6 +22,10 @@ website/*.html
 website/headshot.jpg
 website/CNAME
 
+# Private working notes (application targets, honors collation) — intentionally
+# uncommitted; see notes/applications-and-honors.md
+notes/
+
 # Memory & harness
 .claude-memory/
 .xdg-config/
