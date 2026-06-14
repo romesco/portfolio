@@ -66,14 +66,16 @@
   <section class="works">
     <h2>Selected works</h2>
     {% if publications %}
-    {% call expandable(4) %}
     <ol class="works-list">
       {% for p in publications %}
+      {% set cue_posters = p.media_list | selectattr('type', 'equalto', 'video') | selectattr('poster') | map(attribute='poster') | list %}
+      {% set cue_poster = cue_posters[0] if cue_posters else none %}
       <li>
-        <details class="work">
+        <details class="work{% if cue_poster %} has-video{% endif %}">
           <summary class="work-summary">
             <span class="work-title">{{ p.title }}</span>
             <span class="work-meta">{{ p.authors | authors }} <cite>{{ p.venue }}</cite>, {{ p.year }}.{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}</span>
+            {% if cue_poster %}<span class="work-cue" style="background-image: url('{{ cue_poster }}')" aria-hidden="true"><svg class="work-cue-play" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>{% endif %}
           </summary>
           <div class="work-media">
             {% set media = p.media_list %}
@@ -114,7 +116,6 @@
       </li>
       {% endfor %}
     </ol>
-    {% endcall %}
     {% else %}
     <p class="bio"><em>No publications marked <code>featured: true</code> in <code>publications.yaml</code> yet.</em></p>
     {% endif %}
@@ -356,21 +357,6 @@
           vp.style.maxHeight = (hovering ? h + bumpPx() : h) + 'px';
         });
       });
-
-      // If the content has its own <details> (e.g. the Selected works video
-      // dropdowns), keep the collapsed clamp synced as they open/close: an
-      // opened dropdown grows the peek to fit instead of being clipped, while
-      // items past the peek stay hidden. Fires throughout the open animation.
-      if (window.ResizeObserver) {
-        new ResizeObserver(function () {
-          if (open || peekPx == null) return;
-          var h = peekHeight();
-          if (h == null) return;
-          peekPx = h;
-          var hovering = canHover && !reduce && wrap.matches(':hover');
-          vp.style.maxHeight = (hovering ? h + bumpPx() : h) + 'px';
-        }).observe(list);
-      }
     });
   })();
 </script>
