@@ -311,39 +311,12 @@ section h2 {
   color: var(--fg-muted);
   font-size: 0.85em;
   align-self: center;
-  transition: transform 180ms ease-out, opacity 200ms ease;
+  transition: transform 180ms ease-out;
   user-select: none;
 }
 
 details[open] > .work-summary::before {
   transform: rotate(90deg);
-}
-
-/* Video entries: the disclosure triangle quietly cross-fades into a filled
-   play glyph on hover/focus (closed only), hinting the entry expands to a
-   video. Nothing shows at rest, so the list stays classy. The play glyph
-   shares the marker cell, so it blooms in place of the triangle with no
-   layout shift. */
-.work.has-video > .work-summary::after {
-  content: "\25B6";
-  grid-column: 1;
-  grid-row: 1;
-  color: var(--accent);
-  font-size: 0.85em;
-  align-self: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms ease;
-}
-
-.work.has-video:not([open]):hover > .work-summary::before,
-.work.has-video:not([open]):focus-within > .work-summary::before {
-  opacity: 0;
-}
-
-.work.has-video:not([open]):hover > .work-summary::after,
-.work.has-video:not([open]):focus-within > .work-summary::after {
-  opacity: 1;
 }
 
 .work-summary .work-title {
@@ -561,6 +534,21 @@ details[open] > .work-summary::before {
     .work[open]::details-content {
       opacity: 0;
       height: 0;
+    }
+  }
+
+  /* Hover whisper: a work with media cracks its content open a sliver on
+     hover (closed only), with a light fade underneath, then eases back to
+     closed when the pointer leaves — hinting "there's more here" without
+     committing to open, and without making it about the video. Pointer
+     devices, motion allowed. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .work.has-video:not([open]):hover::details-content {
+      content-visibility: visible;
+      height: 2.2rem;
+      opacity: 1;
+      -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
+              mask-image: linear-gradient(to bottom, #000 40%, transparent);
     }
   }
 }
