@@ -657,6 +657,7 @@ def load_mentoring() -> list[dict]:
             "name": _delatex(str(m.get("name") or "").strip()),
             "url": m.get("url"),
             "project": _delatex(str(m.get("project") or "").strip()),
+            "project_url": m.get("project_url"),
             "span": years.replace("-", "–"),
             "now_html": now_html,
             "year": str(ey) if first else "",

@@ -2,7 +2,8 @@
 # first) and in the CV's Mentoring section. Per mentee:
 #   name, project, years (e.g. 2024-2025 or "Summer 2018"), current (CV trajectory)
 # Website-only extras (the CV ignores them):
-#   url:  personal site — links the name (subtle)
+#   url:          personal site — links the name (subtle)
+#   project_url:  links the project text (e.g. its paper/hardware/press page)
 #   now:  destination chip {name, role?, url?, favicon?|emoji?} shown after the
 #         span as "Next → [role @] [logo]". `favicon` is a hosted/served glyph
 #         (transparent preferred); `emoji` is a literal glyph (e.g. ✈️ for a
@@ -39,13 +40,16 @@ mentees:
     now: {role: PhD, name: CMU, favicon: "/img/cmu.png", url: "https://www.linkedin.com/in/taoj6/"}
   - name: Venkatesh Varada
     project: "Lovelace: The Autonomy-enabled Wheelchair"
+    project_url: "https://robotfeeding.io/hardware/hri25a/"
     current: "Now: Nordstrom"
     years: 2018-2019
   - name: Jeffrey Maxwell
     project: "HERBTalk: A Natural Language Pipeline"
+    project_url: "https://www.geekwire.com/2019/feed-alexa-university-washington-team-creates-voice-controlled-robot-help-people-eat/"
     years: 2018-2019
   - name: Yiren (Ramon) Qu
     project: Streaming RGBD \& Tactile Data Wirelessly
+    project_url: "https://robotfeeding.io/hardware/hri25a/"
     current: "Now: Google"
     years: 2017-2020
     now: {name: Google, favicon: "/img/google.png", url: "https://www.linkedin.com/in/yirenqu/"}

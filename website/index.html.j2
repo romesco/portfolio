@@ -128,7 +128,7 @@
         <span class="mentee-year">{% if m.year %}<span class="year-label">{{ m.year }}</span>{{ m.host_html }}{% endif %}</span>
         <span class="mentee-body">
           {% if m.url %}<a class="mentee-name" href="{{ m.url }}">{{ m.name }}</a>{% else %}<span class="mentee-name">{{ m.name }}</span>{% endif %}
-          <span class="mentee-meta">{{ m.project }}{% if m.span %} · {{ m.span }}{% endif %}{{ m.now_html }}</span>
+          <span class="mentee-meta">{% if m.project_url %}<a class="mentee-project" href="{{ m.project_url }}">{{ m.project }}</a>{% else %}{{ m.project }}{% endif %}{% if m.span %} · {{ m.span }}{% endif %}{{ m.now_html }}</span>
         </span>
       </li>
       {% endfor %}
