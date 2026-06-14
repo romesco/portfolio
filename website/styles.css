@@ -543,7 +543,7 @@ details[open] > .work-summary::before {
      committing to open, and without making it about the video. Pointer
      devices, motion allowed. */
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .work.has-video:not([open]):hover::details-content {
+    .work.has-media:not([open]):hover::details-content {
       content-visibility: visible;
       height: 2.2rem;
       opacity: 1;

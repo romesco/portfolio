@@ -68,9 +68,9 @@
     {% if publications %}
     <ol class="works-list">
       {% for p in publications %}
-      {% set has_video = (p.media_list | selectattr('type', 'equalto', 'video') | list | length) > 0 %}
+      {% set has_media = (p.media_list | length) > 0 %}
       <li>
-        <details class="work{% if has_video %} has-video{% endif %}">
+        <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
             <span class="work-title">{{ p.title }}</span>
             <span class="work-meta">{{ p.authors | authors }} <cite>{{ p.venue }}</cite>, {{ p.year }}.{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}</span>
