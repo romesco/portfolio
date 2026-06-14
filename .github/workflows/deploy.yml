@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily rebuild so the /reading live feed (and any auto-fetched content)
+  # refreshes on its own, even without a push. ~06:00 Pacific.
+  schedule:
+    - cron: "0 13 * * *"
 
 # Least-privilege token scoped for Pages deployment via OIDC.
 permissions:

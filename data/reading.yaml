@@ -31,3 +31,9 @@ groups:
       - name: Simon Willison
         url: https://simonwillison.net
         note: Daily working notes on LLMs, SQLite, and the open web.
+
+  - name: Friends & Adventures
+    links:
+      - name: Galen Weld
+        url: https://galenweld.com/blog
+        note: Backcountry skiing, mountaineering, and alpine trip reports — with gorgeous photography.
