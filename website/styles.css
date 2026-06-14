@@ -722,6 +722,7 @@ details[open] > .work-summary::before {
   grid-template-columns: 4.25rem 1fr;
   column-gap: 1.1rem;
   margin-bottom: 0.7rem;
+  align-items: baseline;
 }
 
 .mentee.year-start { margin-top: 1.4rem; }
@@ -733,8 +734,9 @@ details[open] > .work-summary::before {
 
 .year-label {
   display: block;
-  font-weight: 600;
-  color: var(--fg);
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  letter-spacing: 0.02em;
 }
 
 .mentee-host {
