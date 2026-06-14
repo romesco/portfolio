@@ -214,6 +214,16 @@
     }
 
     document.querySelectorAll('details.work').forEach(function (d) {
+      // Clicking the hover-revealed media sliver (the dropdown content) opens
+      // the entry too — not just the summary text. Only while closed, so it
+      // never interferes with carousel arrows / links / video controls once open.
+      var content = d.querySelector('.work-media');
+      if (content) {
+        content.addEventListener('click', function () {
+          if (!d.open) d.open = true;
+        });
+      }
+
       var carouselEl = d.querySelector('[data-carousel]');
       if (carouselEl) {
         var refresh = setupCarousel(carouselEl, d);
