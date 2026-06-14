@@ -596,22 +596,63 @@ def _delatex(s: str) -> str:
     return s
 
 
+def _chip_html(c, cls: str) -> Markup:
+    """A small institution glyph chip — a favicon img or a literal emoji,
+    optionally linked, with the name in the title/alt tooltip. Used for mentee
+    destinations and the per-year 'host' marker on the mentoring timeline."""
+    if not isinstance(c, dict) or not c.get("name"):
+        return Markup("")
+    name = str(escape(c["name"]))
+    if c.get("favicon"):
+        inner = (f'<img class="chip-glyph" src="{escape(c["favicon"])}" alt="{name}" '
+                 'width="16" height="16" loading="lazy" onerror="this.remove()">')
+    elif c.get("emoji"):
+        inner = f'<span class="chip-emoji" aria-hidden="true">{escape(c["emoji"])}</span>'
+    else:
+        inner = f'<span class="chip-name">{name}</span>'
+    if c.get("url"):
+        return Markup(f'<a class="{cls}" href="{escape(c["url"])}" title="{name}">{inner}</a>')
+    return Markup(f'<span class="{cls}" title="{name}">{inner}</span>')
+
+
 def load_mentoring() -> list[dict]:
-    """Load mentees from data/mentoring.yaml (file order preserved). Cleans
-    LaTeX escapes and stray whitespace, and renders `->` / year ranges with
-    proper arrows/en dashes for the web."""
+    """Load mentees into a year-grouped timeline (newest end-year first). Each
+    mentee is one row; the FIRST mentee of each end-year group carries the year
+    anchor + a 'host' chip (where Rosario was — a UW prototype). Optional `url`
+    links the name to a personal site; optional `now` is a destination chip
+    rendered after the span. LaTeX escapes / arrows are cleaned for the web."""
     if not MENTORING_YAML.exists():
         return []
     data = yaml.safe_load(MENTORING_YAML.read_text()) or {}
+    # Prototype: where Rosario was while mentoring (UW for now; per-year later).
+    HOST = {"name": "University of Washington",
+            "favicon": "/img/allen-school.png",
+            "url": "https://www.cs.washington.edu/"}
+
+    def end_year(years: str) -> int:
+        return max((int(y) for y in re.findall(r"\d{4}", years or "")), default=0)
+
+    raw = list(data.get("mentees") or [])
+    # End-year descending; file order preserved within a year (stable).
+    order = sorted(range(len(raw)),
+                   key=lambda i: (-end_year(str(raw[i].get("years") or "")), i))
     mentees: list[dict] = []
-    for m in data.get("mentees") or []:
-        current = _delatex(str(m.get("current") or "").strip()).replace("->", "→")
-        years = str(m.get("years") or "").strip().replace("-", "–")
+    prev = None
+    for i in order:
+        m = raw[i]
+        years = str(m.get("years") or "").strip()
+        ey = end_year(years)
+        first = ey != prev
+        prev = ey
+        now = m.get("now") if isinstance(m.get("now"), dict) else None
         mentees.append({
             "name": _delatex(str(m.get("name") or "").strip()),
+            "url": m.get("url"),
             "project": _delatex(str(m.get("project") or "").strip()),
-            "current": current,
-            "years": years,
+            "span": years.replace("-", "–"),
+            "now_html": _chip_html(now, "mentee-dest"),
+            "year": str(ey) if first else "",
+            "host_html": _chip_html(HOST, "mentee-host") if first else Markup(""),
         })
     return mentees
 

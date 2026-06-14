@@ -124,12 +124,12 @@
     {% call expandable(3) %}
     <ul class="mentoring">
       {% for m in mentees %}
-      <li class="mentee">
-        <span class="mentee-name">{{ m.name }}</span>
-        {% if m.project %}<span class="mentee-project">{{ m.project }}</span>{% endif %}
-        {% if m.current or m.years %}
-        <span class="mentee-meta">{% if m.current %}{{ m.current }}{% endif %}{% if m.current and m.years %} · {% endif %}{% if m.years %}{{ m.years }}{% endif %}</span>
-        {% endif %}
+      <li class="mentee{% if m.year %} year-start{% endif %}">
+        <span class="mentee-year">{% if m.year %}<span class="year-label">{{ m.year }}</span>{{ m.host_html }}{% endif %}</span>
+        <span class="mentee-body">
+          {% if m.url %}<a class="mentee-name" href="{{ m.url }}">{{ m.name }}</a>{% else %}<span class="mentee-name">{{ m.name }}</span>{% endif %}
+          <span class="mentee-meta">{{ m.project }}{% if m.span %} · {{ m.span }}{% endif %}{{ m.now_html }}</span>
+        </span>
       </li>
       {% endfor %}
     </ul>

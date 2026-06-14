@@ -1,26 +1,43 @@
+# Mentees, rendered on the homepage as a year-grouped timeline (newest end-year
+# first) and in the CV's Mentoring section. Per mentee:
+#   name, project, years (e.g. 2024-2025 or "Summer 2018"), current (CV trajectory)
+# Website-only extras (the CV ignores them):
+#   url:  personal site — links the name (subtle)
+#   now:  destination chip {name, url?, favicon?|emoji?} shown after the span.
+#         `favicon` is a hosted/served glyph (transparent preferred); `emoji` is
+#         a literal glyph (e.g. ✈️ for a stealth startup). `url` → their page at
+#         the destination, else LinkedIn.
 mentees:
-  - name: Cleah Winston 
-    project: Using Non-Expert Data to Robustify Imitation Learning via Offline RL (RISE) 
+  - name: Cleah Winston
+    url: "https://cleahwin.github.io/"
+    project: Using Non-Expert Data to Robustify Imitation Learning via Offline RL (RISE)
     current: "Undergrad -> Now: MS @ UW CS"
     years: 2024-2025
-  - name: Ayush Agrawal 
+    now: {name: UW, favicon: "/img/allen-school.png", url: "https://robotlearning.cs.washington.edu/people/"}
+  - name: Ayush Agrawal
     project: Using Non-Expert Data to Robustify Imitation Learning via Offline RL (RISE)
     current: "BS/MS -> Now: Google"
     years: 2024-2025
+    now: {name: Google, favicon: "/img/google.png", url: "https://www.linkedin.com/in/ayush-agrawal-uw/"}
   - name: Octi Zhang
+    url: "https://zoctipus.github.io/"
     project: Large-Scale Physics-based Simulation
     current: "Now: Core IsaacLab/Newton @ NVIDIA"
     years: 2023-2025
-  - name: Ege Caglar 
+    now: {name: NVIDIA, favicon: "/img/nvidia.png", url: "https://www.linkedin.com/in/octi-zhang-0bb521294/"}
+  - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: Stealth"
     years: 2023-2025
+    now: {name: Stealth, emoji: "✈️", url: "https://www.linkedin.com/in/ege-caglar/"}
   - name: Tao Jin
     project: Safe Control \& Interaction for Assistive Manipulators
     current: "Now: PhD @ CMU"
     years: 2019-2020
+    now: {name: CMU, favicon: "/img/cmu.png", url: "https://www.linkedin.com/in/taoj6/"}
   - name: Venkatesh Varada
     project: "Lovelace: The Autonomy-enabled Wheelchair"
+    current: "Now: Nordstrom"
     years: 2018-2019
   - name: Jeffrey Maxwell
     project: "HERBTalk: A Natural Language Pipeline"
@@ -29,11 +46,14 @@ mentees:
     project: Streaming RGBD \& Tactile Data Wirelessly
     current: "Now: Google"
     years: 2017-2020
+    now: {name: Google, favicon: "/img/google.png", url: "https://www.linkedin.com/in/yirenqu/"}
   - name: Maha Alrashed
     project: Crowdsourcing YCB Object Affordances
+    current: "Boston University (visiting)"
     years: Summer 2018
   - name: Abdullah Albakry
     project: Reverse-engineering an R-net Wheelchair
+    current: "NC State (visiting)"
     years: Summer 2018
 
 other:

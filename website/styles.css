@@ -233,8 +233,8 @@ main {
 .collab-favicon,
 .bio a img,
 .news-text a img {
-  width: 1em;
   height: 1em;
+  width: auto;            /* preserve aspect (square logos still render 1em) */
   border-radius: 3px;
   vertical-align: -0.15em;
 }
@@ -715,29 +715,61 @@ details[open] > .work-summary::before {
   list-style: none;
 }
 
+/* Year-grouped timeline: a left year column (end-year anchor + a "host" chip,
+   shown once per group) and a body (name, then project · span · destination). */
 .mentee {
-  margin-bottom: 1.05rem;
+  display: grid;
+  grid-template-columns: 4.25rem 1fr;
+  column-gap: 1.1rem;
+  margin-bottom: 0.7rem;
 }
 
-/* Name anchors the entry; project sits below in body tone; trajectory and
-   years are a quiet meta line. No markers. */
+.mentee.year-start { margin-top: 1.4rem; }
+.mentoring .mentee:first-child { margin-top: 0; }
+
+.mentee-year {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.year-label {
+  display: block;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.mentee-host {
+  display: inline-block;
+  margin-top: 0.3rem;
+  opacity: 0.85;
+}
+
 .mentee-name {
   display: block;
   font-weight: 600;
+  color: var(--fg);
+  text-decoration: none;
 }
 
-.mentee-project {
-  display: block;
-  margin-top: 0.05rem;
-}
+a.mentee-name:hover { color: var(--accent); text-decoration: underline; }
 
 .mentee-meta {
   display: block;
-  margin-top: 0.15rem;
-  font-size: 0.85rem;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
   color: var(--fg-muted);
-  font-variant-numeric: lining-nums tabular-nums;
 }
+
+.mentee-dest { margin-left: 0.4em; }
+
+/* Chip glyphs (mentee destination + year host) — a favicon image or an emoji. */
+.chip-glyph {
+  height: 1em;
+  width: auto;
+  border-radius: 3px;
+  vertical-align: -0.15em;
+}
+
+.chip-emoji { font-style: normal; vertical-align: -0.05em; }
 
 /* ----------------------------------------------------------------
    Elsewhere — inline link list with middot separators
