@@ -335,24 +335,17 @@ section h2 {
 .work-collab-label { color: var(--fg-muted); }
 
 .collab-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-left: 0.4rem;
-  color: var(--fg);
+  margin-left: 0.3em;
   text-decoration: none;
 }
 
-a.collab-chip:hover .collab-name {
-  color: var(--accent);
-  text-decoration: underline;
-}
-
+/* Author affiliation glyph — sized to the text, no visible label (the
+   institution name lives in the title/alt tooltip). */
 .collab-favicon {
-  width: 16px;
-  height: 16px;
+  width: 1em;
+  height: 1em;
   border-radius: 3px;
-  flex: none;
+  vertical-align: -0.15em;
 }
 
 /* ----------------------------------------------------------------

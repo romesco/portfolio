@@ -181,9 +181,9 @@ def normalize_collaborators(items) -> list[dict]:
 
 
 def _affil_chip(affil: dict) -> str:
-    """Inline institution chip appended after an author's name in a work's author
-    list — the institution's brand glyph (by `domain`/`favicon`) plus its name,
-    linking to its coverage of the work or that author's page."""
+    """Inline institution chip appended after an author's name — the institution's
+    brand glyph ONLY (no visible label; its name lives in the title/alt tooltip),
+    linking to its coverage of the work or that author's page. Deduped by caller."""
     name = str(escape(affil["name"]))
     url = affil.get("url")
     dom = affil.get("domain")
@@ -193,14 +193,12 @@ def _affil_chip(affil: dict) -> str:
         dom = dom[4:]
     fav = affil.get("favicon") or (
         f"https://www.google.com/s2/favicons?domain={dom}&sz=64" if dom else None)
-    inner = ""
-    if fav:
-        inner += (f'<img class="collab-favicon" src="{escape(fav)}" alt="" '
-                  'width="16" height="16" loading="lazy" onerror="this.remove()">')
-    inner += f'<span class="collab-name">{name}</span>'
+    glyph = (f'<img class="collab-favicon" src="{escape(fav)}" alt="{name}" '
+             'width="16" height="16" loading="lazy" onerror="this.remove()">'
+             ) if fav else f'<span class="collab-name">{name}</span>'
     if url:
-        return f'<a class="collab-chip" href="{escape(url)}">{inner}</a>'
-    return f'<span class="collab-chip">{inner}</span>'
+        return f'<a class="collab-chip" href="{escape(url)}" title="{name}">{glyph}</a>'
+    return f'<span class="collab-chip" title="{name}">{glyph}</span>'
 
 
 def render_authors(authors) -> Markup:
@@ -218,6 +216,18 @@ def render_authors(authors) -> Markup:
                 has_ellipsis = True
             else:
                 pieces.append(str(escape(a)))
+            continue
+        # A name-less {affil: ...} entry is a standalone glyph (for an abbreviated
+        # author list) — hug it onto the previous author instead of listing it.
+        if not a.get("name") and isinstance(a.get("affil"), dict):
+            af = a["affil"]
+            if af.get("name") and af["name"] not in seen_affils:
+                seen_affils.add(str(af["name"]))
+                chip = _affil_chip(af)
+                if pieces:
+                    pieces[-1] += chip
+                else:
+                    pieces.append(chip)
             continue
         name = str(escape(a["name"]))
         if a.get("me"):

@@ -23,15 +23,14 @@
 # favicon (by domain) on /inthepress; add `favicon: <url>` to an item to override
 # it when the auto-derived glyph is wrong (e.g. a subdomain with no real icon).
 #
-# An author entry may carry `affil: {name, url, domain?, favicon?}` — an institution
-# chip rendered inline right after that author's name (deduped: shown once per
-# institution, even if several authors share it). The glyph is the institution's
+# An author entry may carry `affil: {name, url, domain?, favicon?}` — a small
+# institution GLYPH (favicon only, no visible label; the name is the hover tooltip)
+# rendered right after that author's name, then the comma. Deduped: shown once per
+# institution even if several authors share it. The glyph is the institution's
 # favicon (by `domain`, else the url host, else explicit `favicon:`); `url` points
-# at its coverage of the work if any, else that author's page. Prefer this for a
-# NAMED co-author.
-#
-# `collaborators:` (featured works) is the fallback for works whose author list is
-# abbreviated (e.g. "..."): a quiet "w/ [glyph] Institution" line — same fields.
+# at its coverage of the work if any, else that author's page. For an abbreviated
+# author list ("..."), add a name-less entry `- {affil: {...}}` to drop the glyph
+# at the end (e.g. Open X-Embodiment → Google DeepMind).
 
 # ---------- Preprints ----------
 
@@ -254,13 +253,12 @@
     - "..."
     - {name: "R. Scalise", me: true}
     - "..."
+    - {affil: {name: "Google DeepMind", domain: "deepmind.google", url: "https://deepmind.google/blog/scaling-up-learning-across-many-different-robot-types/"}}
   featured: true
   title: "Open X-Embodiment: Robotic learning datasets and RT-X models"
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   awards: ["Best Paper Award"]
-  collaborators:
-    - {name: "Google DeepMind", domain: "deepmind.google", url: "https://deepmind.google/blog/scaling-up-learning-across-many-different-robot-types/"}
   coverage:
     - {outlet: IEEE Spectrum, url: "https://spectrum.ieee.org/global-robotic-brain"}
     - {outlet: TechCrunch, url: "https://techcrunch.com/2023/11/04/google-deepminds-robotics-head-on-general-purpose-robots-generative-ai-and-office-ai/"}
