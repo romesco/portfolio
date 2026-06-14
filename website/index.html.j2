@@ -74,7 +74,6 @@
           <summary class="work-summary">
             <span class="work-title">{{ p.title }}</span>
             <span class="work-meta">{{ p.authors | authors }} <cite>{{ p.venue }}</cite>, {{ p.year }}.{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}</span>
-            {% if has_video %}<span class="work-cue" aria-hidden="true"><svg class="work-cue-play" viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span class="work-cue-label">Watch the video</span></span>{% endif %}
           </summary>
           <div class="work-media">
             {% set media = p.media_list %}

@@ -311,12 +311,39 @@ section h2 {
   color: var(--fg-muted);
   font-size: 0.85em;
   align-self: center;
-  transition: transform 180ms ease-out;
+  transition: transform 180ms ease-out, opacity 200ms ease;
   user-select: none;
 }
 
 details[open] > .work-summary::before {
   transform: rotate(90deg);
+}
+
+/* Video entries: the disclosure triangle quietly cross-fades into a filled
+   play glyph on hover/focus (closed only), hinting the entry expands to a
+   video. Nothing shows at rest, so the list stays classy. The play glyph
+   shares the marker cell, so it blooms in place of the triangle with no
+   layout shift. */
+.work.has-video > .work-summary::after {
+  content: "\25B6";
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--accent);
+  font-size: 0.85em;
+  align-self: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.work.has-video:not([open]):hover > .work-summary::before,
+.work.has-video:not([open]):focus-within > .work-summary::before {
+  opacity: 0;
+}
+
+.work.has-video:not([open]):hover > .work-summary::after,
+.work.has-video:not([open]):focus-within > .work-summary::after {
+  opacity: 1;
 }
 
 .work-summary .work-title {
@@ -328,45 +355,6 @@ details[open] > .work-summary::before {
   grid-column: 2;
   grid-row: 2;
   margin-top: 0.1rem;
-}
-
-/* Per-entry "there's a video" cue: a small "▶ Watch the video" pill under the
-   summary of a work that has video, hinting you can click to expand and watch.
-   No video frame is shown. It eases down and warms up on hover (a whisper),
-   and is hidden once the entry is open and the full media plays. */
-.work-cue {
-  grid-column: 2;
-  grid-row: 3;
-  width: fit-content;
-  margin-top: 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.26rem 0.62rem 0.26rem 0.5rem;
-  border-radius: 999px;
-  background: color-mix(in oklch, var(--accent) 10%, transparent);
-  color: var(--fg-muted);
-  font-size: 0.8rem;
-  font-style: italic;
-  transition:
-    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    background 200ms ease,
-    color 200ms ease;
-}
-
-.work-cue-play {
-  flex-shrink: 0;
-  color: var(--accent);
-}
-
-.work.has-video:not([open]):hover .work-cue {
-  transform: translateY(2px);
-  background: color-mix(in oklch, var(--accent) 16%, transparent);
-  color: var(--fg);
-}
-
-.work[open] .work-cue {
-  display: none;
 }
 
 .work-media {
