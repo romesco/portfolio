@@ -257,30 +257,59 @@ def load_bucketlist() -> list[dict]:
     return items
 
 
+def _post_time(at) -> tuple[str, str, str]:
+    """(iso, short display, full title) for a date/datetime/other `at`."""
+    if isinstance(at, datetime.datetime):
+        return (at.isoformat(), at.strftime("%b %-d"),
+                at.strftime("%b %-d, %Y · %-I:%M %p"))
+    if isinstance(at, datetime.date):
+        return at.isoformat(), at.strftime("%b %-d"), at.strftime("%b %-d, %Y")
+    s = str(at or "")
+    return s, s, s
+
+
+def _initials(name: str) -> str:
+    """Up to two initials for an avatar fallback (e.g. 'Octi Zhang' -> 'OZ')."""
+    parts = [w for w in str(name).split() if w]
+    if not parts:
+        return "?"
+    if len(parts) == 1:
+        return parts[0][:2].upper()
+    return (parts[0][0] + parts[-1][0]).upper()
+
+
 def load_twitter() -> tuple[str, list[dict]]:
-    """Load data/twitter.yaml — `{handle, posts: [{at, text}]}` — into a feed,
-    newest first. `at` is a date or datetime; we emit `iso` (for <time> and the
-    client-side relative clock), a short `display` fallback, and a `full` title.
-    Returns (handle, posts)."""
+    """Load data/twitter.yaml — `{handle, posts: [{at, text?, repost?}]}` — into
+    a feed, newest first. A `repost` block carries another person's post
+    `{author, handle, url, at, text, avatar?}`; an own `text` alongside it is a
+    quote-style comment. We emit `iso`/`display`/`full` times for the post and
+    any repost. Returns (handle, posts)."""
     if not TWITTER_YAML.exists():
         return "", []
     data = yaml.safe_load(TWITTER_YAML.read_text()) or {}
     handle = str(data.get("handle") or "").lstrip("@")
     posts: list[dict] = []
     for p in data.get("posts") or []:
-        at = p.get("at")
-        if isinstance(at, datetime.datetime):
-            iso, display, full = (at.isoformat(), at.strftime("%b %-d"),
-                                  at.strftime("%b %-d, %Y · %-I:%M %p"))
-        elif isinstance(at, datetime.date):
-            iso, display, full = at.isoformat(), at.strftime("%b %-d"), at.strftime("%b %-d, %Y")
-        else:
-            iso = display = full = str(at or "")
+        iso, display, full = _post_time(p.get("at"))
+        rp = p.get("repost")
+        repost = None
+        if isinstance(rp, dict):
+            r_iso, r_display, r_full = _post_time(rp.get("at"))
+            repost = {
+                "author": str(rp.get("author") or ""),
+                "handle": str(rp.get("handle") or "").lstrip("@"),
+                "avatar": rp.get("avatar"),
+                "url": rp.get("url"),
+                "initials": _initials(rp.get("author") or ""),
+                "html": _render_inline_md(rp.get("text", "")),
+                "iso": r_iso, "display": r_display, "full": r_full,
+            }
+        comment = str(p.get("text") or "").strip()
         posts.append({
-            "html": _render_inline_md(p.get("text", "")),
-            "iso": iso,
-            "display": display,
-            "full": full,
+            "html": _render_inline_md(comment),
+            "has_comment": bool(comment),
+            "repost": repost,
+            "iso": iso, "display": display, "full": full,
         })
     posts.sort(key=lambda x: x["iso"], reverse=True)
     return handle, posts

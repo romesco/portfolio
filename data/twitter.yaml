@@ -5,6 +5,20 @@
 #   - at: 2026-06-14 09:12:00      # date + time (the timeline shows "2h"/"3d"/date)
 #     text: "Your short post. Inline [links](https://example.com) and *emphasis* work."
 #
+# To repost someone else's post (prototype — content stored here for now), add a
+# `repost:` block. Include your own `text` for a quote-style comment, or omit it
+# for a plain repost:
+#
+#   - at: 2026-06-12 16:20:00
+#     text: "My take on this."            # optional (quote comment)
+#     repost:
+#       author: Octi Zhang
+#       handle: zoctipus
+#       url: https://zoctipus.github.io/  # link to their original
+#       at: 2026-06-12 15:05:00           # their post's time
+#       text: "Their post."
+#       avatar: https://.../octi.jpg      # optional; falls back to initials
+#
 handle: rosarioscalise
 
 posts:
@@ -13,6 +27,23 @@ posts:
 
   - at: 2026-06-13 17:40:00
     text: "Spent the afternoon chasing a sim2real gap. 90% of robotics is plumbing — and I mean that lovingly."
+
+  - at: 2026-06-12 16:20:00
+    text: "Couldn't agree more — the sampling recipe carried this whole project."
+    repost:
+      author: Octi Zhang
+      handle: zoctipus
+      url: https://zoctipus.github.io/
+      at: 2026-06-12 15:05:00
+      text: "Balanced data beats more data. Spent months learning this the hard way so you don't have to."
+
+  - at: 2026-06-10 13:00:00
+    repost:
+      author: Octi Zhang
+      handle: zoctipus
+      url: https://zoctipus.github.io/
+      at: 2026-06-10 12:30:00
+      text: "New role at NVIDIA, same robots. Let's build. 🤖"
 
   - at: 2026-06-11 11:05:00
     text: "New preprint is up: [A Balanced Data Diet](https://sgs-rl.github.io). Locomotion + manipulation from one recipe. Thread soon."
