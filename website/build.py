@@ -158,6 +158,28 @@ def normalize_coverage(items) -> list[dict]:
     return out
 
 
+def normalize_collaborators(items) -> list[dict]:
+    """Coerce the optional `collaborators:` value into {name, url, favicon} dicts
+    for the "w/ [glyph] Institution" tag on a selected work. The glyph is the
+    institution's brand favicon — from an explicit `favicon:`, else a `domain:`,
+    else the link's host. `url` is the click target (the institution's coverage
+    of the work if any, otherwise its most senior co-author's page)."""
+    out: list[dict] = []
+    for it in items or []:
+        if not isinstance(it, dict) or not it.get("name"):
+            continue
+        url = it.get("url")
+        dom = it.get("domain")
+        if not dom and url:
+            dom = urlparse(str(url)).netloc
+        if dom and dom.startswith("www."):
+            dom = dom[4:]
+        favicon = it.get("favicon") or (
+            f"https://www.google.com/s2/favicons?domain={dom}&sz=64" if dom else None)
+        out.append({"name": str(it["name"]), "url": url, "favicon": favicon})
+    return out
+
+
 def render_authors(authors) -> Markup:
     """HTML port of the CV's format_authors. `me: true` wraps in <strong>;
     `equal: true` appends `*`; bare `"..."` becomes a literal ellipsis.
@@ -250,6 +272,27 @@ def render_coverage_inline(coverage, cap: int = 3) -> Markup:
         f'<span class="work-press-outlets">{" · ".join(parts)}{more}</span>'
         "</span>"
     )
+
+
+def render_collaborators(collabs) -> Markup:
+    """Quiet "w/ [glyph] Institution" tag on a selected work — favicon + name
+    chips, each linking to that institution's coverage or its senior co-author."""
+    if not collabs:
+        return Markup("")
+    chips: list[str] = []
+    for c in collabs:
+        inner = ""
+        if c.get("favicon"):
+            inner += (f'<img class="collab-favicon" src="{escape(c["favicon"])}" '
+                      'alt="" width="16" height="16" loading="lazy" onerror="this.remove()">')
+        inner += f'<span class="collab-name">{escape(c["name"])}</span>'
+        if c.get("url"):
+            chips.append(f'<a class="collab-chip" href="{escape(c["url"])}">{inner}</a>')
+        else:
+            chips.append(f'<span class="collab-chip">{inner}</span>')
+    return Markup('<span class="work-collab">'
+                  '<span class="work-collab-label">w/</span> '
+                  + " ".join(chips) + "</span>")
 
 
 def cname_from_website(url: str | None) -> str | None:
@@ -605,6 +648,7 @@ def main() -> int:
         p.setdefault("awards", [])
         p["media_list"] = normalize_media_list(p.get("media"))
         p["coverage"] = normalize_coverage(p.get("coverage"))
+        p["collaborators"] = normalize_collaborators(p.get("collaborators"))
 
     news = load_news()
     mentees = load_mentoring()
@@ -623,6 +667,7 @@ def main() -> int:
     env.filters["authors"] = render_authors
     env.filters["links"] = render_links
     env.filters["coverage"] = render_coverage_inline
+    env.filters["collaborators"] = render_collaborators
 
     shutil.copy2(HEADSHOT_SRC, HEADSHOT_DEST)
     html = env.get_template("index.html.j2").render(

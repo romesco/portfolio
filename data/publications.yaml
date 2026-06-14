@@ -22,6 +22,11 @@
 # third-party coverage (not the project's own page). Each outlet shows its brand
 # favicon (by domain) on /inthepress; add `favicon: <url>` to an item to override
 # it when the auto-derived glyph is wrong (e.g. a subdomain with no real icon).
+#
+# `collaborators:` (featured works) renders a quiet "w/ [glyph] Institution" tag —
+# {name, url, domain?, favicon?}. The glyph is the institution's favicon (by
+# `domain`, else the url host, else an explicit `favicon:`); `url` points at the
+# institution's coverage of the work if any, else its most senior co-author's page.
 
 # ---------- Preprints ----------
 
@@ -47,6 +52,8 @@
       label: Locomotion
       autoplay: true
   links: {project: "https://sgs-rl.github.io"}
+  collaborators:
+    - {name: "NVIDIA", domain: "nvidia.com", url: "https://zoctipus.github.io/"}
 
 - year: 2025
   type: preprint
@@ -102,6 +109,8 @@
   venue_full: The International Journal of Robotics Research (IJRR)
   links:
     github: https://personalrobotics.github.io/collaborative_manipulation_corpus
+  collaborators:
+    - {name: "Carnegie Mellon", domain: "cmu.edu", url: "https://hennyadmoni.com/"}
 
 # ---------- Conferences ----------
 #
@@ -125,6 +134,8 @@
   venue: ICRA 
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}
+  collaborators:
+    - {name: "Toyota Research Institute", domain: "tri.global", url: "https://www.tri.global/about-us/dr-ben-burchfiel"}
 
 - year: 2026
   type: conference 
@@ -249,6 +260,8 @@
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   awards: ["Best Paper Award"]
+  collaborators:
+    - {name: "Google DeepMind", domain: "deepmind.google", url: "https://deepmind.google/blog/scaling-up-learning-across-many-different-robot-types/"}
   coverage:
     - {outlet: IEEE Spectrum, url: "https://spectrum.ieee.org/global-robotic-brain"}
     - {outlet: TechCrunch, url: "https://techcrunch.com/2023/11/04/google-deepminds-robotics-head-on-general-purpose-robots-generative-ai-and-office-ai/"}
@@ -272,6 +285,8 @@
     autoplay: true
   venue: RSS
   venue_full: "Robotics: Science \\& Systems (RSS)"
+  collaborators:
+    - {name: "Stanford", domain: "stanford.edu", url: "https://ai.stanford.edu/~cbfinn/"}
 
 - year: 2023
   type: conference
@@ -286,6 +301,8 @@
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   links: {ieee: "https://ieeexplore.ieee.org/document/10161028"}
+  collaborators:
+    - {name: "Aurora", domain: "aurora.tech", url: "https://adityavk.com/"}
 
 - year: 2022
   type: conference
