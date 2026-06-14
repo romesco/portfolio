@@ -11,6 +11,10 @@ mentees:
     project: Large-Scale Physics-based Simulation
     current: "Now: Core IsaacLab/Newton @ NVIDIA"
     years: 2023-2025
+  - name: Ege Caglar 
+    project: Self-Righting and Recovery in the Wild
+    current: "Now: Stealth"
+    years: 2023-2025
   - name: Tao Jin
     project: Safe Control \& Interaction for Assistive Manipulators
     current: "Now: PhD @ CMU"
