@@ -648,10 +648,11 @@ def load_mentoring() -> list[dict]:
         now = m.get("now") if isinstance(m.get("now"), dict) else None
         chip = _chip_html(now, "mentee-dest")
         role = str(now.get("role")).strip() if now and now.get("role") else ""
-        if chip and role:
-            now_html = Markup(f' · <span class="mentee-role">{escape(role)} @</span>{chip}')
+        if chip:
+            role_html = f'<span class="mentee-role">{escape(role)} @</span>' if role else ""
+            now_html = Markup(f' · <span class="mentee-next">Next →</span> {role_html}{chip}')
         else:
-            now_html = chip
+            now_html = Markup("")
         mentees.append({
             "name": _delatex(str(m.get("name") or "").strip()),
             "url": m.get("url"),

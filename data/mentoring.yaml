@@ -4,11 +4,11 @@
 # Website-only extras (the CV ignores them):
 #   url:  personal site — links the name (subtle)
 #   now:  destination chip {name, role?, url?, favicon?|emoji?} shown after the
-#         span. `favicon` is a hosted/served glyph (transparent preferred);
-#         `emoji` is a literal glyph (e.g. ✈️ for a stealth startup). `url` →
-#         their page at the destination, else LinkedIn. `role` (e.g. "PhD",
-#         "MS") prints before the chip as "PhD @ [logo]" — use it for degree
-#         placements; company placements read fine as the bare logo alone.
+#         span as "Next → [role @] [logo]". `favicon` is a hosted/served glyph
+#         (transparent preferred); `emoji` is a literal glyph (e.g. ✈️ for a
+#         stealth startup). `url` → their page at the destination, else LinkedIn.
+#         `role` (e.g. "PhD", "MS", "Core IsaacLab/Newton") prints before the
+#         logo as "Next → PhD @ [logo]"; omit it for a bare "Next → [logo]".
 mentees:
   - name: Cleah Winston
     url: "https://cleahwin.github.io/"
@@ -26,7 +26,7 @@ mentees:
     project: Large-Scale Physics-based Simulation
     current: "Now: Core IsaacLab/Newton @ NVIDIA"
     years: 2023-2025
-    now: {name: NVIDIA, favicon: "/img/nvidia.png", url: "https://www.linkedin.com/in/octi-zhang-0bb521294/"}
+    now: {role: "Core IsaacLab/Newton", name: NVIDIA, favicon: "/img/nvidia.png", url: "https://www.linkedin.com/in/octi-zhang-0bb521294/"}
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: Stealth"
