@@ -8,7 +8,7 @@ groups:
   - name: Robotics & ML
     links:
       - name: Matt Mason
-        url: https://mtmason.com/
+        url: https://mtmason.com/matt-mason-robotics-blog/
         note: A manipulation pioneer (CMU) blogging "the funnest ideas in robotics."
       - name: The Gradient
         url: https://thegradient.pub

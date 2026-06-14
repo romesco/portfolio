@@ -27,11 +27,14 @@ from __future__ import annotations
 
 import datetime
 import hashlib
+import os
 import re
 import shutil
 import sys
+import time
+import urllib.request
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import mistune
 import yaml
@@ -316,6 +319,61 @@ def load_twitter() -> tuple[str, list[dict]]:
     return handle, posts
 
 
+def _fetch(url: str, timeout: int = 6) -> bytes:
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "portfolio-build/1.0 (+feed reader)"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.read()
+
+
+def _discover_feed(page_url: str, html: bytes) -> str | None:
+    """Find a site's feed via its <link rel="alternate" type="...rss|atom...">."""
+    text = html.decode("utf-8", "replace")
+    for m in re.finditer(r"<link\b[^>]*>", text, re.I):
+        tag = m.group(0)
+        if (re.search(r'rel\s*=\s*["\']?[^"\'>]*alternate', tag, re.I)
+                and re.search(r'type\s*=\s*["\']application/(?:rss|atom)\+xml', tag, re.I)):
+            href = re.search(r'href\s*=\s*["\']([^"\']+)["\']', tag, re.I)
+            if href:
+                return urljoin(page_url, href.group(1))
+    return None
+
+
+def _site_latest(page_url: str, feed_url: str | None = None,
+                 timeout: int = 6) -> dict | None:
+    """Best-effort newest post `{title, url, at}` for a blog, or None. Uses an
+    explicit feed_url if given, else auto-discovers from the page. Every failure
+    (network, parse, missing dep) is swallowed — the river is optional."""
+    try:
+        import feedparser
+    except Exception:
+        return None
+    try:
+        if not feed_url:
+            feed_url = _discover_feed(page_url, _fetch(page_url, timeout))
+        if not feed_url:
+            return None
+        parsed = feedparser.parse(_fetch(feed_url, timeout))
+        if not parsed.entries:
+            return None
+
+        def when(e):
+            return e.get("published_parsed") or e.get("updated_parsed") or time.gmtime(0)
+
+        e = max(parsed.entries, key=when)
+        title = (e.get("title") or "").strip()
+        if not title:
+            return None
+        w = e.get("published_parsed") or e.get("updated_parsed")
+        return {
+            "title": title,
+            "url": e.get("link") or page_url,
+            "at": datetime.datetime(*w[:6]) if w else None,
+        }
+    except Exception:
+        return None
+
+
 def load_reading() -> list[dict]:
     """Load data/reading.yaml — `{groups: [{name, links: [{name, url, note}]}]}`
     — into a curated, grouped blogroll. Derives a bare display domain from each
@@ -323,6 +381,9 @@ def load_reading() -> list[dict]:
     if not READING_YAML.exists():
         return []
     data = yaml.safe_load(READING_YAML.read_text()) or {}
+    # Fetch each blog's latest post only in CI (deploy) or when explicitly asked,
+    # so local `make site` stays fast and offline-friendly.
+    fetch = bool(os.environ.get("CI") or os.environ.get("FETCH_FEEDS"))
     groups: list[dict] = []
     for g in data.get("groups") or []:
         links: list[dict] = []
@@ -332,6 +393,18 @@ def load_reading() -> list[dict]:
             if host.startswith("www."):
                 host = host[4:]
             note = ln.get("note")
+            latest = None
+            if fetch and url:
+                info = _site_latest(url, ln.get("feed"))
+                if info:
+                    at = info["at"]
+                    latest = {
+                        "title": info["title"],
+                        "url": info["url"],
+                        "iso": at.isoformat() if at else "",
+                        "display": at.strftime("%b %Y") if at else "",
+                        "full": at.strftime("%b %-d, %Y") if at else "",
+                    }
             links.append({
                 "name": str(ln.get("name") or host or url),
                 "url": url,
@@ -339,6 +412,7 @@ def load_reading() -> list[dict]:
                 # Favicon by domain (no images to host). Swap the service freely.
                 "favicon": f"https://www.google.com/s2/favicons?domain={host}&sz=64" if host else None,
                 "note": _render_inline_md(note) if note else None,
+                "latest": latest,
             })
         if links:
             groups.append({"name": str(g.get("name") or ""), "links": links})

@@ -1091,3 +1091,30 @@ a:focus-visible {
   margin-top: 0.1rem;
   color: var(--fg-muted);
 }
+
+/* Live "river": the blog's latest post, fetched at build time. */
+.read-latest {
+  grid-column: 2;
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.read-latest-label {
+  font-style: italic;
+  margin-right: 0.45rem;
+}
+
+.read-latest-label::after { content: "·"; margin-left: 0.45rem; }
+
+.read-latest-title { color: var(--fg); }
+
+.read-latest:hover .read-latest-title { color: var(--accent); }
+
+.read-latest-time {
+  margin-left: 0.45rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
+}

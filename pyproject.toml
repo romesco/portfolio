@@ -8,6 +8,7 @@ dependencies = [
     "pydantic>=2.6",
     "markupsafe",
     "mistune>=3.2.1",
+    "feedparser>=6.0.12",
 ]
 
 [tool.pytest.ini_options]

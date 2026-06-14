@@ -26,6 +26,13 @@
           {% if ln.domain %}<span class="read-domain">{{ ln.domain }}</span>{% endif %}
         </span>
         {% if ln.note %}<span class="read-note">{{ ln.note }}</span>{% endif %}
+        {% if ln.latest %}
+        <a class="read-latest" href="{{ ln.latest.url }}">
+          <span class="read-latest-label">latest</span>
+          <span class="read-latest-title">{{ ln.latest.title }}</span>
+          {% if ln.latest.display %}<time class="read-latest-time" datetime="{{ ln.latest.iso }}" title="{{ ln.latest.full }}">{{ ln.latest.display }}</time>{% endif %}
+        </a>
+        {% endif %}
       </li>
       {% endfor %}
     </ul>
