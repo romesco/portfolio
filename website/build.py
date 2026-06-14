@@ -336,6 +336,8 @@ def load_reading() -> list[dict]:
                 "name": str(ln.get("name") or host or url),
                 "url": url,
                 "domain": host,
+                # Favicon by domain (no images to host). Swap the service freely.
+                "favicon": f"https://www.google.com/s2/favicons?domain={host}&sz=64" if host else None,
                 "note": _render_inline_md(note) if note else None,
             })
         if links:

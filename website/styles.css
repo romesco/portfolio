@@ -1046,10 +1046,22 @@ a:focus-visible {
 }
 
 .read-item {
+  display: grid;
+  grid-template-columns: 1.15rem 1fr;
+  column-gap: 0.6rem;
+  align-items: start;
   margin-bottom: 1rem;
 }
 
+.read-favicon {
+  width: 16px;
+  height: 16px;
+  margin-top: 0.18rem;        /* nudge to sit with the name's cap height */
+  border-radius: 3px;
+}
+
 .read-head {
+  grid-column: 2;
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
@@ -1074,6 +1086,7 @@ a:focus-visible {
 }
 
 .read-note {
+  grid-column: 2;
   display: block;
   margin-top: 0.1rem;
   color: var(--fg-muted);

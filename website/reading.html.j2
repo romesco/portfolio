@@ -20,6 +20,7 @@
     <ul class="reading">
       {% for ln in g.links %}
       <li class="read-item">
+        {% if ln.favicon %}<img class="read-favicon" src="{{ ln.favicon }}" alt="" width="16" height="16" loading="lazy" onerror="this.style.visibility='hidden'">{% else %}<span class="read-favicon" aria-hidden="true"></span>{% endif %}
         <span class="read-head">
           <a class="read-name" href="{{ ln.url }}">{{ ln.name }}</a>
           {% if ln.domain %}<span class="read-domain">{{ ln.domain }}</span>{% endif %}
