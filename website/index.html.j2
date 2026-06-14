@@ -66,6 +66,7 @@
   <section class="works">
     <h2>Selected works</h2>
     {% if publications %}
+    {% call expandable(4) %}
     <ol class="works-list">
       {% for p in publications %}
       <li>
@@ -113,6 +114,7 @@
       </li>
       {% endfor %}
     </ol>
+    {% endcall %}
     {% else %}
     <p class="bio"><em>No publications marked <code>featured: true</code> in <code>publications.yaml</code> yet.</em></p>
     {% endif %}
@@ -354,6 +356,21 @@
           vp.style.maxHeight = (hovering ? h + bumpPx() : h) + 'px';
         });
       });
+
+      // If the content has its own <details> (e.g. the Selected works video
+      // dropdowns), keep the collapsed clamp synced as they open/close: an
+      // opened dropdown grows the peek to fit instead of being clipped, while
+      // items past the peek stay hidden. Fires throughout the open animation.
+      if (window.ResizeObserver) {
+        new ResizeObserver(function () {
+          if (open || peekPx == null) return;
+          var h = peekHeight();
+          if (h == null) return;
+          peekPx = h;
+          var hovering = canHover && !reduce && wrap.matches(':hover');
+          vp.style.maxHeight = (hovering ? h + bumpPx() : h) + 'px';
+        }).observe(list);
+      }
     });
   })();
 </script>
