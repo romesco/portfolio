@@ -57,7 +57,7 @@ mentees:
     project: Crowdsourcing YCB Object Affordances
     current: "Boston University (visiting)"
     years: Summer 2018
-    now: {name: IBM, favicon: "/img/ibm-chip.png", url: "https://www.linkedin.com/in/mahaalrashed/"}
+    now: {name: IBM, favicon: "/img/ibm-mark.png", url: "https://www.linkedin.com/in/mahaalrashed/"}
   - name: Abdullah Albakry
     project: Reverse-engineering an R-net Wheelchair
     project_url: "https://robotfeeding.io/hardware/hri25a/"
