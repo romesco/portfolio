@@ -68,14 +68,13 @@
     {% if publications %}
     <ol class="works-list">
       {% for p in publications %}
-      {% set cue_posters = p.media_list | selectattr('type', 'equalto', 'video') | selectattr('poster') | map(attribute='poster') | list %}
-      {% set cue_poster = cue_posters[0] if cue_posters else none %}
+      {% set has_video = (p.media_list | selectattr('type', 'equalto', 'video') | list | length) > 0 %}
       <li>
-        <details class="work{% if cue_poster %} has-video{% endif %}">
+        <details class="work{% if has_video %} has-video{% endif %}">
           <summary class="work-summary">
             <span class="work-title">{{ p.title }}</span>
             <span class="work-meta">{{ p.authors | authors }} <cite>{{ p.venue }}</cite>, {{ p.year }}.{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}</span>
-            {% if cue_poster %}<span class="work-cue" style="background-image: url('{{ cue_poster }}')" aria-hidden="true"><svg class="work-cue-play" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>{% endif %}
+            {% if has_video %}<span class="work-cue" aria-hidden="true"><svg class="work-cue-play" viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span class="work-cue-label">Watch the video</span></span>{% endif %}
           </summary>
           <div class="work-media">
             {% set media = p.media_list %}
