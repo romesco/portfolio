@@ -636,6 +636,7 @@ def load_mentoring() -> list[dict]:
     # End-year descending; file order preserved within a year (stable).
     order = sorted(range(len(raw)),
                    key=lambda i: (-end_year(str(raw[i].get("years") or "")), i))
+    newest = end_year(str(raw[order[0]].get("years") or "")) if order else 0
     mentees: list[dict] = []
     prev = None
     for i in order:
@@ -645,14 +646,21 @@ def load_mentoring() -> list[dict]:
         first = ey != prev
         prev = ey
         now = m.get("now") if isinstance(m.get("now"), dict) else None
+        chip = _chip_html(now, "mentee-dest")
+        role = str(now.get("role")).strip() if now and now.get("role") else ""
+        if chip and role:
+            now_html = Markup(f' · <span class="mentee-role">{escape(role)} @</span>{chip}')
+        else:
+            now_html = chip
         mentees.append({
             "name": _delatex(str(m.get("name") or "").strip()),
             "url": m.get("url"),
             "project": _delatex(str(m.get("project") or "").strip()),
             "span": years.replace("-", "–"),
-            "now_html": _chip_html(now, "mentee-dest"),
+            "now_html": now_html,
             "year": str(ey) if first else "",
-            "host_html": _chip_html(HOST, "mentee-host") if first else Markup(""),
+            # The 'host' chip (where Rosario was) shows only on the newest group.
+            "host_html": _chip_html(HOST, "mentee-host") if (first and ey == newest) else Markup(""),
         })
     return mentees
 

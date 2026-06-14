@@ -3,17 +3,19 @@
 #   name, project, years (e.g. 2024-2025 or "Summer 2018"), current (CV trajectory)
 # Website-only extras (the CV ignores them):
 #   url:  personal site — links the name (subtle)
-#   now:  destination chip {name, url?, favicon?|emoji?} shown after the span.
-#         `favicon` is a hosted/served glyph (transparent preferred); `emoji` is
-#         a literal glyph (e.g. ✈️ for a stealth startup). `url` → their page at
-#         the destination, else LinkedIn.
+#   now:  destination chip {name, role?, url?, favicon?|emoji?} shown after the
+#         span. `favicon` is a hosted/served glyph (transparent preferred);
+#         `emoji` is a literal glyph (e.g. ✈️ for a stealth startup). `url` →
+#         their page at the destination, else LinkedIn. `role` (e.g. "PhD",
+#         "MS") prints before the chip as "PhD @ [logo]" — use it for degree
+#         placements; company placements read fine as the bare logo alone.
 mentees:
   - name: Cleah Winston
     url: "https://cleahwin.github.io/"
     project: Using Non-Expert Data to Robustify Imitation Learning via Offline RL (RISE)
     current: "Undergrad -> Now: MS @ UW CS"
     years: 2024-2025
-    now: {name: UW, favicon: "/img/allen-school.png", url: "https://robotlearning.cs.washington.edu/people/"}
+    now: {role: MS, name: UW, favicon: "/img/allen-school.png", url: "https://robotlearning.cs.washington.edu/people/"}
   - name: Ayush Agrawal
     project: Using Non-Expert Data to Robustify Imitation Learning via Offline RL (RISE)
     current: "BS/MS -> Now: Google"
@@ -34,7 +36,7 @@ mentees:
     project: Safe Control \& Interaction for Assistive Manipulators
     current: "Now: PhD @ CMU"
     years: 2019-2020
-    now: {name: CMU, favicon: "/img/cmu.png", url: "https://www.linkedin.com/in/taoj6/"}
+    now: {role: PhD, name: CMU, favicon: "/img/cmu.png", url: "https://www.linkedin.com/in/taoj6/"}
   - name: Venkatesh Varada
     project: "Lovelace: The Autonomy-enabled Wheelchair"
     current: "Now: Nordstrom"

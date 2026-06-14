@@ -760,6 +760,7 @@ a.mentee-name:hover { color: var(--accent); text-decoration: underline; }
 }
 
 .mentee-dest { margin-left: 0.4em; }
+.mentee-role { color: var(--fg); }
 
 /* Chip glyphs (mentee destination + year host) — a favicon image or an emoji. */
 .chip-glyph {
