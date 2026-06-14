@@ -305,28 +305,13 @@ def render_links(links) -> Markup:
 PRESS_PAGE_URL = "/inthepress"
 
 
-def render_coverage_inline(coverage, cap: int = 3) -> Markup:
-    """Quiet "press" line for a featured work: up to `cap` outlet links joined by
-    middots, with a "+N more" pointer to the full /inthepress archive when the
-    list is longer. The "press" label always links there too."""
+def render_coverage_inline(coverage) -> Markup:
+    """A quiet inline 'press' hint folded into a featured work's meta line — just a
+    muted link to the full /inthepress archive, where the outlet names live. The
+    homepage only signals that coverage exists. Empty when there's none."""
     if not coverage:
         return Markup("")
-    shown = coverage[:cap]
-    parts: list[str] = []
-    for c in shown:
-        if c.get("url"):
-            parts.append(f'<a href="{escape(c["url"])}">{escape(c["outlet"])}</a>')
-        else:
-            parts.append(str(escape(c["outlet"])))
-    extra = len(coverage) - len(shown)
-    more = (f' <a class="work-press-more" href="{PRESS_PAGE_URL}">+{extra} more</a>'
-            if extra > 0 else "")
-    return Markup(
-        '<span class="work-press">'
-        f'<a class="work-press-label" href="{PRESS_PAGE_URL}">press</a> '
-        f'<span class="work-press-outlets">{" · ".join(parts)}{more}</span>'
-        "</span>"
-    )
+    return Markup(f'<a class="work-press" href="{PRESS_PAGE_URL}">press</a>')
 
 
 def render_collaborators(collabs) -> Markup:

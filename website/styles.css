@@ -204,15 +204,29 @@ main {
   font-size: 1.0625rem;
 }
 
-/* Lab-affiliation chips woven into the bio: a small brand glyph before the
-   linked label (e.g. "Machine Learning" → WAIL). */
+/* Calm the bio's affiliation links: read as prose (text colour), warming to the
+   accent on hover, so three links across two sentences don't shout. */
+.bio a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.bio a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Inline brand glyphs — author affiliation chips and bio lab chips share ONE
+   size / rounding / baseline so they sit identically wherever they appear. */
+.collab-favicon,
 .bio a img {
   width: 1em;
   height: 1em;
   border-radius: 3px;
   vertical-align: -0.15em;
-  margin-right: 0.3em;
 }
+
+.bio a img { margin-right: 0.3em; }
 
 /* ----------------------------------------------------------------
    Sections (Selected works, Elsewhere)
@@ -291,36 +305,19 @@ section h2 {
 /* Quiet "in the press" line under a featured work — a muted label plus outlet
    names as understated links that warm to the accent on hover. Rendered only
    where genuine coverage exists; the label + "+N more" point to /inthepress. */
+/* Quiet inline "press" hint on a featured work — a muted link to the full
+   /inthepress archive (the outlet names live there, not on the homepage). */
 .work-press {
-  display: block;
-  margin-top: 0.3rem;
-  font-size: 0.85rem;
-  color: var(--fg-muted);
-}
-
-.work-press-label {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.68rem;
   color: var(--fg-muted);
   text-decoration: none;
 }
 
-.work-press-label:hover { color: var(--accent); }
-
-.work-press-outlets { margin-left: 0.55em; }
-
-.work-press-outlets a {
-  color: var(--fg-muted);
-  text-decoration: none;
+.work-press::before {
+  content: "·";
+  margin: 0 0.4em;
 }
 
-.work-press-outlets a:hover {
-  color: var(--accent);
-  text-decoration: underline;
-}
-
-.work-press-more { font-style: italic; white-space: nowrap; }
+.work-press:hover { color: var(--accent); }
 
 /* "w/ [glyph] Institution" collaborator tag on a selected work — same favicon-
    chip language as the press line. Each chip links to that lab's coverage of the
@@ -337,15 +334,6 @@ section h2 {
 .collab-chip {
   margin-left: 0.3em;
   text-decoration: none;
-}
-
-/* Author affiliation glyph — sized to the text, no visible label (the
-   institution name lives in the title/alt tooltip). */
-.collab-favicon {
-  width: 1em;
-  height: 1em;
-  border-radius: 3px;
-  vertical-align: -0.15em;
 }
 
 /* ----------------------------------------------------------------
