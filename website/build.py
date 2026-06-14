@@ -139,9 +139,16 @@ def normalize_coverage(items) -> list[dict]:
             iso, disp = d.isoformat(), d.strftime("%b %Y")
         else:
             iso = disp = str(d) if d else ""
+        # The outlet's own favicon (its brand glyph) by domain — same service
+        # the /reading page uses. No images to host; graceful if it 404s.
+        host = urlparse(str(it.get("url") or "")).netloc
+        if host.startswith("www."):
+            host = host[4:]
         out.append({
             "outlet": str(it["outlet"]),
             "url": it.get("url"),
+            "domain": host,
+            "favicon": f"https://www.google.com/s2/favicons?domain={host}&sz=64" if host else None,
             "iso": iso,
             "date_display": disp,
         })

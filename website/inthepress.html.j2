@@ -25,7 +25,11 @@
         <ul class="press-outlets">
           {% for c in w.coverage %}
           <li class="press-outlet">
-            {% if c.url %}<a class="press-outlet-name" href="{{ c.url }}">{{ c.outlet }}</a>{% else %}<span class="press-outlet-name">{{ c.outlet }}</span>{% endif %}
+            {% set tag = 'a' if c.url else 'span' %}
+            <{{ tag }} class="press-outlet-link"{% if c.url %} href="{{ c.url }}"{% endif %}>
+              {% if c.favicon %}<img class="press-favicon" src="{{ c.favicon }}" alt="" width="16" height="16" loading="lazy" onerror="this.remove()">{% endif %}
+              <span class="press-outlet-name">{{ c.outlet }}</span>
+            </{{ tag }}>
             {% if c.date_display %}<time class="press-outlet-date"{% if c.iso %} datetime="{{ c.iso }}"{% endif %}>{{ c.date_display }}</time>{% endif %}
           </li>
           {% endfor %}

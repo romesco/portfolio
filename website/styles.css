@@ -1191,31 +1191,44 @@ a:focus-visible {
 .press-work-meta cite { font-style: italic; }
 
 .press-outlets {
-  margin: 0.55rem 0 0;
+  margin: 0.6rem 0 0;
   padding: 0;
   list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.15rem;        /* row gap · column gap between outlet chips */
 }
 
-.press-outlet { display: inline; }
-
-.press-outlet:not(:last-child)::after {
-  content: "·";
-  margin: 0 0.55rem;
-  color: var(--fg-muted);
+.press-outlet {
+  display: inline-flex;
+  align-items: baseline;
 }
 
-.press-outlet-name {
+/* Outlet "chip": the outlet's own favicon (brand glyph) + its name. The glyph
+   carries the brand; spacing — not middots — separates one outlet from the
+   next, keeping the row quiet and uncluttered. */
+.press-outlet-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   color: var(--fg);
   text-decoration: none;
 }
 
-a.press-outlet-name:hover {
+a.press-outlet-link:hover .press-outlet-name {
   color: var(--accent);
   text-decoration: underline;
 }
 
+.press-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  flex: none;
+}
+
 .press-outlet-date {
-  margin-left: 0.35rem;
+  margin-left: 0.4rem;
   font-size: 0.8rem;
   color: var(--fg-muted);
   font-variant-numeric: lining-nums tabular-nums;
