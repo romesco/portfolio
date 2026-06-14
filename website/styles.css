@@ -216,10 +216,23 @@ main {
   text-decoration: underline;
 }
 
+/* Calm the News links the same way — the chips carry the visual interest;
+   word-links read as prose, warming to the accent on hover. */
+.news-text a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.news-text a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 /* Inline brand glyphs — author affiliation chips and bio lab chips share ONE
    size / rounding / baseline so they sit identically wherever they appear. */
 .collab-favicon,
-.bio a img {
+.bio a img,
+.news-text a img {
   width: 1em;
   height: 1em;
   border-radius: 3px;
@@ -513,6 +526,9 @@ details[open] > .work-summary::before {
   display: flex;
   gap: 0.4rem;
   margin-left: auto;
+  /* Room so the active dot's scale-up isn't clipped by the panel's
+     ::details-content overflow at its right / bottom edge. */
+  padding: 0.25rem;
 }
 
 .carousel-dot {

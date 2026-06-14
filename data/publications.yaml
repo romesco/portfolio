@@ -39,7 +39,7 @@
 - year: 2026
   type: preprint
   authors:
-    - {name: "O. Zhang", equal: true, affil: {name: "NVIDIA", domain: "nvidia.com", url: "https://zoctipus.github.io/"}}
+    - {name: "O. Zhang", equal: true, affil: {name: "NVIDIA", favicon: "/img/nvidia.png", url: "https://zoctipus.github.io/"}}
     - {name: "M. G. Castro", equal: true}
     - {name: "P. Yin", equal: true}
     - A. Gupta
@@ -277,7 +277,7 @@
     - "..."
     - {name: "R. Scalise", me: true}
     - "..."
-    - {name: "C. Finn", affil: {name: "Stanford", domain: "stanford.edu", url: "https://ai.stanford.edu/~cbfinn/"}}
+    - {name: "C. Finn", affil: {name: "Stanford", favicon: "/img/stanford.png", url: "https://ai.stanford.edu/~cbfinn/"}}
   featured: true
   title: "DROID: A large-scale in-the-wild robot manipulation dataset"
   media:
