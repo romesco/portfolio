@@ -180,6 +180,29 @@ def normalize_collaborators(items) -> list[dict]:
     return out
 
 
+def _affil_chip(affil: dict) -> str:
+    """Inline institution chip appended after an author's name in a work's author
+    list — the institution's brand glyph (by `domain`/`favicon`) plus its name,
+    linking to its coverage of the work or that author's page."""
+    name = str(escape(affil["name"]))
+    url = affil.get("url")
+    dom = affil.get("domain")
+    if not dom and url:
+        dom = urlparse(str(url)).netloc
+    if dom and dom.startswith("www."):
+        dom = dom[4:]
+    fav = affil.get("favicon") or (
+        f"https://www.google.com/s2/favicons?domain={dom}&sz=64" if dom else None)
+    inner = ""
+    if fav:
+        inner += (f'<img class="collab-favicon" src="{escape(fav)}" alt="" '
+                  'width="16" height="16" loading="lazy" onerror="this.remove()">')
+    inner += f'<span class="collab-name">{name}</span>'
+    if url:
+        return f'<a class="collab-chip" href="{escape(url)}">{inner}</a>'
+    return f'<span class="collab-chip">{inner}</span>'
+
+
 def render_authors(authors) -> Markup:
     """HTML port of the CV's format_authors. `me: true` wraps in <strong>;
     `equal: true` appends `*`; bare `"..."` becomes a literal ellipsis.
@@ -187,6 +210,7 @@ def render_authors(authors) -> Markup:
     an ellipsis (commas only — "..., & ..." reads as ungrammatical)."""
     pieces: list[str] = []
     has_ellipsis = False
+    seen_affils: set[str] = set()
     for a in authors:
         if isinstance(a, str):
             if a == "...":
@@ -203,6 +227,12 @@ def render_authors(authors) -> Markup:
         marks = ("*" if a.get("equal") else "") + ("†" if a.get("dagger") else "")
         if marks:
             name = f"{name}<sup>{marks}</sup>"
+        # An author's institution chip, shown once per institution across the
+        # list (a second author from the same place doesn't repeat the chip).
+        affil = a.get("affil")
+        if isinstance(affil, dict) and affil.get("name") and affil["name"] not in seen_affils:
+            seen_affils.add(str(affil["name"]))
+            name += _affil_chip(affil)
         pieces.append(name)
 
     if not pieces:
@@ -674,7 +704,7 @@ def main() -> int:
         publications=featured,
         identity=identity,
         description=site.get("description", ""),
-        bio=site.get("bio", ""),
+        bio=_render_inline_md(site.get("bio", "")),
         links=links,
         news=news,
         mentees=mentees,

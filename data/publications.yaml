@@ -23,17 +23,22 @@
 # favicon (by domain) on /inthepress; add `favicon: <url>` to an item to override
 # it when the auto-derived glyph is wrong (e.g. a subdomain with no real icon).
 #
-# `collaborators:` (featured works) renders a quiet "w/ [glyph] Institution" tag —
-# {name, url, domain?, favicon?}. The glyph is the institution's favicon (by
-# `domain`, else the url host, else an explicit `favicon:`); `url` points at the
-# institution's coverage of the work if any, else its most senior co-author's page.
+# An author entry may carry `affil: {name, url, domain?, favicon?}` — an institution
+# chip rendered inline right after that author's name (deduped: shown once per
+# institution, even if several authors share it). The glyph is the institution's
+# favicon (by `domain`, else the url host, else explicit `favicon:`); `url` points
+# at its coverage of the work if any, else that author's page. Prefer this for a
+# NAMED co-author.
+#
+# `collaborators:` (featured works) is the fallback for works whose author list is
+# abbreviated (e.g. "..."): a quiet "w/ [glyph] Institution" line — same fields.
 
 # ---------- Preprints ----------
 
 - year: 2026
   type: preprint
   authors:
-    - {name: "O. Zhang", equal: true}
+    - {name: "O. Zhang", equal: true, affil: {name: "NVIDIA", domain: "nvidia.com", url: "https://zoctipus.github.io/"}}
     - {name: "M. G. Castro", equal: true}
     - {name: "P. Yin", equal: true}
     - A. Gupta
@@ -52,8 +57,6 @@
       label: Locomotion
       autoplay: true
   links: {project: "https://sgs-rl.github.io"}
-  collaborators:
-    - {name: "NVIDIA", domain: "nvidia.com", url: "https://zoctipus.github.io/"}
 
 - year: 2025
   type: preprint
@@ -100,7 +103,7 @@
   authors:
     - {name: "R. Scalise", me: true}
     - S. Li
-    - H. Admoni
+    - {name: "H. Admoni", affil: {name: "Carnegie Mellon", domain: "cmu.edu", url: "https://hennyadmoni.com/"}}
     - S. Rosenthal
     - S.S. Srinivasa
   featured: true
@@ -109,8 +112,6 @@
   venue_full: The International Journal of Robotics Research (IJRR)
   links:
     github: https://personalrobotics.github.io/collaborative_manipulation_corpus
-  collaborators:
-    - {name: "Carnegie Mellon", domain: "cmu.edu", url: "https://hennyadmoni.com/"}
 
 # ---------- Conferences ----------
 #
@@ -125,7 +126,7 @@
     - R. Baijal
     - M. Grotz
     - B. Boots
-    - B. Burchfiel
+    - {name: "B. Burchfiel", affil: {name: "Toyota Research Institute", domain: "tri.global", url: "https://www.tri.global/about-us/dr-ben-burchfiel"}}
     - M. Itkina
     - P. Shah
     - A. Gupta
@@ -134,8 +135,6 @@
   venue: ICRA 
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}
-  collaborators:
-    - {name: "Toyota Research Institute", domain: "tri.global", url: "https://www.tri.global/about-us/dr-ben-burchfiel"}
 
 - year: 2026
   type: conference 
@@ -277,7 +276,7 @@
     - "..."
     - {name: "R. Scalise", me: true}
     - "..."
-    - C. Finn
+    - {name: "C. Finn", affil: {name: "Stanford", domain: "stanford.edu", url: "https://ai.stanford.edu/~cbfinn/"}}
   featured: true
   title: "DROID: A large-scale in-the-wild robot manipulation dataset"
   media:
@@ -285,14 +284,12 @@
     autoplay: true
   venue: RSS
   venue_full: "Robotics: Science \\& Systems (RSS)"
-  collaborators:
-    - {name: "Stanford", domain: "stanford.edu", url: "https://ai.stanford.edu/~cbfinn/"}
 
 - year: 2023
   type: conference
   authors:
     - {name: "R. Scalise", me: true}
-    - A. Mandalika
+    - {name: "A. Mandalika", affil: {name: "Aurora", domain: "aurora.tech", url: "https://adityavk.com/"}}
     - B. Hou
     - S. Choudhury
     - S.S. Srinivasa
@@ -301,8 +298,6 @@
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   links: {ieee: "https://ieeexplore.ieee.org/document/10161028"}
-  collaborators:
-    - {name: "Aurora", domain: "aurora.tech", url: "https://adityavk.com/"}
 
 - year: 2022
   type: conference

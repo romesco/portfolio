@@ -204,6 +204,16 @@ main {
   font-size: 1.0625rem;
 }
 
+/* Lab-affiliation chips woven into the bio: a small brand glyph before the
+   linked label (e.g. "Machine Learning" → WAIL). */
+.bio a img {
+  width: 1em;
+  height: 1em;
+  border-radius: 3px;
+  vertical-align: -0.15em;
+  margin-right: 0.3em;
+}
+
 /* ----------------------------------------------------------------
    Sections (Selected works, Elsewhere)
 ---------------------------------------------------------------- */
