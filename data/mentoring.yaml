@@ -62,6 +62,7 @@ mentees:
     project_url: "https://robotfeeding.io/hardware/hri25a/"
     current: "NC State (visiting)"
     years: Summer 2018
+    now: {role: PhD, name: KAUST, favicon: "/img/kaust.png", url: "https://cemse.kaust.edu.sa/profiles/abdullah-adil-albakry"}
 
 other:
   - K-12 Lab Demos
