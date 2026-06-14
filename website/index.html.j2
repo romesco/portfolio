@@ -368,4 +368,31 @@
     });
   })();
 </script>
+<script>
+  // Keep each work's author/venue line from running wider than its title:
+  // cap the meta to the rendered title width. Re-measured after web fonts
+  // load and on resize (the title re-wraps as the column changes). Manual
+  // "//" breaks in the author list still apply within this cap.
+  (function () {
+    var summaries = Array.prototype.slice.call(document.querySelectorAll('.work-summary'));
+    if (!summaries.length) return;
+    function fit() {
+      summaries.forEach(function (s) {
+        var title = s.querySelector('.work-title');
+        var meta = s.querySelector('.work-meta');
+        if (!title || !meta) return;
+        var w = Math.ceil(title.getBoundingClientRect().width);
+        if (w > 0) meta.style.maxWidth = w + 'px';
+      });
+    }
+    fit();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    window.addEventListener('load', fit);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(fit, 120);
+    });
+  })();
+</script>
 {% endblock %}

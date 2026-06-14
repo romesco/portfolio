@@ -7,9 +7,9 @@ description: Personal site of Rosario Scalise, PhD student at the University of 
 # in. The [![](favicon)Name](url) chips show a small UW glyph before the label.
 bio: >
   Rosario is a PhD candidate at the University of Washington in
-  [![](https://www.cs.washington.edu/sites/default/files/favicon_3.ico)Machine Learning](https://wail.uw.edu/)
+  [![](/img/allen-school.png)Machine Learning](https://wail.uw.edu/)
   & [Robotics](https://robotics.cs.washington.edu/). His research, in the
-  [![](https://www.cs.washington.edu/sites/default/files/favicon_3.ico)Robot Learning Lab](https://robotlearning.cs.washington.edu/),
+  [![](/img/allen-school.png)Robot Learning Lab](https://robotlearning.cs.washington.edu/),
   applies machine learning and optimization to continual learning,
   reinforcement learning, large-scale physics-based simulation, and the
   science of transferring learned behaviors to physical systems.

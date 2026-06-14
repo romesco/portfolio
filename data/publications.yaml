@@ -7,6 +7,8 @@
 #   - {name: ..., equal: true}                  → suffix `*` (co-first author)
 #   - {name: ..., dagger: true}                 → suffix `†` (e.g. co-advisor)
 #   - "..."  (quoted, list element)             → literal ellipsis for abbreviated lists
+#   - "//"   (or "\\")                           → website only: force a line break in
+#                                                  the author list here (CV ignores it)
 #
 # Links: any of arxiv, pdf, doi, ieee, github, project. arxiv: <id> expands
 # to https://arxiv.org/abs/<id>; arxiv: <full URL> passes through.

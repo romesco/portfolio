@@ -392,6 +392,9 @@ details[open] > .work-summary::before {
 .work-summary .work-title {
   grid-column: 2;
   grid-row: 1;
+  /* Shrink to the title text so the meta line below can be capped to its
+     width (see the author-meta fit script). */
+  justify-self: start;
 }
 
 .work-summary .work-meta {

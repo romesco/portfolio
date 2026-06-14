@@ -106,12 +106,18 @@ ELLIPSIS = "..."
 
 
 def _parse_author(raw):
-    """A bare YAML string is shorthand for {name: <string>}, except `'...'`
-    which is the abbreviated-list ellipsis sentinel."""
+    """A bare YAML string is shorthand for {name: <string>}, except `'...'` (the
+    abbreviated-list ellipsis sentinel). Two website-only tokens are dropped for
+    the CV (returning None, filtered by the validator): a forced line-break marker
+    (`//` / `\\`) and a name-less `{affil: ...}` glyph entry."""
     if isinstance(raw, str):
         if raw == ELLIPSIS:
             return ELLIPSIS
+        if raw.strip() in ("//", "\\", "\\\\"):
+            return None
         return Author(name=raw)
+    if isinstance(raw, dict) and not raw.get("name") and raw.get("affil"):
+        return None
     return Author.model_validate(raw)
 
 
@@ -154,7 +160,7 @@ class Publication(BaseModel):
     def _coerce_authors(cls, v):
         if not isinstance(v, list):
             raise ValueError("authors must be a list")
-        return [_parse_author(a) for a in v]
+        return [p for p in (_parse_author(a) for a in v) if p is not None]
 
 
 # --- Manifest -------------------------------------------------------------

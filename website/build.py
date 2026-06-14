@@ -209,8 +209,13 @@ def render_authors(authors) -> Markup:
     pieces: list[str] = []
     has_ellipsis = False
     seen_affils: set[str] = set()
+    breaks: set[int] = set()              # force a line break AFTER this piece index
     for a in authors:
         if isinstance(a, str):
+            if a.strip() in ("//", "\\", "\\\\"):   # LaTeX-style forced line break
+                if pieces:
+                    breaks.add(len(pieces) - 1)
+                continue
             if a == "...":
                 pieces.append(ELLIPSIS_OUT)
                 has_ellipsis = True
@@ -247,12 +252,22 @@ def render_authors(authors) -> Markup:
 
     if not pieces:
         return Markup("")
-    if len(pieces) == 1:
-        out = pieces[0]
-    elif has_ellipsis:
-        out = ", ".join(pieces)
-    else:
-        out = ", ".join(pieces[:-1]) + ", &amp; " + pieces[-1]
+    # Assemble with comma / Oxford-ampersand separators, swapping in a <br>
+    # wherever a manual break was requested (the comma stays; only the trailing
+    # space becomes a line break).
+    n = len(pieces)
+    use_amp = (not has_ellipsis) and n >= 2
+    chunks: list[str] = []
+    for i, p in enumerate(pieces):
+        chunks.append(p)
+        if i == n - 1:
+            break
+        amp = use_amp and i == n - 2
+        if i in breaks:
+            chunks.append(",<br>&amp; " if amp else ",<br>")
+        else:
+            chunks.append(", &amp; " if amp else ", ")
+    out = "".join(chunks)
 
     # Terminate with a period unless already ending in one (e.g. the
     # literal ellipsis already trails punctuation).
