@@ -70,8 +70,10 @@
       {% for p in publications %}
       {% set has_media = (p.media_list | length) > 0 %}
       <li class="work-row{% if p.year_show %} year-start{% endif %}">
-        {% if p.year_show %}<span class="work-year">{{ p.year }}</span>{% endif %}
-        <cite class="work-venue"{% if p.venue_full %} title="{{ p.venue_full }}"{% endif %}>{{ p.venue }}</cite>
+        <div class="work-rail">
+          <cite class="work-venue"{% if p.venue_full %} title="{{ p.venue_full }}"{% endif %}>{{ p.venue }}</cite>
+          <span class="work-year">{{ p.year }}</span>
+        </div>
         <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
             <span class="work-title">{{ p.title }}</span>

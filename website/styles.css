@@ -30,6 +30,7 @@
   --bg:        oklch(0.975 0.012 80);
   --fg:        oklch(0.225 0.008 80);
   --fg-muted:  oklch(0.500 0.012 80);
+  --fg-faint:  oklch(0.685 0.010 80);
   --rule:      oklch(0.860 0.012 80);
   --accent:        oklch(0.420 0.130 250);
   --accent-strong: oklch(0.320 0.150 250);
@@ -50,6 +51,7 @@
   --bg:        oklch(0.180 0.008 80);
   --fg:        oklch(0.920 0.006 80);
   --fg-muted:  oklch(0.640 0.012 80);
+  --fg-faint:  oklch(0.475 0.010 80);
   --rule:      oklch(0.310 0.012 80);
   --accent:        oklch(0.780 0.120 250);
   --accent-strong: oklch(0.880 0.120 250);
@@ -305,23 +307,29 @@ section h2 {
 .works-list li.year-start { margin-top: 1.5rem; }
 .works-list li:first-child { margin-top: 0; }
 
-/* The year sits on its own line above the cluster; the venue rides the rail
-   beneath it, aligned with each work's title. */
-.work-year {
-  grid-column: 1 / -1;
-  margin-bottom: 0.1rem;
-  font-size: 0.8rem;
-  color: var(--fg-muted);
-  letter-spacing: 0.02em;
-  font-variant-numeric: lining-nums tabular-nums;
+/* Left rail: the venue labels each work, with its year tucked faintly beneath.
+   Venue is the first line, so baseline alignment pins it to the work's title. */
+.work-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
 }
 
 .work-venue {
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
   color: var(--fg-muted);
   letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.work-year {
+  font-size: 0.72rem;
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 1.1;
 }
 
 .work-title {
