@@ -252,6 +252,7 @@ main {
 /* Inline brand glyphs — author affiliation chips and bio lab chips share ONE
    size / rounding / baseline so they sit identically wherever they appear. */
 .collab-favicon,
+.work-press-glyph img,
 .bio a img,
 .news-text a img {
   height: 1em;
@@ -363,14 +364,11 @@ section h2 {
   line-height: 0;
 }
 
-/* Quiet "in the press" line under a featured work — a muted label plus outlet
-   names as understated links that warm to the accent on hover. Rendered only
-   where genuine coverage exists; the label + "+N more" point to /inthepress. */
-/* Quiet inline "press" hint on a featured work — a muted link to the full
-   /inthepress archive (the outlet names live there, not on the homepage). */
+/* Press tag on a featured work: the lead outlet named, then the rest as small
+   brand glyphs, collapsing to "+N" -> /inthepress when the list runs long. The
+   outlet names live in full on /inthepress; here we show the credible logos. */
 .work-press {
   color: var(--fg-muted);
-  text-decoration: none;
 }
 
 .work-press::before {
@@ -378,7 +376,31 @@ section h2 {
   margin: 0 0.4em;
 }
 
-.work-press:hover { color: var(--accent); }
+.work-press-lead,
+.work-press-text,
+.work-press-more {
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.work-press-lead { white-space: nowrap; }
+
+.work-press-lead:hover,
+.work-press-text:hover,
+.work-press-more:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.work-press-glyph {
+  margin-left: 0.35em;
+  text-decoration: none;
+}
+
+.work-press-more {
+  margin-left: 0.35em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
 
 /* "w/ [glyph] Institution" collaborator tag on a selected work — same favicon-
    chip language as the press line. Each chip links to that lab's coverage of the

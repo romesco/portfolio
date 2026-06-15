@@ -305,13 +305,40 @@ def render_links(links) -> Markup:
 PRESS_PAGE_URL = "/inthepress"
 
 
+# How many trailing outlets to show as brand glyphs before collapsing to "+N".
+PRESS_GLYPH_CAP = 3
+
+
 def render_coverage_inline(coverage) -> Markup:
-    """A quiet inline 'press' hint folded into a featured work's meta line — just a
-    muted link to the full /inthepress archive, where the outlet names live. The
-    homepage only signals that coverage exists. Empty when there's none."""
+    """A compact 'press' tag on a featured work's meta line: the lead outlet named,
+    then the remaining outlets as small brand glyphs, collapsing to a '+N' link to
+    the /inthepress archive once the list runs long. The lead and each glyph link
+    to their article; the outlet name is the glyph's hover tooltip. The lead is the
+    first `coverage:` entry, so order the strongest outlet first. Empty when there's
+    no coverage."""
     if not coverage:
         return Markup("")
-    return Markup(f'<a class="work-press" href="{PRESS_PAGE_URL}">press</a>')
+    lead, rest = coverage[0], coverage[1:]
+    parts = [f'<a class="work-press-lead" href="{escape(lead.get("url") or PRESS_PAGE_URL)}">'
+             f'{escape(lead["outlet"])}</a>']
+    # Only collapse to "+N" when it actually hides 2+ outlets; a lone hidden
+    # outlet saves no space, so just show it.
+    if len(rest) - PRESS_GLYPH_CAP >= 2:
+        shown, overflow = rest[:PRESS_GLYPH_CAP], len(rest) - PRESS_GLYPH_CAP
+    else:
+        shown, overflow = rest, 0
+    for c in shown:
+        url, name = escape(c.get("url") or PRESS_PAGE_URL), escape(c["outlet"])
+        if c.get("favicon"):
+            parts.append(
+                f'<a class="work-press-glyph" href="{url}" title="{name}">'
+                f'<img src="{escape(c["favicon"])}" alt="{name}" width="16" height="16" '
+                'loading="lazy" onerror="this.remove()"></a>')
+        else:
+            parts.append(f'<a class="work-press-glyph work-press-text" href="{url}">{name}</a>')
+    if overflow:
+        parts.append(f'<a class="work-press-more" href="{PRESS_PAGE_URL}">+{overflow}</a>')
+    return Markup('<span class="work-press">' + " ".join(parts) + "</span>")
 
 
 def render_collaborators(collabs) -> Markup:
