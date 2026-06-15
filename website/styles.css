@@ -137,11 +137,15 @@ main {
   flex-shrink: 0;
 }
 
-.reading-link {
+.head-tools-extra {
   position: absolute;
-  top: calc(100% + 0.2rem);
+  top: calc(100% + 0.25rem);
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 /* Both icons occupy the same cell and cross-fade + rotate on toggle. */
@@ -873,17 +877,26 @@ a.mentee-project:hover { color: var(--accent); text-decoration: underline; }
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 0.9875rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.95rem;
 }
 
-.elsewhere li {
-  display: inline;
-}
+.elsewhere li { display: inline-flex; }
 
-.elsewhere li + li::before {
-  content: "·";
+.elsewhere a {
+  display: inline-flex;
   color: var(--fg-muted);
-  margin: 0 0.55em;
+  text-decoration: none;
+}
+
+.elsewhere a:hover { color: var(--accent); }
+
+.elsewhere svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
 }
 
 /* ----------------------------------------------------------------
