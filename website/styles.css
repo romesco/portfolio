@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------
-   Design notes — the principles this stylesheet is built on.
+   Design notes: the principles this stylesheet is built on.
    ----------------------------------------------------------------
    Rhythm comes from a small spacing scale, not arbitrary values.
    OKLCH tokens drive every color so light and dark stay in tune.
@@ -39,7 +39,7 @@
   --leading: 1.7;
   --leading-tight: 1.25;
 
-  /* System serif stack — faithful to classic faculty pages.
+  /* System serif stack: faithful to classic faculty pages.
      Iowan on macOS/iOS, Palatino on Windows, Georgia as floor. */
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino,
            "Hoefler Text", "Sitka Text", Cambria, ui-serif, Georgia, serif;
@@ -96,7 +96,7 @@ main {
 }
 
 /* ----------------------------------------------------------------
-   Theme toggle — subtle sun/moon morph, sitting on the name's line
+   Theme toggle: subtle sun/moon morph, sitting on the name's line
    (see .identity-head) so it tracks the name at every screen size.
 ---------------------------------------------------------------- */
 
@@ -178,7 +178,7 @@ main {
 }
 
 /* ----------------------------------------------------------------
-   Masthead — photo + identity
+   Masthead: photo + identity
 ---------------------------------------------------------------- */
 
 .masthead {
@@ -267,7 +267,7 @@ main {
   text-decoration: underline;
 }
 
-/* Calm the News links the same way — the chips carry the visual interest;
+/* Calm the News links the same way: the chips carry the visual interest;
    word-links read as prose, warming to the accent on hover. */
 .news-text a {
   color: var(--fg);
@@ -279,7 +279,7 @@ main {
   text-decoration: underline;
 }
 
-/* Inline brand glyphs — author affiliation chips and bio lab chips share ONE
+/* Inline brand glyphs: author affiliation chips and bio lab chips share ONE
    size / rounding / baseline so they sit identically wherever they appear. */
 .collab-favicon,
 .work-press-glyph img,
@@ -315,7 +315,7 @@ section h2 {
 }
 
 /* ----------------------------------------------------------------
-   Selected works — numbered, content-dense
+   Selected works: numbered, content-dense
 ---------------------------------------------------------------- */
 
 .works-list {
@@ -387,7 +387,7 @@ section h2 {
   font-weight: 600;
 }
 
-/* Contribution markers (* / †) — superscript, sized down, and zeroed
+/* Contribution markers (* / †): superscript, sized down, and zeroed
    line-height so the raised glyph doesn't stretch the author line. */
 .work-meta sup {
   font-size: 0.7em;
@@ -432,7 +432,7 @@ section h2 {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
-/* "w/ [glyph] Institution" collaborator tag on a selected work — same favicon-
+/* "w/ [glyph] Institution" collaborator tag on a selected work: same favicon-
    chip language as the press line. Each chip links to that lab's coverage of the
    work, or its most senior co-author's page. */
 .work-collab {
@@ -450,7 +450,7 @@ section h2 {
 }
 
 /* ----------------------------------------------------------------
-   Work expandable — <details>/<summary> with media drop-down
+   Work expandable: <details>/<summary> with media drop-down
 
    Structure per <li>:
      <details class="work">
@@ -523,7 +523,7 @@ details[open] > .work-summary::before {
   letter-spacing: 0.01em;
 }
 
-/* Real media — video, image (incl. gif), or iframe embed. The 16:9 box
+/* Real media: video, image (incl. gif), or iframe embed. The 16:9 box
    is enforced; non-matching aspects letterbox via object-fit: contain
    rather than crop. Background shows through letterboxing and during
    load. */
@@ -545,7 +545,7 @@ details[open] > .work-summary::before {
 }
 
 /* ----------------------------------------------------------------
-   Media carousel — multiple clips in one work dropdown. Slides are a
+   Media carousel: multiple clips in one work dropdown. Slides are a
    flex track translated by transform (no layout animation). Arrows
    appear on hover (stay visible on touch); a caption + dots sit below.
 ---------------------------------------------------------------- */
@@ -662,14 +662,14 @@ details[open] > .work-summary::before {
 
   .work::details-content {
     /* `display: flow-root` establishes a new block formatting context so
-       the first child's margin-top doesn't escape the height collapse —
+       the first child's margin-top doesn't escape the height collapse,
        without it, that leaked margin snaps out at the end of the
        transition, producing a visible jitter on close. */
     display: flow-root;
     opacity: 0;
     height: 0;
     overflow: clip;
-    /* Sync opacity to the height duration + curve — a single coherent
+    /* Sync opacity to the height duration + curve: a single coherent
        motion rather than two staggered ones. */
     transition:
       content-visibility 280ms allow-discrete,
@@ -683,7 +683,7 @@ details[open] > .work-summary::before {
   }
 
   /* Establishes the "from" state when a closed details first matches
-     [open] — without this, the transition has nothing to interpolate
+     [open]: without this, the transition has nothing to interpolate
      from on the very first open. */
   @starting-style {
     .work[open]::details-content {
@@ -694,7 +694,7 @@ details[open] > .work-summary::before {
 
   /* Hover whisper: a work with media cracks its content open a sliver on
      hover (closed only), with a light fade underneath, then eases back to
-     closed when the pointer leaves — hinting "there's more here" without
+     closed when the pointer leaves: hinting "there's more here" without
      committing to open, and without making it about the video. Pointer
      devices, motion allowed. */
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -709,7 +709,7 @@ details[open] > .work-summary::before {
 }
 
 /* ----------------------------------------------------------------
-   Expandable — "peek + fade" disclosure for long sections
+   Expandable: "peek + fade" disclosure for long sections
 
    A section body is wrapped in .expandable-viewport; the index script
    collapses it to ~data-peek items, masks the cut-off into a soft fade,
@@ -806,7 +806,7 @@ details[open] > .work-summary::before {
 }
 
 /* ----------------------------------------------------------------
-   Mentoring — name + project, with trajectory/years as muted meta
+   Mentoring: name + project, with trajectory/years as muted meta
 ---------------------------------------------------------------- */
 
 .mentoring {
@@ -863,12 +863,12 @@ a.mentee-name:hover { color: var(--accent); text-decoration: underline; }
 
 .mentee-dest { margin-left: 0.4em; }
 
-/* Project link (mentee worked on a documented project) — subtle in the muted
+/* Project link (mentee worked on a documented project): subtle in the muted
    meta line, reveals an affordance on hover. */
 a.mentee-project { color: inherit; text-decoration: none; }
 a.mentee-project:hover { color: var(--accent); text-decoration: underline; }
 
-/* Chip glyphs (mentee destination + year host) — a favicon image or an emoji. */
+/* Chip glyphs (mentee destination + year host): a favicon image or an emoji. */
 .chip-glyph {
   height: 1em;
   width: auto;
@@ -879,7 +879,7 @@ a.mentee-project:hover { color: var(--accent); text-decoration: underline; }
 .chip-emoji { font-style: normal; vertical-align: -0.05em; }
 
 /* ----------------------------------------------------------------
-   Elsewhere — inline link list with middot separators
+   Elsewhere: inline link list with middot separators
 ---------------------------------------------------------------- */
 
 .elsewhere {
@@ -926,7 +926,7 @@ a.mentee-project:hover { color: var(--accent); text-decoration: underline; }
 .copyright a { color: var(--fg-muted); text-decoration: none; }
 .copyright a:hover { color: var(--accent); text-decoration: underline; }
 
-/* Site footer — a quiet copyright line, lower-right, on pages with no
+/* Site footer: a quiet copyright line, lower-right, on pages with no
    bottom-left content (the homepage uses the Elsewhere row instead). */
 .site-footer {
   margin-top: 2.75rem;
@@ -990,7 +990,7 @@ a:focus-visible {
 }
 
 /* ----------------------------------------------------------------
-   News — single-line updates, date pinned to the right
+   News: single-line updates, date pinned to the right
 ---------------------------------------------------------------- */
 
 .news {
@@ -1026,7 +1026,7 @@ a:focus-visible {
 }
 
 /* ----------------------------------------------------------------
-   Standalone pages — back link + Markdown prose
+   Standalone pages: back link + Markdown prose
 
    Content headings are normal prose, deliberately distinct from the
    italic/lowercase section *labels* used on the homepage.
@@ -1080,7 +1080,7 @@ a:focus-visible {
 }
 
 /* ----------------------------------------------------------------
-   Bucket list — /bucketlist (hidden page). A numbered list driven by
+   Bucket list: /bucketlist (hidden page). A numbered list driven by
    data/bucketlist.yaml; done items are muted and struck through.
 ---------------------------------------------------------------- */
 
@@ -1109,7 +1109,7 @@ a:focus-visible {
 }
 
 /* ----------------------------------------------------------------
-   Twitter — /twitter (hidden page). A microblog feed driven by
+   Twitter: /twitter (hidden page). A microblog feed driven by
    data/twitter.yaml, in the site's serif/paper style: avatar + name +
    @handle + relative time, then the post, separated by hairlines.
 ---------------------------------------------------------------- */
@@ -1201,7 +1201,7 @@ a:focus-visible {
 .post-text > :first-child { margin-top: 0; }
 .post-text > :last-child { margin-bottom: 0; }
 
-/* Repost — a post that shares someone else's "en mi mente" post, shown as a
+/* Repost: a post that shares someone else's "en mi mente" post, shown as a
    quoted card with their identity and a link to the original on their site.
    (Prototype: the reposted content is stored locally in twitter.yaml.) */
 .repost-label {
@@ -1271,7 +1271,7 @@ a:focus-visible {
 .repost-text > :last-child { margin-bottom: 0; }
 
 /* ----------------------------------------------------------------
-   Reading — /reading (hidden page). A curated blogroll grouped by topic:
+   Reading: /reading (hidden page). A curated blogroll grouped by topic:
    bold group headings, then name · domain + a one-line note per entry.
 ---------------------------------------------------------------- */
 
@@ -1366,7 +1366,7 @@ a:focus-visible {
 }
 
 /* ----------------------------------------------------------------
-   In the press — /inthepress (hidden page). The exhaustive archive: each
+   In the press: /inthepress (hidden page). The exhaustive archive: each
    publication that has coverage, with its outlets listed as a middot row.
 ---------------------------------------------------------------- */
 
@@ -1417,7 +1417,7 @@ a:focus-visible {
 }
 
 /* Outlet "chip": the outlet's own favicon (brand glyph) + its name. The glyph
-   carries the brand; spacing — not middots — separates one outlet from the
+   carries the brand; spacing, not middots, separates one outlet from the
    next, keeping the row quiet and uncluttered. */
 .press-outlet-link {
   display: inline-flex;

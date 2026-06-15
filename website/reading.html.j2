@@ -1,6 +1,6 @@
 {# Hidden page: /reading. A curated, grouped blogroll driven by
    data/reading.yaml. Extends the shared layout; not linked from the site,
-   marked noindex. Generated to reading.html by build.py — do NOT hand-edit. #}
+   marked noindex. Generated to reading.html by build.py: do NOT hand-edit. #}
 {% extends "_layout.html.j2" %}
 
 {% block title %}{{ title }} · {{ identity.name }}{% endblock %}
@@ -37,7 +37,7 @@
     </ul>
     {% endfor %}
     {% else %}
-    <p class="bio"><em>No links yet — add some in <code>data/reading.yaml</code>.</em></p>
+    <p class="bio"><em>No links yet: add some in <code>data/reading.yaml</code>.</em></p>
     {% endif %}
   </section>
 {% endblock %}

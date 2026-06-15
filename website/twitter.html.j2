@@ -1,7 +1,7 @@
 {# Hidden page: /twitter. A Twitter/X-style microblog feed driven by
    data/twitter.yaml, in the site's own style. Extends the shared layout;
    not linked from the site, marked noindex. Generated to twitter.html by
-   build.py — do NOT hand-edit. #}
+   build.py: do NOT hand-edit. #}
 {% extends "_layout.html.j2" %}
 
 {% block title %}{{ title }} · {{ identity.name }}{% endblock %}
@@ -60,7 +60,7 @@
       {% endfor %}
     </div>
     {% else %}
-    <p class="bio"><em>No posts yet — add some in <code>data/twitter.yaml</code>.</em></p>
+    <p class="bio"><em>No posts yet: add some in <code>data/twitter.yaml</code>.</em></p>
     {% endif %}
   </section>
 {% endblock %}

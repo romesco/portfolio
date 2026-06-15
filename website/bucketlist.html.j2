@@ -1,6 +1,6 @@
 {# Hidden page: /bucketlist. Data-driven from data/bucketlist.yaml (a simple
    list). Extends the shared base layout; not linked from the site, marked
-   noindex. Generated to bucketlist.html by build.py — do NOT hand-edit. #}
+   noindex. Generated to bucketlist.html by build.py: do NOT hand-edit. #}
 {% extends "_layout.html.j2" %}
 
 {% block title %}{{ title }} · {{ identity.name }}{% endblock %}
@@ -20,7 +20,7 @@
       {% endfor %}
     </ol>
     {% else %}
-    <p class="bio"><em>No items yet — add some in <code>data/bucketlist.yaml</code>.</em></p>
+    <p class="bio"><em>No items yet: add some in <code>data/bucketlist.yaml</code>.</em></p>
     {% endif %}
   </section>
 {% endblock %}

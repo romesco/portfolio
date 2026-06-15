@@ -3,7 +3,7 @@ title: Who I Am
 description: What Rosario Scalise values and cares about.
 ---
 
-<!-- PLACEHOLDER — replace with your own words. Markdown works here:
+<!-- PLACEHOLDER: replace with your own words. Markdown works here:
      **bold**, *italics*, [links](https://example.com), `code`,
      ## subheadings, > blockquotes, and - bullet lists.
      Served at /whoiam, styled like the homepage, not linked from it,
@@ -14,9 +14,9 @@ through-line in your work and life.
 
 ## What I value
 
-- **Value one** — a sentence on why it matters to you.
-- **Value two** — a sentence on why it matters to you.
-- **Value three** — a sentence on why it matters to you.
+- **Value one**: a sentence on why it matters to you.
+- **Value two**: a sentence on why it matters to you.
+- **Value three**: a sentence on why it matters to you.
 
 ## What I care about
 

@@ -2,7 +2,7 @@
    grouped by publication. Sourced from the `coverage:` lists in
    data/publications.yaml (single source of truth). Extends the shared layout;
    not linked from the homepage nav, marked noindex. Generated to inthepress.html
-   by build.py — do NOT hand-edit. #}
+   by build.py: do NOT hand-edit. #}
 {% extends "_layout.html.j2" %}
 
 {% block title %}{{ title }} · {{ identity.name }}{% endblock %}
@@ -38,7 +38,7 @@
       {% endfor %}
     </ul>
     {% else %}
-    <p class="bio"><em>No press coverage recorded yet — add <code>coverage:</code> to entries in <code>data/publications.yaml</code>.</em></p>
+    <p class="bio"><em>No press coverage recorded yet: add <code>coverage:</code> to entries in <code>data/publications.yaml</code>.</em></p>
     {% endif %}
   </section>
 {% endblock %}

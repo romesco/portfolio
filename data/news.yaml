@@ -1,11 +1,11 @@
 # News / updates shown near the top of the homepage (first section after the
-# bio). Newest first — build.py sorts by `date` descending. Each item:
+# bio). Newest first: build.py sorts by `date` descending. Each item:
 #   - date: YYYY-MM-DD        # rendered as "Jun 2026" in the left column
 #     text: one-line update   # supports inline Markdown, e.g. [Octi](https://…)
 #     link: https://...       # optional; links the WHOLE line (use the inline
 #                             #   Markdown form above to link just part of it)
 #
-# Placeholder entries below — edit the text/dates (and add more) freely.
+# Placeholder entries below: edit the text/dates (and add more) freely.
 #- date: 2026-06-17
 #  text: (TBA) Invited talk at the NVIDIA Seattle Robotics Laboratory
 - date: 2026-05-30

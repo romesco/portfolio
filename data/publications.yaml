@@ -14,18 +14,18 @@
 # to https://arxiv.org/abs/<id>; arxiv: <full URL> passes through.
 #
 # Website only: `featured: true` shows the entry on the homepage. `media:` may
-# be a single video/image/youtube OR a LIST of them — a list renders as a
+# be a single video/image/youtube OR a LIST of them: a list renders as a
 # carousel in the dropdown. Each item: {src, type?, poster?, autoplay?, alt?,
 # label?}. `label` captions the slide in a carousel.
 #
-# `coverage:` is an optional list of real press/media hits — {outlet, url} (a
+# `coverage:` is an optional list of real press/media hits: {outlet, url} (a
 # bare string also works). Featured works render a quiet "press" line; ALL works
 # with coverage are collected on the hidden /inthepress page. Only add genuine
 # third-party coverage (not the project's own page). Each outlet shows its brand
 # favicon (by domain) on /inthepress; add `favicon: <url>` to an item to override
 # it when the auto-derived glyph is wrong (e.g. a subdomain with no real icon).
 #
-# An author entry may carry `affil: {name, url, domain?, favicon?}` — a small
+# An author entry may carry `affil: {name, url, domain?, favicon?}`: a small
 # institution GLYPH (favicon only, no visible label; the name is the hover tooltip)
 # rendered right after that author's name, then the comma. Deduped: shown once per
 # institution even if several authors share it. The glyph is the institution's

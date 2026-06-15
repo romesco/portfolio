@@ -2,7 +2,7 @@
 # first) and in the CV's Mentoring section. Per mentee:
 #   name, project, years (e.g. 2024-2025 or "Summer 2018"), current (CV trajectory)
 # Website-only extras (the CV ignores them):
-#   url:          personal site — links the name (subtle)
+#   url:          personal site: links the name (subtle)
 #   project_url:  links the project text (e.g. its paper/hardware/press page)
 #   now:  destination chip {name, role?, url?, favicon?|emoji?} shown after the
 #         span as "Next → [role @] [logo]". `favicon` is a hosted/served glyph

@@ -16,7 +16,7 @@ build):
     src: ./media/foo.mp4           # required
     type: video                    # optional (video | image | youtube)
     poster: ./media/foo-poster.jpg # optional (video only)
-    autoplay: true                 # optional (video) — implies muted/loop
+    autoplay: true                 # optional (video): implies muted/loop
     alt: "Caption text"            # optional (image)
 
 Standalone pages: drop `website/pages/<slug>.md` (optional YAML front-matter
@@ -117,7 +117,7 @@ def normalize_media(m) -> dict | None:
 def normalize_media_list(m) -> list[dict]:
     """Coerce the optional `media:` value into a list of media dicts (0, 1, or
     many). A single string/dict becomes a one-item list; a YAML list of items
-    becomes many — the template renders >1 as a carousel."""
+    becomes many: the template renders >1 as a carousel."""
     if m is None:
         return []
     items = m if isinstance(m, list) else [m]
@@ -139,7 +139,7 @@ def normalize_coverage(items) -> list[dict]:
             iso, disp = d.isoformat(), d.strftime("%b %Y")
         else:
             iso = disp = str(d) if d else ""
-        # The outlet's own favicon (its brand glyph) by domain — same service
+        # The outlet's own favicon (its brand glyph) by domain: same service
         # the /reading page uses. No images to host; graceful if it 404s.
         host = urlparse(str(it.get("url") or "")).netloc
         if host.startswith("www."):
@@ -149,7 +149,7 @@ def normalize_coverage(items) -> list[dict]:
             "outlet": str(it["outlet"]),
             "url": it.get("url"),
             "domain": host,
-            # Explicit `favicon:` wins (some sites have no good auto-favicon —
+            # Explicit `favicon:` wins (some sites have no good auto-favicon,
             # e.g. a subdomain that only resolves to a generic globe).
             "favicon": it.get("favicon") or auto,
             "iso": iso,
@@ -161,7 +161,7 @@ def normalize_coverage(items) -> list[dict]:
 def normalize_collaborators(items) -> list[dict]:
     """Coerce the optional `collaborators:` value into {name, url, favicon} dicts
     for the "w/ [glyph] Institution" tag on a selected work. The glyph is the
-    institution's brand favicon — from an explicit `favicon:`, else a `domain:`,
+    institution's brand favicon: from an explicit `favicon:`, else a `domain:`,
     else the link's host. `url` is the click target (the institution's coverage
     of the work if any, otherwise its most senior co-author's page)."""
     out: list[dict] = []
@@ -181,7 +181,7 @@ def normalize_collaborators(items) -> list[dict]:
 
 
 def _affil_chip(affil: dict) -> str:
-    """Inline institution chip appended after an author's name — the institution's
+    """Inline institution chip appended after an author's name: the institution's
     brand glyph ONLY (no visible label; its name lives in the title/alt tooltip),
     linking to its coverage of the work or that author's page. Deduped by caller."""
     name = str(escape(affil["name"]))
@@ -205,7 +205,7 @@ def render_authors(authors) -> Markup:
     """HTML port of the CV's format_authors. `me: true` wraps in <strong>;
     `equal: true` appends `*`; bare `"..."` becomes a literal ellipsis.
     Oxford comma + ampersand as last separator, except when the list contains
-    an ellipsis (commas only — "..., & ..." reads as ungrammatical)."""
+    an ellipsis (commas only: "..., & ..." reads as ungrammatical)."""
     pieces: list[str] = []
     has_ellipsis = False
     seen_affils: set[str] = set()
@@ -223,7 +223,7 @@ def render_authors(authors) -> Markup:
                 pieces.append(str(escape(a)))
             continue
         # A name-less {affil: ...} entry is a standalone glyph (for an abbreviated
-        # author list) — hug it onto the previous author instead of listing it.
+        # author list): hug it onto the previous author instead of listing it.
         if not a.get("name") and isinstance(a.get("affil"), dict):
             af = a["affil"]
             if af.get("name") and af["name"] not in seen_affils:
@@ -342,7 +342,7 @@ def render_coverage_inline(coverage) -> Markup:
 
 
 def render_collaborators(collabs) -> Markup:
-    """Quiet "w/ [glyph] Institution" tag on a selected work — favicon + name
+    """Quiet "w/ [glyph] Institution" tag on a selected work: favicon + name
     chips, each linking to that institution's coverage or its senior co-author."""
     if not collabs:
         return Markup("")
@@ -456,7 +456,7 @@ def _initials(name: str) -> str:
 
 
 def load_twitter() -> tuple[str, list[dict]]:
-    """Load data/twitter.yaml — `{handle, posts: [{at, text?, repost?}]}` — into
+    """Load data/twitter.yaml (`{handle, posts: [{at, text?, repost?}]}`) into
     a feed, newest first. A `repost` block carries another person's post
     `{author, handle, url, at, text, avatar?}`; an own `text` alongside it is a
     quote-style comment. We emit `iso`/`display`/`full` times for the post and
@@ -516,7 +516,7 @@ def _site_latest(page_url: str, feed_url: str | None = None,
                  timeout: int = 6) -> dict | None:
     """Best-effort newest post `{title, url, at}` for a blog, or None. Uses an
     explicit feed_url if given, else auto-discovers from the page. Every failure
-    (network, parse, missing dep) is swallowed — the river is optional."""
+    (network, parse, missing dep) is swallowed: the river is optional."""
     try:
         import feedparser
     except Exception:
@@ -548,8 +548,8 @@ def _site_latest(page_url: str, feed_url: str | None = None,
 
 
 def load_reading() -> list[dict]:
-    """Load data/reading.yaml — `{groups: [{name, links: [{name, url, note}]}]}`
-    — into a curated, grouped blogroll. Derives a bare display domain from each
+    """Load data/reading.yaml (`{groups: [{name, links: [{name, url, note}]}]}`)
+    into a curated, grouped blogroll. Derives a bare display domain from each
     URL; renders notes as inline Markdown. Preserves file order."""
     if not READING_YAML.exists():
         return []
@@ -600,7 +600,7 @@ _LATEX_UNESCAPE = {r"\&": "&", r"\%": "%", r"\#": "#", r"\_": "_", r"\$": "$"}
 def load_press() -> list[dict]:
     """Collect every publication carrying a `coverage:` list into render-ready
     works for the /inthepress archive, newest first. Coverage lives on the
-    publication entries (single source of truth) — this is just a view over it."""
+    publication entries (single source of truth): this is just a view over it."""
     raw = yaml.safe_load(PUBS_YAML.read_text()) or []
     works: list[dict] = []
     for p in raw:
@@ -624,7 +624,7 @@ def _delatex(s: str) -> str:
 
 
 def _chip_html(c, cls: str) -> Markup:
-    """A small institution glyph chip — a favicon img or a literal emoji,
+    """A small institution glyph chip: a favicon img or a literal emoji,
     optionally linked, with the name in the title/alt tooltip. Used for mentee
     destinations and the per-year 'host' marker on the mentoring timeline."""
     if not isinstance(c, dict) or not c.get("name"):
@@ -645,7 +645,7 @@ def _chip_html(c, cls: str) -> Markup:
 def load_mentoring() -> list[dict]:
     """Load mentees into a year-grouped timeline (newest end-year first). Each
     mentee is one row; the FIRST mentee of each end-year group carries the year
-    anchor + a 'host' chip (where Rosario was — a UW prototype). Optional `url`
+    anchor + a 'host' chip (where Rosario was: a UW prototype). Optional `url`
     links the name to a personal site; optional `now` is a destination chip
     rendered after the span. LaTeX escapes / arrows are cleaned for the web."""
     if not MENTORING_YAML.exists():
@@ -783,7 +783,7 @@ def main() -> int:
     # Content hash of the stylesheet, appended to its URL so browsers fetch
     # the new CSS immediately instead of serving a stale cached copy.
     css_version = hashlib.sha256((ROOT / "styles.css").read_bytes()).hexdigest()[:8]
-    # Build fingerprint — a stable integrity hash stamped onto each page's root
+    # Build fingerprint: a stable integrity hash stamped onto each page's root
     # element (data-build) for provenance and asset versioning.
     build_fp = "5e4615be69fe6816b3a72e686745aee6d93d01d4d25c53610c8d97ab9a987c92"
 
@@ -821,7 +821,7 @@ def main() -> int:
     if pages:
         print(f"wrote {len(pages)} page(s): {', '.join(pages)}")
 
-    # Bucket list — a YAML-driven hidden page at /bucketlist.
+    # Bucket list: a YAML-driven hidden page at /bucketlist.
     if BUCKETLIST_YAML.exists():
         bucket = load_bucketlist()
         html = env.get_template("bucketlist.html.j2").render(
@@ -835,7 +835,7 @@ def main() -> int:
         (ROOT / "bucketlist.html").write_text(html)
         print(f"wrote bucketlist.html ({len(bucket)} items)")
 
-    # Twitter-style microblog feed — a YAML-driven hidden page at /twitter.
+    # Twitter-style microblog feed: a YAML-driven hidden page at /twitter.
     if TWITTER_YAML.exists():
         handle, posts = load_twitter()
         html = env.get_template("twitter.html.j2").render(
@@ -850,7 +850,7 @@ def main() -> int:
         (ROOT / "twitter.html").write_text(html)
         print(f"wrote twitter.html ({len(posts)} posts)")
 
-    # Reading — a curated blogroll, YAML-driven hidden page at /reading.
+    # Reading: a curated blogroll, YAML-driven hidden page at /reading.
     if READING_YAML.exists():
         groups = load_reading()
         html = env.get_template("reading.html.j2").render(
@@ -864,7 +864,7 @@ def main() -> int:
         (ROOT / "reading.html").write_text(html)
         print(f"wrote reading.html ({sum(len(g['links']) for g in groups)} links)")
 
-    # In the press — every publication's real media coverage, an exhaustive
+    # In the press: every publication's real media coverage, an exhaustive
     # YAML-driven hidden page at /inthepress (sourced from publications.yaml).
     press_works = load_press()
     if press_works:

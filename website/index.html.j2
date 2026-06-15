@@ -162,7 +162,7 @@
   // Media inside each work's <details> dropdown. A single autoplay video
   // plays when the dropdown opens and resets on close. A carousel (multiple
   // clips) gets prev/next + dots, and only the active slide's video plays.
-  // We avoid the HTML `autoplay` attribute (it fires on page load) — playback
+  // We avoid the HTML `autoplay` attribute (it fires on page load): playback
   // starts when the user actually opens the dropdown.
   (function () {
     function setupCarousel(root, details) {
@@ -208,7 +208,7 @@
 
     document.querySelectorAll('details.work').forEach(function (d) {
       // Clicking the hover-revealed media sliver (the dropdown content) opens
-      // the entry too — not just the summary text. Only while closed, so it
+      // the entry too: not just the summary text. Only while closed, so it
       // never interferes with carousel arrows / links / video controls once open.
       var content = d.querySelector('.work-media');
       if (content) {
@@ -277,7 +277,7 @@
 
       function collapse() {
         var h = peekHeight();
-        if (h == null) {                       // fits — show all, no toggle
+        if (h == null) {                       // fits: show all, no toggle
           btn.hidden = true;
           wrap.classList.remove('is-collapsed', 'is-open');
           vp.style.maxHeight = '';
