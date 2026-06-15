@@ -31,3 +31,6 @@ groups:
       - name: Adam Fishman
         url: https://fishbotics.com
         note: "A UW robotics PhD now at OpenAI, working on robot manipulation and learning, with biking, hiking, and pizza on the side."
+      - name: Jonas Frey
+        url: https://jonasfrey96.github.io/
+        note: "A robotics postdoc at Stanford and Berkeley (ETH PhD), working on perception and navigation for legged robots."
