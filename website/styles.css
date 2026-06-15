@@ -99,7 +99,9 @@ main {
    (see .identity-head) so it tracks the name at every screen size.
 ---------------------------------------------------------------- */
 
-.theme-toggle {
+/* Shared chrome for the masthead tool glyphs (theme toggle + reading link):
+   a 2rem round, muted icon that warms to full ink on hover. */
+.head-tool {
   flex-shrink: 0;
 
   appearance: none;
@@ -110,6 +112,7 @@ main {
   padding: 0.3rem;
   cursor: pointer;
   color: var(--fg-muted);
+  text-decoration: none;
   border-radius: 50%;
 
   display: grid;
@@ -120,11 +123,25 @@ main {
   transition: color 160ms ease;
 }
 
-.theme-toggle:hover { color: var(--fg); }
+.head-tool:hover { color: var(--fg); }
 
-.theme-toggle:focus-visible {
+.head-tool:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+/* Tool rail: the reading link hangs directly beneath the toggle without
+   growing the name row (absolute, so the masthead flow is undisturbed). */
+.head-tools {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.reading-link {
+  position: absolute;
+  top: calc(100% + 0.2rem);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Both icons occupy the same cell and cross-fade + rotate on toggle. */
