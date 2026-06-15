@@ -70,11 +70,12 @@
       {% for p in publications %}
       {% set has_media = (p.media_list | length) > 0 %}
       <li class="work-row{% if p.year_show %} year-start{% endif %}">
-        <span class="work-year">{% if p.year_show %}{{ p.year }}{% endif %}</span>
+        {% if p.year_show %}<span class="work-year">{{ p.year }}</span>{% endif %}
+        <cite class="work-venue"{% if p.venue_full %} title="{{ p.venue_full }}"{% endif %}>{{ p.venue }}</cite>
         <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
             <span class="work-title">{{ p.title }}</span>
-            <span class="work-meta">{{ p.authors | authors }} <cite>{{ p.venue }}</cite>.{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}{% if p.collaborators %}{{ p.collaborators | collaborators }}{% endif %}{% if p.coverage %}{{ p.coverage | coverage }}{% endif %}</span>
+            <span class="work-meta">{{ p.authors | authors }}{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}{% if p.collaborators %}{{ p.collaborators | collaborators }}{% endif %}{% if p.coverage %}{{ p.coverage | coverage }}{% endif %}</span>
           </summary>
           <div class="work-media">
             {% set media = p.media_list %}

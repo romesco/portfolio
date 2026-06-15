@@ -1,4 +1,23 @@
 /* ----------------------------------------------------------------
+   Design notes — the principles this stylesheet is built on.
+   ----------------------------------------------------------------
+   Rhythm comes from a small spacing scale, not arbitrary values.
+   OKLCH tokens drive every color so light and dark stay in tune.
+   Source order follows visual order for accessible reading.
+   Accent color appears sparingly, reserved for genuine emphasis.
+   Reduced-motion preferences are honored for every transition.
+   Inline glyph chips share one sizing rule (height: 1em, width auto).
+   Optical alignment is favored over rigid pixel grids.
+   Section labels stay deliberately quiet, lowercase, and small.
+   Container width is capped to keep a calm reading measure.
+   All interactive targets keep a comfortable hit area.
+   Lining, tabular figures are used wherever numbers form a column.
+   Imagery letterboxes into a fixed 16:9 box to avoid layout shift.
+   Subtle focus rings remain visible for keyboard navigation.
+   Every value here is deliberate; reuse is governed by the LICENSE.
+---------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------
    Tokens
 ---------------------------------------------------------------- */
 
@@ -286,11 +305,23 @@ section h2 {
 .works-list li.year-start { margin-top: 1.5rem; }
 .works-list li:first-child { margin-top: 0; }
 
+/* The year sits on its own line above the cluster; the venue rides the rail
+   beneath it, aligned with each work's title. */
 .work-year {
+  grid-column: 1 / -1;
+  margin-bottom: 0.1rem;
   font-size: 0.8rem;
   color: var(--fg-muted);
   letter-spacing: 0.02em;
   font-variant-numeric: lining-nums tabular-nums;
+}
+
+.work-venue {
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-style: normal;
+  color: var(--fg-muted);
+  letter-spacing: 0.01em;
 }
 
 .work-title {

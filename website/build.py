@@ -737,6 +737,7 @@ def main() -> int:
     for p in featured:
         p.setdefault("links", {})
         p.setdefault("awards", [])
+        p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))
         p["coverage"] = normalize_coverage(p.get("coverage"))
         p["collaborators"] = normalize_collaborators(p.get("collaborators"))
