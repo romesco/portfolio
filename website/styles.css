@@ -908,6 +908,24 @@ a.mentee-project:hover { color: var(--accent); text-decoration: underline; }
   fill: currentColor;
 }
 
+/* Elsewhere row: glyphs on the left, copyright aligned to the right on the
+   same line; wraps to its own line on narrow screens. */
+.elsewhere-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.copyright {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
+.copyright a { color: var(--fg-muted); text-decoration: none; }
+.copyright a:hover { color: var(--accent); text-decoration: underline; }
+
 /* Site footer — a quiet copyright line + link to the terms, on every page. */
 .site-footer {
   margin-top: 2.75rem;

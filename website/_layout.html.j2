@@ -88,7 +88,9 @@
   </header>
 
 {% block content %}{% endblock %}
+{% block footer %}
   <footer class="site-footer">© {{ year }} {{ identity.name }} · <a href="/license">terms</a></footer>
+{% endblock %}
 </main>
 <script>
   // Theme toggle — flips data-theme on <html> and remembers the choice.
