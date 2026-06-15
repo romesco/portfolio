@@ -92,6 +92,7 @@ main {
   max-width: var(--measure);
   margin: 0 auto;
   padding: var(--pad-y) var(--pad-x);
+  position: relative;
 }
 
 /* ----------------------------------------------------------------
@@ -994,9 +995,15 @@ a:focus-visible {
    italic/lowercase section *labels* used on the homepage.
 ---------------------------------------------------------------- */
 
+/* Floated into the top padding (absolute) so the back link never adds height
+   above the masthead: the masthead stays put when navigating home <-> subpage. */
 .backlink {
-  margin: 0 0 1.75rem;
+  position: absolute;
+  top: calc(var(--pad-y) - 1.8rem);
+  left: var(--pad-x);
+  margin: 0;
   font-size: 0.9rem;
+  line-height: 1.2;
 }
 
 .page-content { font-size: 1.0625rem; }
