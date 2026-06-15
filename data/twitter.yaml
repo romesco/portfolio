@@ -23,33 +23,33 @@ handle: rosarioscalise
 
 posts:
   - at: 2026-06-14 09:12:00
-    text: "Morning thought: the real bottleneck in mega-scale RL is the *data diet*, not the compute. More on this soon."
+    text: "Lorem ipsum dolor sit amet, consectetur *adipiscing* elit, sed do eiusmod tempor incididunt ut labore."
 
   - at: 2026-06-13 17:40:00
-    text: "Spent the afternoon chasing a sim2real gap. 90% of robotics is plumbing — and I mean that lovingly."
+    text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
 
   - at: 2026-06-12 16:20:00
-    text: "Couldn't agree more — the sampling recipe carried this whole project."
+    text: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum."
     repost:
-      author: Octi Zhang
-      handle: zoctipus
-      url: https://zoctipus.github.io/
+      author: Lorem Ipsum
+      handle: loremipsum
+      url: https://example.com
       at: 2026-06-12 15:05:00
-      text: "Balanced data beats more data. Spent months learning this the hard way so you don't have to."
+      text: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt."
 
   - at: 2026-06-10 13:00:00
     repost:
-      author: Octi Zhang
-      handle: zoctipus
-      url: https://zoctipus.github.io/
+      author: Lorem Ipsum
+      handle: loremipsum
+      url: https://example.com
       at: 2026-06-10 12:30:00
-      text: "New role at NVIDIA, same robots. Let's build. 🤖"
+      text: "Sunt in culpa qui officia deserunt mollit anim id est laborum."
 
   - at: 2026-06-11 11:05:00
-    text: "New preprint is up: [A Balanced Data Diet](https://sgs-rl.github.io). Locomotion + manipulation from one recipe. Thread soon."
+    text: "Lorem ipsum [dolor sit amet](https://example.com), consectetur adipiscing elit sed do."
 
   - at: 2026-06-08 20:15:00
-    text: "If you work on large-scale physics simulation for robot learning, say hi — always up to compare notes."
+    text: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque."
 
   - at: 2026-06-02 14:30:00
-    text: "Hello, world. Standing up a little corner of the web for short thoughts on robots, RL, and research life."
+    text: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur adipisci."

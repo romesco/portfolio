@@ -228,6 +228,14 @@ main {
   color: var(--fg-muted);
 }
 
+/* Reserve a right gutter so the title/affiliation wrap clear of the masthead
+   tool rail (toggle + reading + garage glyphs hang down the right edge) and
+   never run under the glyphs on narrow screens. */
+.identity .title,
+.identity .affiliation {
+  padding-right: 2.75rem;
+}
+
 /* Stack on the narrowest screens so neither the photo nor the
    identity gets squeezed. */
 @media (max-width: 380px) {
