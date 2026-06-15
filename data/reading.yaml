@@ -28,3 +28,6 @@ groups:
         # Buttondown newsletter, which exposes an RSS feed we point at directly.
         feed: https://buttondown.email/mbforbes/rss
         note: AI researcher — travel photography, software experiments, and reflections.
+      - name: Adam Fishman
+        url: https://fishbotics.com
+        note: "A UW robotics PhD now at OpenAI, working on robot manipulation and learning, with biking, hiking, and pizza on the side."
