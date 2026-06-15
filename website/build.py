@@ -799,6 +799,7 @@ def main() -> int:
     env.filters["coverage"] = render_coverage_inline
     env.filters["collaborators"] = render_collaborators
     env.globals["build_fp"] = build_fp
+    env.globals["year"] = datetime.date.today().year
 
     shutil.copy2(HEADSHOT_SRC, HEADSHOT_DEST)
     html = env.get_template("index.html.j2").render(
