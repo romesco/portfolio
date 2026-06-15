@@ -268,20 +268,29 @@ section h2 {
 
 .works-list {
   margin: 0;
-  padding-left: 2rem;
-  list-style-type: decimal;
-  /* Lining + tabular figures look cleanest in numbered markers */
+  padding-left: 0;
+  list-style: none;
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* Left-anchored timeline: a year column (shown once per year cluster) and the
+   work (disclosure + title + meta). Mirrors the mentoring timeline. */
 .works-list li {
+  display: grid;
+  grid-template-columns: 4.25rem 1fr;
+  column-gap: 1.1rem;
+  align-items: baseline;
   margin-bottom: 1.1rem;
-  padding-left: 0.25rem;
 }
 
-.works-list li::marker {
+.works-list li.year-start { margin-top: 1.5rem; }
+.works-list li:first-child { margin-top: 0; }
+
+.work-year {
+  font-size: 0.8rem;
   color: var(--fg-muted);
-  font-size: 0.9em;
+  letter-spacing: 0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .work-title {

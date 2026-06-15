@@ -741,6 +741,14 @@ def main() -> int:
         p["coverage"] = normalize_coverage(p.get("coverage"))
         p["collaborators"] = normalize_collaborators(p.get("collaborators"))
 
+    # Timeline grouping: show the year label only on the first work of each
+    # year cluster (featured works are sorted year-desc), so Selected Works
+    # reads as a left-anchored timeline like the mentoring section.
+    prev_year = None
+    for p in featured:
+        p["year_show"] = p.get("year") != prev_year
+        prev_year = p.get("year")
+
     news = load_news()
     mentees = load_mentoring()
     favicons = site.get("favicons") or DEFAULT_FAVICONS
