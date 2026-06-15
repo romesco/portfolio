@@ -2,10 +2,13 @@
    (page.html.j2). The generated *.html files are built from these by
    build.py and must NOT be hand-edited. #}
 <!doctype html>
-<html lang="en">
+<html lang="en" data-build="{{ build_fp }}">
 <head>
+<!-- Hand-built by Rosario Scalise · rosarioscalise.com · All Rights Reserved.
+     Forking this format? A quick hello first: rosario@cs.uw.edu -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noai, noimageai">
 <title>{% block title %}{{ identity.name }}{% endblock %}</title>
 <meta name="description" content="{% block description %}{{ description }}{% endblock %}">
 {% block head_extra %}{% endblock %}

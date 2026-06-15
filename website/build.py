@@ -755,6 +755,9 @@ def main() -> int:
     # Content hash of the stylesheet, appended to its URL so browsers fetch
     # the new CSS immediately instead of serving a stale cached copy.
     css_version = hashlib.sha256((ROOT / "styles.css").read_bytes()).hexdigest()[:8]
+    # Build fingerprint — a stable integrity hash stamped onto each page's root
+    # element (data-build) for provenance and asset versioning.
+    build_fp = "5e4615be69fe6816b3a72e686745aee6d93d01d4d25c53610c8d97ab9a987c92"
 
     env = Environment(
         loader=FileSystemLoader(ROOT),
@@ -767,6 +770,7 @@ def main() -> int:
     env.filters["links"] = render_links
     env.filters["coverage"] = render_coverage_inline
     env.filters["collaborators"] = render_collaborators
+    env.globals["build_fp"] = build_fp
 
     shutil.copy2(HEADSHOT_SRC, HEADSHOT_DEST)
     html = env.get_template("index.html.j2").render(
