@@ -1290,20 +1290,25 @@ a:focus-visible {
   text-decoration: underline;
 }
 
-/* Crop window: shows only the photo from the Instagram embed. `aspect-ratio`
-   (set inline per post) sizes it; the iframe is pulled up by --ig-header to
-   hide Instagram's title bar, and everything below the photo is clipped. The
-   small horizontal bleed hides the embed card's 1px border. Bump --ig-header
-   if Instagram restyles the embed and a sliver of header peeks through. */
+/* The card hugs the photo: its width is the capped photo width plus the card's
+   own padding (1.6rem) and border (2px), so it isn't a wide box around a small
+   image. The three knobs live here and are inherited by the crop below. */
+.repost-instagram {
+  --ig-header: 58px;   /* hides Instagram's title bar; bump if a sliver peeks through */
+  --ig-aspect: 1;      /* photo width/height, set inline per post */
+  --ig-max-h: 300px;   /* photo height cap; width follows the aspect */
+  max-width: calc(var(--ig-max-h) * var(--ig-aspect) + 1.6rem + 2px);
+}
+
+/* Crop window: reveals only the photo. aspect-ratio sizes it; the iframe is
+   pulled up by --ig-header to hide the title bar and everything below the photo
+   is clipped. The small horizontal bleed hides the embed card's 1px border. */
 .ig-embed-crop {
-  --ig-header: 58px;
-  --ig-aspect: 1;          /* photo width/height, set inline per post */
-  --ig-max-h: 300px;       /* cap the photo height; width follows the aspect */
   position: relative;
   margin-top: 0.5rem;
   width: 100%;
-  max-width: calc(var(--ig-max-h) * var(--ig-aspect));
-  aspect-ratio: var(--ig-aspect);
+  max-width: calc(var(--ig-max-h, 300px) * var(--ig-aspect, 1));
+  aspect-ratio: var(--ig-aspect, 1);
   overflow: hidden;
   border-radius: 10px;
   background: var(--rule);
@@ -1311,10 +1316,10 @@ a:focus-visible {
 
 .ig-embed-crop iframe {
   position: absolute;
-  top: calc(-1 * var(--ig-header));
+  top: calc(-1 * var(--ig-header, 58px));
   left: -2px;
   width: calc(100% + 4px);
-  height: calc(100% + var(--ig-header) + 260px);
+  height: calc(100% + var(--ig-header, 58px) + 260px);
   border: 0;
   pointer-events: none;
 }
