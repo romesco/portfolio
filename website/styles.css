@@ -363,6 +363,18 @@ section h2 {
   line-height: 1.1;
 }
 
+/* Award medal, sits under the year in the rail. Understated: the style sets
+   only its color; the glyph is monochrome via currentColor. */
+.work-medal {
+  display: block;
+  margin-top: 0.35rem;
+  line-height: 0;
+}
+
+.work-medal--ribbon { color: var(--fg-muted); }
+.work-medal--star   { color: var(--fg-faint); }
+.work-medal--accent { color: var(--accent); }
+
 .work-title {
   margin: 0;
   font-weight: 600;

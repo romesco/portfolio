@@ -888,6 +888,14 @@ def main() -> int:
     for p in featured:
         p.setdefault("links", {})
         p.setdefault("awards", [])
+        # Award medal in the rail. An explicit `medal:` style wins (used while
+        # we're trying out styles); otherwise any award shows the default style.
+        # One of: ribbon | star | accent.
+        mstyle = str(p.get("medal") or "").lower()
+        if not mstyle and p["awards"]:
+            mstyle = "ribbon"
+        p["medal"] = mstyle if mstyle in ("ribbon", "star", "accent") else ""
+        p["award_label"] = _delatex("; ".join(p["awards"])) if p["awards"] else ""
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))
         p["coverage"] = normalize_coverage(p.get("coverage"))

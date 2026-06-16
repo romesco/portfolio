@@ -73,6 +73,17 @@
         <div class="work-rail">
           <cite class="work-venue"{% if p.venue_full %} title="{{ p.venue_full }}"{% endif %}>{{ p.venue }}</cite>
           <span class="work-year">{{ p.year }}</span>
+          {% if p.medal %}
+          <span class="work-medal work-medal--{{ p.medal }}"{% if p.award_label %} title="{{ p.award_label }}"{% endif %} aria-label="{{ p.award_label or 'Award' }}">
+            {%- if p.medal == 'ribbon' -%}
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 9.6 6.4 3M14.8 9.6 17.6 3"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg>
+            {%- elif p.medal == 'star' -%}
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><polygon points="12,7 13.2,10.3 16.8,10.5 14,12.7 14.9,16 12,14.1 9.1,16 10,12.7 7.2,10.5 10.8,10.3" fill="currentColor" stroke="none"/></svg>
+            {%- elif p.medal == 'accent' -%}
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M9.4 15.5 7.6 21.5 10.8 19.7ZM14.6 15.5 16.4 21.5 13.2 19.7Z"/><path fill-rule="evenodd" d="M4 11a8 8 0 1 1 16 0a8 8 0 1 1 -16 0ZM12 6.4 13.4 10 17.2 10 14.1 12.3 15.2 16 12 13.8 8.8 16 9.9 12.3 6.8 10 10.6 10Z"/></svg>
+            {%- endif -%}
+          </span>
+          {% endif %}
         </div>
         <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
