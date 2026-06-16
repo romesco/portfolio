@@ -55,17 +55,15 @@ posts:
       aspect: 1   # square; set 0.8 for portrait (4:5), 1.91 for landscape
       text: "Me wit my boy Helios #darpa #robotics #drcfinals #drc #mit #atlas #turnt #swerve"
 
-  - at: 2026-06-13 17:40:00
-    text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
-
-  - at: 2026-06-11 11:05:00
-    text: "Lorem ipsum [dolor sit amet](https://example.com), consectetur adipiscing elit sed do."
-
-  - at: 2026-06-08 20:15:00
-    text: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque."
-
-  - at: 2026-06-02 14:30:00
-    text: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur adipisci."
+  - at: 2026-06-02 10:00:00
+    text: "me quoting a dude quoting another dude"
+    repost:
+      author: Octi Zhang
+      handle: zoctipus
+      url: https://zoctipus.github.io/
+      at: 2026-05-30 12:00:00
+      avatar: /img/octi.png
+      text: "\"Beauty is truth, truth beauty,\"—that is all Ye know on earth, and all ye need to know.  \n— John Keats, 1819"
 
   - at: 2026-06-01 09:00:00
     text: "the only way out of it is through it"
