@@ -566,9 +566,14 @@ def load_reading() -> list[dict]:
             if host.startswith("www."):
                 host = host[4:]
             note = ln.get("note")
+            feed = ln.get("feed")
             latest = None
-            if fetch and url:
-                info = _site_latest(url, ln.get("feed"))
+            # `feed: false` opts a blog out of the river: use it when a site's
+            # advertised feed misrepresents it (e.g. a stale feed that only lists
+            # self-hosted posts while the author publishes elsewhere). A string
+            # `feed:` points at an explicit feed URL; None auto-discovers.
+            if fetch and url and feed is not False:
+                info = _site_latest(url, feed if isinstance(feed, str) else None)
                 if info:
                     at = info["at"]
                     latest = {
