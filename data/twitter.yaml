@@ -32,14 +32,14 @@ posts:
     text: "the only way out of it is through it"
 
   - at: 2026-06-13 18:30:00
-    text: "Reposting this from Instagram, it stuck with me."
+    text: "Throwback to the DRC finals."
     repost:
-      author: Lorem Ipsum
-      handle: loremipsum
+      author: romesc
+      handle: romesc
       url: https://www.instagram.com/p/3nQQX8MbSC/
-      at: 2026-06-13 12:00:00
+      at: 2015-06-17 12:00:00
       aspect: 1   # square; set 0.8 for portrait (4:5), 1.91 for landscape
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+      text: "Me wit my boy Helios #darpa #robotics #drcfinals #drc #mit #atlas #turnt #swerve"
 
   - at: 2026-06-13 17:40:00
     text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
