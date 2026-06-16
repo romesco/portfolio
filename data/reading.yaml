@@ -28,15 +28,18 @@ groups:
         # Buttondown newsletter, which exposes an RSS feed we point at directly.
         feed: https://buttondown.email/mbforbes/rss
         note: "AI researcher: travel photography, software experiments, and reflections."
+      - name: Carolina Higuera
+        url: https://carolinahiguera.github.io/
+        note: "A UW robotics PhD and Meta visiting researcher, working on vision-based tactile perception for robot manipulation."
       - name: Adam Fishman
         url: https://fishbotics.com
         note: "A UW robotics PhD now at OpenAI, working on robot manipulation and learning, with biking, hiking, and pizza on the side."
       - name: Jonas Frey
         url: https://jonasfrey96.github.io/
         note: "A robotics postdoc at Stanford and Berkeley (ETH PhD), working on perception and navigation for legged robots."
-      - name: Carolina Higuera
-        url: https://carolinahiguera.github.io/
-        note: "A UW robotics PhD and Meta visiting researcher, working on vision-based tactile perception for robot manipulation."
+      - name: Melanie Sclar
+        url: https://msclar.github.io/
+        note: "A UW CS PhD working on robust reasoning and theory of mind in language models."
       - name: Gokul Swamy
         url: https://gokul.dev/blog/
         # His feed.xml only carries one self-hosted post (a 2017 piece); the
