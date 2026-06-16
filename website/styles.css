@@ -1270,40 +1270,18 @@ a:focus-visible {
 .repost-text > :first-child { margin-top: 0; }
 .repost-text > :last-child { margin-bottom: 0; }
 
-/* Instagram repost: the IG glyph stands in for the avatar, an optional
-   thumbnail previews the post, and a source line links out. */
-.repost-ig {
-  display: inline-flex;
-  flex-shrink: 0;
-  color: var(--fg-muted);
+/* Instagram repost: rendered by Instagram's official embed.js, which replaces
+   the blockquote with its own (light-themed) card. We only size it to sit
+   inside the feed column; the .ig-fallback is what shows with JS disabled. */
+.instagram-media {
+  margin: 0.5rem 0 !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }
 
-.repost-ig:hover { color: var(--accent); }
-
-.repost-media {
-  display: block;
-  margin-top: 0.5rem;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.repost-media img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.repost-source {
-  display: inline-block;
-  margin-top: 0.45rem;
-  font-size: 0.78rem;
-  color: var(--fg-muted);
-  text-decoration: none;
-}
-
-.repost-source:hover {
-  color: var(--accent);
-  text-decoration: underline;
+.ig-fallback {
+  margin-top: 0.3rem;
+  font-size: 1rem;
 }
 
 /* ----------------------------------------------------------------
