@@ -34,6 +34,9 @@ groups:
       - name: Jonas Frey
         url: https://jonasfrey96.github.io/
         note: "A robotics postdoc at Stanford and Berkeley (ETH PhD), working on perception and navigation for legged robots."
+      - name: Carolina Higuera
+        url: https://carolinahiguera.github.io/
+        note: "A UW robotics PhD and Meta visiting researcher, working on vision-based tactile perception for robot manipulation."
       - name: Gokul Swamy
         url: https://gokul.dev/blog/
         # His feed.xml only carries one self-hosted post (a 2017 piece); the
