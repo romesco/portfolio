@@ -37,20 +37,26 @@
           </div>
           {% if p.repost %}
             {% if p.has_comment %}<div class="post-text">{{ p.html }}</div>{% endif %}
-            <div class="repost">
+            <div class="repost{% if p.repost.source == 'instagram' %} repost-instagram{% endif %}">
               {% if not p.has_comment %}<span class="repost-label" aria-hidden="true">↻ reposted</span>{% endif %}
               <span class="repost-head">
-                {% if p.repost.avatar %}
+                {% if p.repost.source == 'instagram' %}
+                <a class="repost-ig" href="{{ p.repost.url }}" aria-label="View on Instagram"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.35" fill="currentColor" stroke="none"/></svg></a>
+                {% elif p.repost.avatar %}
                 <img class="repost-avatar" src="{{ p.repost.avatar }}" alt="" width="22" height="22">
                 {% else %}
                 <span class="repost-initials" aria-hidden="true">{{ p.repost.initials }}</span>
                 {% endif %}
                 <span class="repost-name">{{ p.repost.author }}</span>
                 {% if p.repost.handle %}<a class="repost-link" href="{{ p.repost.url }}">@{{ p.repost.handle }}</a>{% endif %}
+                {% if p.repost.display %}
                 <span class="post-sep" aria-hidden="true">·</span>
                 <time class="post-time" datetime="{{ p.repost.iso }}" title="{{ p.repost.full }}">{{ p.repost.display }}</time>
+                {% endif %}
               </span>
+              {% if p.repost.image %}<a class="repost-media" href="{{ p.repost.url }}"><img src="{{ p.repost.image }}" alt="" loading="lazy"></a>{% endif %}
               <div class="repost-text">{{ p.repost.html }}</div>
+              {% if p.repost.source == 'instagram' %}<a class="repost-source" href="{{ p.repost.url }}">instagram.com ↗</a>{% endif %}
             </div>
           {% else %}
           <div class="post-text">{{ p.html }}</div>

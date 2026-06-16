@@ -478,11 +478,21 @@ def load_twitter() -> tuple[str, list[dict]]:
         repost = None
         if isinstance(rp, dict):
             r_iso, r_display, r_full = _post_time(rp.get("at"))
+            r_url = str(rp.get("url") or "")
+            # An Instagram repost renders as an IG-style card. Marked explicitly
+            # with `source: instagram`, or inferred from an instagram.com URL.
+            # Instagram blocks scraping (login wall, no OpenGraph, token-gated
+            # oEmbed), so author/caption/image are authored here, not fetched.
+            source = str(rp.get("source") or "").lower()
+            if not source and "instagram.com" in r_url:
+                source = "instagram"
             repost = {
                 "author": str(rp.get("author") or ""),
                 "handle": str(rp.get("handle") or "").lstrip("@"),
                 "avatar": rp.get("avatar"),
-                "url": rp.get("url"),
+                "url": r_url,
+                "source": source,
+                "image": rp.get("image"),
                 "initials": _initials(rp.get("author") or ""),
                 "html": _render_inline_md(rp.get("text", "")),
                 "iso": r_iso, "display": r_display, "full": r_full,

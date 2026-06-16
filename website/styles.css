@@ -1270,6 +1270,42 @@ a:focus-visible {
 .repost-text > :first-child { margin-top: 0; }
 .repost-text > :last-child { margin-bottom: 0; }
 
+/* Instagram repost: the IG glyph stands in for the avatar, an optional
+   thumbnail previews the post, and a source line links out. */
+.repost-ig {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--fg-muted);
+}
+
+.repost-ig:hover { color: var(--accent); }
+
+.repost-media {
+  display: block;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.repost-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.repost-source {
+  display: inline-block;
+  margin-top: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.repost-source:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 /* ----------------------------------------------------------------
    Reading: /reading (hidden page). A curated blogroll grouped by topic:
    bold group headings, then name · domain + a one-line note per entry.
