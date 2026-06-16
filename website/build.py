@@ -451,6 +451,16 @@ def _post_time(at) -> tuple[str, str, str]:
     return s, s, s
 
 
+def _yt_id(url: str) -> str | None:
+    """YouTube video id from a watch / youtu.be / embed / shorts URL."""
+    for pat in (r"[?&]v=([A-Za-z0-9_-]{6,})", r"youtu\.be/([A-Za-z0-9_-]{6,})",
+                r"/embed/([A-Za-z0-9_-]{6,})", r"/shorts/([A-Za-z0-9_-]{6,})"):
+        m = re.search(pat, url)
+        if m:
+            return m.group(1)
+    return None
+
+
 def _initials(name: str) -> str:
     """Up to two initials for an avatar fallback (e.g. 'Octi Zhang' -> 'OZ')."""
     parts = [w for w in str(name).split() if w]
@@ -479,18 +489,33 @@ def load_twitter() -> tuple[str, list[dict]]:
         if isinstance(rp, dict):
             r_iso, r_display, r_full = _post_time(rp.get("at"))
             r_url = str(rp.get("url") or "")
-            # An Instagram repost embeds the post's own /embed/ iframe, cropped
-            # (see .ig-embed-crop) to show just the photo inside our card chrome.
-            # Instagram blocks server-side image extraction (cross-origin iframe,
-            # login-walled API), so cropping the live embed is the only way to
-            # surface the image on-brand. `aspect` is the crop ratio (W/H, default
-            # square); marked with `source: instagram` or an instagram.com URL.
+            # Source-specific media reposts (see docs/REPOSTING.md):
+            #  - instagram: crop the post's own /embed/ iframe (.ig-embed-crop) to
+            #    show just the photo in our card chrome (server-side extraction is
+            #    blocked). `aspect` is the crop ratio (W/H, default square).
+            #  - youtube: thumbnail in our card that plays inline on hover, from
+            #    `start` seconds; `url` links back to the channel, `video` is the
+            #    watch URL. Always 16:9.
+            # Marked with `source:` or inferred from the URL.
+            video = str(rp.get("video") or "")
             source = str(rp.get("source") or "").lower()
             if not source and "instagram.com" in r_url:
                 source = "instagram"
-            embed_src = ""
+            if not source and ("youtu" in r_url or "youtu" in video):
+                source = "youtube"
+            embed_src = thumb = video_url = ""
+            aspect = str(rp.get("aspect") or "1")
             if source == "instagram" and r_url:
                 embed_src = r_url.split("?", 1)[0].rstrip("/") + "/embed/"
+            elif source == "youtube":
+                vid = _yt_id(video or r_url) or ""
+                start = int(rp.get("start") or 0)
+                aspect = str(rp.get("aspect") or "1.7778")
+                if vid:
+                    embed_src = (f"https://www.youtube.com/embed/{vid}"
+                                 f"?start={start}&autoplay=1&mute=1&rel=0&playsinline=1")
+                    thumb = f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg"
+                    video_url = f"https://www.youtube.com/watch?v={vid}&t={start}s"
             repost = {
                 "author": str(rp.get("author") or ""),
                 "handle": str(rp.get("handle") or "").lstrip("@"),
@@ -498,7 +523,9 @@ def load_twitter() -> tuple[str, list[dict]]:
                 "url": r_url,
                 "source": source,
                 "embed_src": embed_src,
-                "aspect": str(rp.get("aspect") or "1"),
+                "thumb": thumb,
+                "video_url": video_url,
+                "aspect": aspect,
                 "initials": _initials(rp.get("author") or ""),
                 "html": _render_inline_md(rp.get("text", "")),
                 "iso": r_iso, "display": r_display, "full": r_full,

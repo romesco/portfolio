@@ -1270,8 +1270,10 @@ a:focus-visible {
 .repost-text > :first-child { margin-top: 0; }
 .repost-text > :last-child { margin-bottom: 0; }
 
-/* Instagram repost: our own card chrome around a cropped /embed/ iframe. */
-.repost-ig {
+/* Media reposts (Instagram photo, YouTube video): our own card chrome around an
+   embedded source. The glyph + source link are shared. */
+.repost-ig,
+.repost-yt {
   display: inline-flex;
   flex-shrink: 0;
   color: var(--fg-muted);
@@ -1290,25 +1292,27 @@ a:focus-visible {
   text-decoration: underline;
 }
 
-/* The card hugs the photo: its width is the capped photo width plus the card's
+/* The card hugs the media: its width is the capped media width plus the card's
    own padding (1.6rem) and border (2px), so it isn't a wide box around a small
-   image. The three knobs live here and are inherited by the crop below. */
-.repost-instagram {
-  --ig-header: 58px;   /* hides Instagram's title bar; bump if a sliver peeks through */
-  --ig-aspect: 1;      /* photo width/height, set inline per post */
-  --ig-max-h: 300px;   /* photo height cap; width follows the aspect */
-  max-width: calc(var(--ig-max-h) * var(--ig-aspect) + 1.6rem + 2px);
+   image. --rp-aspect (set inline per post) and --rp-max-h are inherited by the
+   media box below. */
+.repost-instagram,
+.repost-youtube {
+  --rp-aspect: 1;      /* media width/height, set inline per post */
+  --rp-max-h: 300px;   /* media height cap; width follows the aspect */
+  max-width: calc(var(--rp-max-h) * var(--rp-aspect) + 1.6rem + 2px);
 }
 
-/* Crop window: reveals only the photo. aspect-ratio sizes it; the iframe is
-   pulled up by --ig-header to hide the title bar and everything below the photo
-   is clipped. The small horizontal bleed hides the embed card's 1px border. */
+/* Crop window: reveals only the Instagram photo. aspect-ratio sizes it; the
+   iframe is pulled up by --ig-header to hide the title bar and everything below
+   the photo is clipped. The small horizontal bleed hides the 1px card border. */
 .ig-embed-crop {
+  --ig-header: 58px;   /* hides Instagram's title bar; bump if a sliver peeks through */
   position: relative;
   margin-top: 0.5rem;
   width: 100%;
-  max-width: calc(var(--ig-max-h, 300px) * var(--ig-aspect, 1));
-  aspect-ratio: var(--ig-aspect, 1);
+  max-width: calc(var(--rp-max-h, 300px) * var(--rp-aspect, 1));
+  aspect-ratio: var(--rp-aspect, 1);
   overflow: hidden;
   border-radius: 10px;
   background: var(--rule);
@@ -1329,6 +1333,62 @@ a:focus-visible {
   inset: 0;
   z-index: 2;
 }
+
+/* YouTube: a 16:9 thumbnail that swaps to an inline player on hover (JS). */
+.yt-embed {
+  position: relative;
+  margin-top: 0.5rem;
+  width: 100%;
+  max-width: calc(var(--rp-max-h, 300px) * var(--rp-aspect, 1.7778));
+  aspect-ratio: var(--rp-aspect, 1.7778);
+  overflow: hidden;
+  border-radius: 10px;
+  background: #000;
+}
+
+.yt-thumb,
+.yt-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.yt-thumb { object-fit: cover; }
+.yt-frame { z-index: 1; pointer-events: none; }
+
+.yt-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+}
+
+/* Play badge: a subtle dark disc with a white triangle (monochrome, not IG/YT
+   brand colors). Fades out once the inline preview is playing. */
+.yt-play {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.yt-play::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 0.95rem 0 0 1.1rem;
+  border-style: solid;
+  border-width: 0.5rem 0 0.5rem 0.85rem;
+  border-color: transparent transparent transparent #fff;
+}
+
+.yt-embed:hover .yt-play { background: rgba(0, 0, 0, 0.68); }
+.yt-playing .yt-play { opacity: 0; }
 
 /* ----------------------------------------------------------------
    Reading: /reading (hidden page). A curated blogroll grouped by topic:

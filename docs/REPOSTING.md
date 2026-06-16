@@ -1,22 +1,25 @@
 # Reposting guide (for future agents)
 
 How to quickly add a repost to the hidden microblog at `/twitter` without
-re-deriving the mechanics. When Rosario says *"repost this Instagram thing
-&lt;url&gt;"* (or similar), this is the path.
+re-deriving the mechanics. When Rosario says *"repost this Instagram/YouTube
+thing &lt;url&gt;"* (or similar), this is the path.
 
 ## TL;DR recipe
 
 ```bash
-# 1. Extract metadata and insert a repost block at the top of the feed:
+# Instagram:
 python3 scripts/ig_repost.py "https://www.instagram.com/p/<code>/" --append \
     --comment "optional line in Rosario's voice"
+#   then, if the photo isn't square, set aspect in the new block (the one thing
+#   not auto-detected): aspect: 0.8 (portrait) / 1.91 (landscape)
 
-# 2. If the photo isn't square, set the aspect (the one thing not auto-detected):
-#    edit the new block in data/twitter.yaml -> aspect: 0.8 (portrait) / 1.91 (landscape)
+# YouTube (channel name/URL/title come from oEmbed; --start sets the hover preview):
+python3 scripts/yt_repost.py "https://www.youtube.com/watch?v=<id>" --start 4:20 --append \
+    --comment "optional line in Rosario's voice"
 
-# 3. Build, verify, commit, push (auto-deploys via GitHub Pages):
+# Then build, verify, commit, push (auto-deploys via GitHub Pages):
 /workspace/.venv/bin/python website/build.py
-git add data/twitter.yaml && git commit -m "Twitter: repost <handle>'s post" && git push
+git add data/twitter.yaml && git commit -m "Twitter: repost ..." && git push
 ```
 
 Then verify live (`curl -s https://rosarioscalise.com/twitter | grep ...`) the
@@ -64,6 +67,22 @@ Tuning knobs live on `.repost-instagram` in `styles.css` (inherited by the crop)
 The photo is a live cross-origin iframe, so it only renders in a browser, you
 can't pixel-check the crop from the shell. Confirm the markup is deployed, then
 ask Rosario to eyeball.
+
+## YouTube
+
+`scripts/yt_repost.py <url> [--start M:SS] [--comment ...] [--append]`. YouTube
+is friendly, no scraping tricks needed: its **oEmbed** endpoint
+(`https://www.youtube.com/oembed?url=...&format=json`, no auth) returns the
+title, channel name, and channel URL, and thumbnails are hotlinkable
+(`i.ytimg.com/vi/<id>/maxresdefault.jpg`). `--start` accepts seconds or `M:SS`.
+
+The card (`source: youtube`): our chrome (YouTube glyph + channel name linking
+**back to the channel**) over a 16:9 thumbnail. On hover it swaps the thumbnail
+for an inline `<iframe>` that autoplays muted from `start` (the facade JS lives
+in `twitter.html.j2`); on mouseleave it restores the thumbnail. Clicking the
+cover opens the video on YouTube at the timestamp. YAML fields: `url` = channel,
+`video` = watch URL, `start` = seconds, `text` = title. Sizing reuses the shared
+`--rp-aspect` / `--rp-max-h` knobs on `.repost-youtube` (default 16:9, 300px cap).
 
 ## Adding non-Instagram reposts
 

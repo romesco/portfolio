@@ -25,11 +25,28 @@
 # crop fits: 1 square (default), 0.8 portrait (4:5), 1.91 landscape. `author`,
 # `handle`, and `text` fill the card's caption line.
 #
+# To repost a YouTube video, set `source: youtube`, point `url` at the channel
+# (the card links back to it), `video` at the watch URL, and optionally `start:`
+# seconds (the inline preview plays from there on hover). `text` is the title.
+# Easiest: `python3 scripts/yt_repost.py <url> --start 4:20 --append`.
+# Instagram has a matching helper: `python3 scripts/ig_repost.py <url> --append`.
+# Full guide: docs/REPOSTING.md.
+#
 handle: rosarioscalise
 
 posts:
   - at: 2026-06-14 09:12:00
     text: "the only way out of it is through it"
+
+  - at: 2026-06-14 08:30:00
+    text: "Po-Shen Loh on the one trait that matters in the AI era."
+    repost:
+      source: youtube
+      author: EO
+      url: https://www.youtube.com/@eoglobal       # link back to the channel
+      video: https://www.youtube.com/watch?v=xWYb7tImErI
+      start: 260   # hover preview starts at 4:20
+      text: "The Only Trait for Success in the AI Era—How to Build It | Carnegie Mellon University Po-Shen Loh"
 
   - at: 2026-06-13 18:30:00
     text: "Throwback to the DRC finals."
