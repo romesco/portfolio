@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import datetime
 import hashlib
+import json
 import os
 import re
 import shutil
@@ -51,6 +52,11 @@ MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
 TWITTER_YAML = DATA_DIR / "twitter.yaml"
 READING_YAML = DATA_DIR / "reading.yaml"
+# Last-known-good river entries, keyed by blog URL. Tracked in git so a deploy
+# whose live fetch misses a feed falls back to this instead of dropping the
+# line. Refreshed by any fetch-enabled build (CI or FETCH_FEEDS) that is then
+# committed; the deploy runner can't write it back (Pages token is read-only).
+READING_CACHE = DATA_DIR / "reading-cache.json"
 PAGES_DIR = ROOT / "pages"
 HEADSHOT_SRC = ROOT.parent / "assets" / "headshot.jpg"
 HEADSHOT_DEST = ROOT / "headshot.jpg"
@@ -584,6 +590,24 @@ def _site_latest_by_crawl(page_url: str, crawl, timeout: int = 6) -> dict | None
     return {"title": title, "url": url, "at": at}
 
 
+def _load_river_cache() -> dict:
+    """Last-known-good `latest` dicts keyed by blog URL, or {} if absent/unreadable."""
+    try:
+        return json.loads(READING_CACHE.read_text())
+    except Exception:
+        return {}
+
+
+def _save_river_cache(cache: dict) -> None:
+    """Write the river cache deterministically (sorted keys) so it only diffs
+    when a blog's latest actually changes, keeping git churn minimal."""
+    try:
+        READING_CACHE.write_text(
+            json.dumps(cache, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
 def load_reading() -> list[dict]:
     """Load data/reading.yaml (`{groups: [{name, links: [{name, url, note}]}]}`)
     into a curated, grouped blogroll. Derives a bare display domain from each
@@ -594,6 +618,9 @@ def load_reading() -> list[dict]:
     # Fetch each blog's latest post only in CI (deploy) or when explicitly asked,
     # so local `make site` stays fast and offline-friendly.
     fetch = bool(os.environ.get("CI") or os.environ.get("FETCH_FEEDS"))
+    # Last-known-good fallback so a deploy that misses a live fetch keeps the line.
+    cache = _load_river_cache() if fetch else {}
+    seen: set[str] = set()
     groups: list[dict] = []
     for g in data.get("groups") or []:
         links: list[dict] = []
@@ -612,6 +639,7 @@ def load_reading() -> list[dict]:
             #   `feed: <url>`  -> explicit feed URL
             #   (none)         -> auto-discover an RSS/Atom feed from the page
             if fetch and url and feed is not False:
+                seen.add(url)
                 if crawl:
                     info = _site_latest_by_crawl(url, crawl)
                 else:
@@ -625,6 +653,9 @@ def load_reading() -> list[dict]:
                         "display": at.strftime("%b %Y") if at else "",
                         "full": at.strftime("%b %-d, %Y") if at else "",
                     }
+                    cache[url] = latest          # refresh the last-known-good
+                else:
+                    latest = cache.get(url)      # live fetch missed: reuse the cache
             links.append({
                 "name": str(ln.get("name") or host or url),
                 "url": url,
@@ -636,6 +667,9 @@ def load_reading() -> list[dict]:
             })
         if links:
             groups.append({"name": str(g.get("name") or ""), "links": links})
+    if fetch:
+        # Persist, dropping any blogs no longer in the list.
+        _save_river_cache({k: v for k, v in cache.items() if k in seen})
     return groups
 
 

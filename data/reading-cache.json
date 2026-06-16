@@ -1,0 +1,44 @@
+{
+  "https://distill.pub": {
+    "display": "Sep 2021",
+    "full": "Sep 2, 2021",
+    "iso": "2021-09-02T20:00:00",
+    "title": "Understanding Convolutions on Graphs",
+    "url": "https://distill.pub/2021/understanding-gnns"
+  },
+  "https://galenweld.com/blog": {
+    "display": "Jun 2026",
+    "full": "Jun 13, 2026",
+    "iso": "2026-06-13T02:31:05",
+    "title": "Trip Report: Running the Stone Ridge Trail on the Big Sur Coast",
+    "url": "https://galenweld.com/blog/2026/6/12/trip-report-running-the-stone-ridge-trail-on-the-big-sur-coast"
+  },
+  "https://gokul.dev/blog/": {
+    "display": "",
+    "full": "",
+    "iso": "",
+    "title": "Heuristics Considered Harmful: RL With Random Rewards Should Not Make LLMs Reason",
+    "url": "https://fuchsia-arch-d8e.notion.site/Heuristics-Considered-Harmful-RL-With-Random-Rewards-Should-Not-Make-LLMs-Reason-21ba29497c4180ca86ffce303f01923d"
+  },
+  "https://maxwellforbes.com/studio/": {
+    "display": "Feb 2025",
+    "full": "Feb 14, 2025",
+    "iso": "2025-02-14T14:38:32",
+    "title": "February 2025 Monthly Digest",
+    "url": "https://buttondown.com/mbforbes/archive/february-2025-monthly-digest/"
+  },
+  "https://mtmason.com/matt-mason-robotics-blog/": {
+    "display": "May 2026",
+    "full": "May 4, 2026",
+    "iso": "2026-05-04T20:27:50",
+    "title": "The Glory of Manipulation",
+    "url": "https://mtmason.com/the-glory-of-manipulation/"
+  },
+  "https://thegradient.pub": {
+    "display": "Feb 2026",
+    "full": "Feb 18, 2026",
+    "iso": "2026-02-18T23:25:52",
+    "title": "After Orthogonality: Virtue-Ethical Agency and AI Alignment",
+    "url": "https://thegradient.pub/virtue-ethics-ai-alignment/"
+  }
+}
