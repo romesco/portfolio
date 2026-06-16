@@ -1297,9 +1297,13 @@ a:focus-visible {
    if Instagram restyles the embed and a sliver of header peeks through. */
 .ig-embed-crop {
   --ig-header: 58px;
+  --ig-aspect: 1;          /* photo width/height, set inline per post */
+  --ig-max-h: 300px;       /* cap the photo height; width follows the aspect */
   position: relative;
   margin-top: 0.5rem;
-  aspect-ratio: 1;
+  width: 100%;
+  max-width: calc(var(--ig-max-h) * var(--ig-aspect));
+  aspect-ratio: var(--ig-aspect);
   overflow: hidden;
   border-radius: 10px;
   background: var(--rule);

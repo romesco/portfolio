@@ -48,7 +48,7 @@
                 <span class="repost-name">{{ p.repost.author }}</span>
                 {% if p.repost.handle %}<a class="repost-link" href="{{ p.repost.url }}">@{{ p.repost.handle }}</a>{% endif %}
               </span>
-              <div class="ig-embed-crop" style="aspect-ratio: {{ p.repost.aspect }};">
+              <div class="ig-embed-crop" style="--ig-aspect: {{ p.repost.aspect }};">
                 <iframe src="{{ p.repost.embed_src }}" title="Instagram post" loading="lazy" scrolling="no" allowtransparency="true"></iframe>
                 <a class="ig-embed-cover" href="{{ p.repost.url }}" aria-label="View on Instagram"></a>
               </div>
