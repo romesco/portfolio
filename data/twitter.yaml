@@ -20,8 +20,10 @@
 #       avatar: https://.../octi.jpg      # optional; falls back to initials
 #
 # To repost an Instagram post, give the `repost.url` an instagram.com link: it
-# renders via Instagram's official embed widget, so the real photo and caption
-# load client-side. The `author`/`text` you give is just the no-JS fallback.
+# renders in the card style with just the post's photo (the embed is cropped to
+# hide Instagram's own chrome). Set `aspect:` to the photo's width/height so the
+# crop fits: 1 square (default), 0.8 portrait (4:5), 1.91 landscape. `author`,
+# `handle`, and `text` fill the card's caption line.
 #
 handle: rosarioscalise
 
@@ -36,8 +38,8 @@ posts:
       handle: loremipsum
       url: https://www.instagram.com/p/3nQQX8MbSC/
       at: 2026-06-13 12:00:00
+      aspect: 1   # square; set 0.8 for portrait (4:5), 1.91 for landscape
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-      # Renders via Instagram's embed widget; this text is the no-JS fallback.
 
   - at: 2026-06-13 17:40:00
     text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."

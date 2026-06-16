@@ -1270,18 +1270,55 @@ a:focus-visible {
 .repost-text > :first-child { margin-top: 0; }
 .repost-text > :last-child { margin-bottom: 0; }
 
-/* Instagram repost: rendered by Instagram's official embed.js, which replaces
-   the blockquote with its own (light-themed) card. We only size it to sit
-   inside the feed column; the .ig-fallback is what shows with JS disabled. */
-.instagram-media {
-  margin: 0.5rem 0 !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
+/* Instagram repost: our own card chrome around a cropped /embed/ iframe. */
+.repost-ig {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--fg-muted);
 }
 
-.ig-fallback {
-  margin-top: 0.3rem;
-  font-size: 1rem;
+.repost-source {
+  display: inline-block;
+  margin-top: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.repost-source:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Crop window: shows only the photo from the Instagram embed. `aspect-ratio`
+   (set inline per post) sizes it; the iframe is pulled up by --ig-header to
+   hide Instagram's title bar, and everything below the photo is clipped. The
+   small horizontal bleed hides the embed card's 1px border. Bump --ig-header
+   if Instagram restyles the embed and a sliver of header peeks through. */
+.ig-embed-crop {
+  --ig-header: 58px;
+  position: relative;
+  margin-top: 0.5rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--rule);
+}
+
+.ig-embed-crop iframe {
+  position: absolute;
+  top: calc(-1 * var(--ig-header));
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + var(--ig-header) + 260px);
+  border: 0;
+  pointer-events: none;
+}
+
+.ig-embed-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
 }
 
 /* ----------------------------------------------------------------

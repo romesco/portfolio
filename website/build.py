@@ -479,20 +479,26 @@ def load_twitter() -> tuple[str, list[dict]]:
         if isinstance(rp, dict):
             r_iso, r_display, r_full = _post_time(rp.get("at"))
             r_url = str(rp.get("url") or "")
-            # An Instagram repost renders via Instagram's official embed widget
-            # (blockquote + embed.js), which pulls the real photo and caption
-            # client-side. Marked with `source: instagram` or inferred from an
-            # instagram.com URL. The authored author/text is the no-JS fallback,
-            # since Instagram blocks server-side fetching of the post.
+            # An Instagram repost embeds the post's own /embed/ iframe, cropped
+            # (see .ig-embed-crop) to show just the photo inside our card chrome.
+            # Instagram blocks server-side image extraction (cross-origin iframe,
+            # login-walled API), so cropping the live embed is the only way to
+            # surface the image on-brand. `aspect` is the crop ratio (W/H, default
+            # square); marked with `source: instagram` or an instagram.com URL.
             source = str(rp.get("source") or "").lower()
             if not source and "instagram.com" in r_url:
                 source = "instagram"
+            embed_src = ""
+            if source == "instagram" and r_url:
+                embed_src = r_url.split("?", 1)[0].rstrip("/") + "/embed/"
             repost = {
                 "author": str(rp.get("author") or ""),
                 "handle": str(rp.get("handle") or "").lstrip("@"),
                 "avatar": rp.get("avatar"),
                 "url": r_url,
                 "source": source,
+                "embed_src": embed_src,
+                "aspect": str(rp.get("aspect") or "1"),
                 "initials": _initials(rp.get("author") or ""),
                 "html": _render_inline_md(rp.get("text", "")),
                 "iso": r_iso, "display": r_display, "full": r_full,
@@ -929,17 +935,12 @@ def main() -> int:
     # Twitter-style microblog feed: a YAML-driven hidden page at /twitter.
     if TWITTER_YAML.exists():
         handle, posts = load_twitter()
-        # Only pull in Instagram's embed.js when a post actually embeds one.
-        has_instagram = any(
-            p.get("repost") and p["repost"].get("source") == "instagram"
-            for p in posts)
         html = env.get_template("twitter.html.j2").render(
             identity=identity,
             title="en mi mente",
             description=f"Short posts from {identity.get('name', '')}.".strip(),
             handle=handle,
             posts=posts,
-            has_instagram=has_instagram,
             css_version=css_version,
             favicons=favicons,
         )
