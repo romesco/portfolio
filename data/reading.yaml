@@ -34,3 +34,6 @@ groups:
       - name: Jonas Frey
         url: https://jonasfrey96.github.io/
         note: "A robotics postdoc at Stanford and Berkeley (ETH PhD), working on perception and navigation for legged robots."
+      - name: Gokul Swamy
+        url: https://gokul.dev/blog/
+        note: "A CMU PhD researcher in reinforcement and imitation learning, writing clear technical tutorials like his RLHF 101 series."
