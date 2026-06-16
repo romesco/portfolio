@@ -35,9 +35,6 @@
 handle: rosarioscalise
 
 posts:
-  - at: 2026-06-14 09:12:00
-    text: "the only way out of it is through it"
-
   - at: 2026-06-14 08:30:00
     text: "For a long time I didn't realize other people thought the same way as me and was kind of a bit discouraged about it, but it's nice to see there are others (even folks who are pretty well-respected and who \"figured out the game\") saying this kind of thing. Highly recommend watching it in its entirety! But if you want to focus on one part, listen to the section around timestamp 4:20"
     repost:
@@ -61,23 +58,6 @@ posts:
   - at: 2026-06-13 17:40:00
     text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
 
-  - at: 2026-06-12 16:20:00
-    text: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum."
-    repost:
-      author: Lorem Ipsum
-      handle: loremipsum
-      url: https://example.com
-      at: 2026-06-12 15:05:00
-      text: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt."
-
-  - at: 2026-06-10 13:00:00
-    repost:
-      author: Lorem Ipsum
-      handle: loremipsum
-      url: https://example.com
-      at: 2026-06-10 12:30:00
-      text: "Sunt in culpa qui officia deserunt mollit anim id est laborum."
-
   - at: 2026-06-11 11:05:00
     text: "Lorem ipsum [dolor sit amet](https://example.com), consectetur adipiscing elit sed do."
 
@@ -86,3 +66,6 @@ posts:
 
   - at: 2026-06-02 14:30:00
     text: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur adipisci."
+
+  - at: 2026-06-01 09:00:00
+    text: "the only way out of it is through it"
