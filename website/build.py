@@ -547,6 +547,43 @@ def _site_latest(page_url: str, feed_url: str | None = None,
         return None
 
 
+def _site_latest_by_crawl(page_url: str, crawl, timeout: int = 6) -> dict | None:
+    """Best-effort newest post by scraping a blog's index page, for sites whose
+    RSS feed is missing or unrepresentative of what they actually publish.
+
+    `crawl` names the CSS class of the element wrapping each post-title link
+    (a dict `{title_class: ...}` or a bare string); the newest post is assumed
+    to be the first such link on the page. A date is recovered from the post
+    URL when it embeds one (`/YYYY/MM/DD/`), else omitted. Every failure is
+    swallowed: the river is optional, so a redesigned page just drops the line."""
+    cls = crawl.get("title_class") if isinstance(crawl, dict) else (
+        crawl if isinstance(crawl, str) else None)
+    if not cls:
+        return None
+    try:
+        html = _fetch(page_url, timeout).decode("utf-8", "replace")
+    except Exception:
+        return None
+    # First `<a href>` directly inside the first element carrying `cls`.
+    m = re.search(
+        r'class="[^"]*\b' + re.escape(cls) + r'\b[^"]*">\s*<a\s+href="([^"]+)"[^>]*>(.*?)</a>',
+        html, re.S | re.I)
+    if not m:
+        return None
+    href, title = m.group(1), re.sub(r"\s+", " ", m.group(2)).strip()
+    if not title:
+        return None
+    url = urljoin(page_url, href)
+    at = None
+    d = re.search(r"/(\d{4})/(\d{2})/(\d{2})/", url)
+    if d:
+        try:
+            at = datetime.datetime(int(d.group(1)), int(d.group(2)), int(d.group(3)))
+        except ValueError:
+            at = None
+    return {"title": title, "url": url, "at": at}
+
+
 def load_reading() -> list[dict]:
     """Load data/reading.yaml (`{groups: [{name, links: [{name, url, note}]}]}`)
     into a curated, grouped blogroll. Derives a bare display domain from each
@@ -567,13 +604,18 @@ def load_reading() -> list[dict]:
                 host = host[4:]
             note = ln.get("note")
             feed = ln.get("feed")
+            crawl = ln.get("crawl")
             latest = None
-            # `feed: false` opts a blog out of the river: use it when a site's
-            # advertised feed misrepresents it (e.g. a stale feed that only lists
-            # self-hosted posts while the author publishes elsewhere). A string
-            # `feed:` points at an explicit feed URL; None auto-discovers.
+            # River source, in order of preference:
+            #   `feed: false`  -> opt out entirely (no latest line)
+            #   `crawl: {...}` -> scrape the index page (for stale/unrepresentative feeds)
+            #   `feed: <url>`  -> explicit feed URL
+            #   (none)         -> auto-discover an RSS/Atom feed from the page
             if fetch and url and feed is not False:
-                info = _site_latest(url, feed if isinstance(feed, str) else None)
+                if crawl:
+                    info = _site_latest_by_crawl(url, crawl)
+                else:
+                    info = _site_latest(url, feed if isinstance(feed, str) else None)
                 if info:
                     at = info["at"]
                     latest = {

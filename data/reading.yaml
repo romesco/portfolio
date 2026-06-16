@@ -37,7 +37,9 @@ groups:
       - name: Gokul Swamy
         url: https://gokul.dev/blog/
         # His feed.xml only carries one self-hosted post (a 2017 piece); the
-        # writing worth reading lives off-site (CMU ML blog, Notion), so the
-        # river would show a stale "latest." Opt out and let the note speak.
-        feed: false
+        # writing worth reading lives off-site (CMU ML blog, Notion), so RSS
+        # shows a stale "latest." Scrape his hand-maintained index instead,
+        # where posts list newest-first as <h4 class="project-title"><a>.
+        crawl:
+          title_class: project-title
         note: "A CMU PhD researcher in reinforcement and imitation learning, writing clear technical tutorials like his RLHF 101 series."
