@@ -46,6 +46,7 @@
     - {name: "R. Scalise", me: true, equal: true, dagger: true}
     - {name: "B. Boots", dagger: true}
   featured: true
+  medal: rosette   # DEMO: trying out award-medal styles (remove after picking)
   title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
   venue: Preprint
   media:
@@ -108,7 +109,6 @@
     - S. Rosenthal
     - S.S. Srinivasa
   featured: true
-  medal: ribbon   # DEMO: trying out award-medal styles (remove after picking)
   title: Natural language instructions for human-robot collaborative manipulation
   venue: IJRR
   venue_full: The International Journal of Robotics Research (IJRR)
@@ -134,6 +134,7 @@
     - P. Shah
     - A. Gupta
   featured: true
+  medal: hanging   # DEMO: trying out award-medal styles (remove after picking)
   title: Using non-expert data to robustify imitation learning via offline reinforcement learning
   venue: ICRA 
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
@@ -212,7 +213,7 @@
     - {name: "R. Scalise", me: true}
     - B. Boots
   featured: true
-  medal: star   # DEMO: trying out award-medal styles (remove after picking)
+  medal: outline   # DEMO: trying out award-medal styles (remove after picking)
   title: "Demonstrating Wheeled Lab: Modern Sim2Real for Low-cost, Open-source Wheeled Robotics"
   venue: CoRL
   venue_full: Conference on Robot Learning (CoRL)
@@ -268,7 +269,7 @@
     - "..."
     - {affil: {name: "Google DeepMind", domain: "deepmind.google", url: "https://deepmind.google/blog/scaling-up-learning-across-many-different-robot-types/"}}
   featured: true
-  medal: accent   # DEMO: trying out award-medal styles (remove after picking)
+  medal: prize   # DEMO: trying out award-medal styles (remove after picking)
   title: "Open X-Embodiment: Robotic learning datasets and RT-X models"
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
@@ -306,6 +307,7 @@
     - S. Choudhury
     - S.S. Srinivasa
   featured: true
+  medal: seal   # DEMO: trying out award-medal styles (remove after picking)
   title: "GuILD: Guided Incremental Local Densification for Accelerated Sampling-based Motion Planning"
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)

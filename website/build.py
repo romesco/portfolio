@@ -893,8 +893,9 @@ def main() -> int:
         # One of: ribbon | star | accent.
         mstyle = str(p.get("medal") or "").lower()
         if not mstyle and p["awards"]:
-            mstyle = "ribbon"
-        p["medal"] = mstyle if mstyle in ("ribbon", "star", "accent") else ""
+            mstyle = "rosette"
+        p["medal"] = mstyle if mstyle in (
+            "rosette", "hanging", "outline", "prize", "seal") else ""
         p["award_label"] = _delatex("; ".join(p["awards"])) if p["awards"] else ""
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))
