@@ -19,13 +19,16 @@ bio: >
 # emoji that stay legible at ~16px work best.
 favicons: ["🤖", "🦾", "🧠", "🧬", "⚙️", "🛰️", "🔬", "🔭", "⚛️", "✨"]
 
-# Self-hosted Umami analytics (cookieless, privacy-friendly). The tracking
-# snippet in _layout.html.j2 renders ONLY when both fields below are set, so
-# the site stays clean until the Umami instance is live. After deploying Umami
-# (see handoffs/20260617_UMAMI_SELFHOST.md), fill these in and push:
-#   src: the full URL of the tracker script on your Umami host
-#   id:  the website ID (UUID) from the Umami dashboard for this site
-# Outbound link clicks are tracked automatically via a small shim in the layout.
+# Umami analytics (cookieless, privacy-friendly). The tracking snippet in
+# _layout.html.j2 renders ONLY when both fields below are set, so the site stays
+# clean until activated. Outbound link clicks are tracked automatically via a
+# small shim in the layout.
+#
+# Currently using the Umami Cloud free Hobby tier. `umami_src` below is the
+# standard Umami Cloud (US) tracker; if cloud.umami.is shows a different host
+# (e.g. eu.umami.is), swap it. Set `umami_id` to this site's Website ID to go
+# live. To move to a self-hosted instance later, just change these two fields
+# (see handoffs/20260617_UMAMI_SELFHOST.md).
 analytics:
-  umami_src: ""   # e.g. https://analytics.rosarioscalise.com/script.js
-  umami_id: ""    # e.g. 0f7c2e1a-... (from Umami → Settings → Websites)
+  umami_src: "https://cloud.umami.is/script.js"
+  umami_id: ""    # paste the Website ID (UUID) from cloud.umami.is to activate
