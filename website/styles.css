@@ -935,6 +935,13 @@ a.mentee-project:hover { color: var(--accent); text-decoration: underline; }
   vertical-align: -0.15em;
 }
 
+/* Opt-in slightly larger glyph (e.g. a wordless mark that reads small at 1em). */
+.chip-glyph-lg {
+  height: 1.25em;
+  vertical-align: -0.28em;
+  border-radius: 0;
+}
+
 .chip-emoji { font-style: normal; vertical-align: -0.05em; }
 
 /* ----------------------------------------------------------------

@@ -782,7 +782,8 @@ def _chip_html(c, cls: str) -> Markup:
         return Markup("")
     name = str(escape(c["name"]))
     if c.get("favicon"):
-        inner = (f'<img class="chip-glyph" src="{escape(c["favicon"])}" alt="{name}" '
+        big = " chip-glyph-lg" if c.get("glyph_big") else ""
+        inner = (f'<img class="chip-glyph{big}" src="{escape(c["favicon"])}" alt="{name}" '
                  'width="16" height="16" loading="lazy" onerror="this.remove()">')
     elif c.get("emoji"):
         inner = f'<span class="chip-emoji" aria-hidden="true">{escape(c["emoji"])}</span>'
