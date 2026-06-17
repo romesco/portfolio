@@ -939,13 +939,6 @@ def main() -> int:
         # "redact" = wipeable cover, "hover" = unfurl on row hover, "footnote" =
         # a tl;dr marker by the title that pops a card.
         p["tldr_style"] = str(p["tldr_style"]).strip() if p.get("tldr_style") else ""
-        # Optional homepage focus treatment (prototype): how this work is
-        # emphasized among Selected works to cut visual noise. "" = none;
-        # "spotlight" = hovering it lets the other rows recede; "panel" = a soft
-        # accent panel appears behind it on hover; "pinned" = an always-on accent
-        # panel marks it as the lead. Homepage only (the /publications list
-        # ignores it via the macro's `full` flag).
-        p["focus"] = str(p["focus"]).strip() if p.get("focus") else ""
         # Optional shorthand / codename (e.g. "SGS") shown as a quiet muted
         # parenthetical after the title. Auto-suppressed when it already appears
         # in the title, so papers whose acronym is already in the title (DROID,

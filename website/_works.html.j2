@@ -39,13 +39,13 @@
 {% endmacro %}
 
 {% macro work_list(pubs, full=false) %}
-    <ol class="works-list">
+    <ol class="works-list{% if not full %} works-list-solo{% endif %}">
       {% set ns = namespace(prev=None) %}
       {% for p in pubs %}
       {% set has_media = (p.media_list | length) > 0 %}
       {% set year_show = p.year != ns.prev %}
       {% set ns.prev = p.year %}
-      <li class="work-row{% if year_show %} year-start{% endif %}{% if p.focus and not full %} focus-{{ p.focus }}{% endif %}">
+      <li class="work-row{% if year_show %} year-start{% endif %}">
         <div class="work-rail">
           <cite class="work-venue"{% if p.venue_full %} title="{{ p.venue_full }}"{% endif %}>{{ p.venue }}</cite>
           <span class="work-year">{{ p.year }}</span>

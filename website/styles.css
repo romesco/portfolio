@@ -674,65 +674,32 @@ details.work[open] .work-tldr-peek {
   white-space: nowrap;
 }
 
-/* ---- "Solo the work" focus prototypes (homepage only, per-paper via `focus`)
-   Three low-key ways to cut visual noise and let one work stand out, demoed on
-   three spread-out Selected-works entries so they compare side by side. If one
-   is adopted it would apply to every row (A/B follow the cursor; C is
-   always-on). The full /publications list never uses these. ---- */
-
-/* The row fades smoothly when the spotlight (A) dims its neighbors. */
-.works-list li {
-  transition: opacity 300ms ease-out, filter 300ms ease-out;
+/* ---- "Solo on dwell": when the cursor RESTS on a Selected-works row for ~2s,
+   the other rows quietly recede so the one you're reading stands alone. The dim
+   is gated behind a 2s transition-delay, so a cursor sweeping past never trips
+   it; moving off the list restores every row together. No added color, just
+   subtraction, to keep an already information-dense page calm. Homepage only
+   (.works-list-solo); the full /publications list is untouched. ---- */
+.works-list-solo li {
+  /* Smooth, prompt restore when you leave the soloed state (no delay). */
+  transition: opacity 550ms ease-out, filter 550ms ease-out;
+  transition-delay: 0s;
 }
 
-/* (A) Spotlight, follows curiosity: hovering this row lets every OTHER row
-   recede (dim + desaturate), so the one you're reading is the only crisp entry.
-   Nothing is added to the focused row; focus comes from the rest stepping back.
-   Demoed on RISE. */
-.works-list:has(.focus-spotlight:hover) li:not(:hover) {
-  opacity: 0.45;
-  filter: saturate(0.7);
+@media (hover: hover) {
+  .works-list-solo:has(li:hover) li:not(:hover) {
+    opacity: 0.4;
+    filter: saturate(0.6);
+    /* The dwell: ~2s of continuous hover before the others begin to recede. Move
+       the cursor away first and the pending change is cancelled, so a quick pass
+       never flickers. */
+    transition-delay: 2s;
+  }
 }
-
-/* (B) Panel, follows curiosity: hovering this row floats a soft accent panel
-   behind it, lifting it off the page. Neighbors untouched. Demoed on
-   Open X-Embodiment. */
-.work-row.focus-panel,
-.work-row.focus-pinned {
-  position: relative;
-  z-index: 0;
-}
-.work-row.focus-panel::after {
-  content: "";
-  position: absolute;
-  inset: -0.55rem -0.8rem;
-  border-radius: 10px;
-  background: color-mix(in oklch, var(--accent) 8%, transparent);
-  opacity: 0;
-  transition: opacity 260ms ease-out;
-  z-index: -1;
-  pointer-events: none;
-}
-.work-row.focus-panel:hover::after { opacity: 1; }
-
-/* (C) Pinned, always-on: one work is permanently soloed by a quiet accent panel
-   plus an accent-tinted rail, marking it the "lead" with no interaction needed.
-   Demoed on GuILD. */
-.work-row.focus-pinned::after {
-  content: "";
-  position: absolute;
-  inset: -0.55rem -0.8rem;
-  border-radius: 10px;
-  background: color-mix(in oklch, var(--accent) 6%, transparent);
-  z-index: -1;
-  pointer-events: none;
-}
-.work-row.focus-pinned .work-venue,
-.work-row.focus-pinned .work-year { color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
-  .works-list li,
-  .work-row.focus-panel::after { transition: none; }
+  /* Keep the 2s dwell gate, but drop the fade: rows just switch state. */
+  .works-list-solo li { transition-duration: 0s; }
 }
 
 .work-media {
