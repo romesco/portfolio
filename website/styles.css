@@ -344,6 +344,7 @@ section h2 {
   display: flex;
   flex-direction: column;
   gap: 0.05rem;
+  position: relative;
 }
 
 .work-venue {
@@ -376,6 +377,24 @@ section h2 {
 .work-medal--outline,
 .work-medal--prize,
 .work-medal--seal { color: var(--accent); }
+
+/* Medal position within the rail (trying placements).
+   below (default): after the year. */
+.work-rail--mpos-above .work-medal { order: -1; margin-top: 0; margin-bottom: 0.3rem; }
+
+/* inline: medal sits next to the venue, year drops to its own line below. */
+.work-rail--mpos-inline { flex-flow: row wrap; align-items: center; column-gap: 0.3rem; }
+.work-rail--mpos-inline .work-venue { order: 0; }
+.work-rail--mpos-inline .work-medal { order: 1; margin-top: 0; }
+.work-rail--mpos-inline .work-year  { order: 2; flex-basis: 100%; }
+
+/* gutter: medal floated out into the left margin, beside the venue. */
+.work-rail--mpos-gutter .work-medal {
+  position: absolute;
+  left: -1.4rem;
+  top: 0.05rem;
+  margin-top: 0;
+}
 
 .work-title {
   margin: 0;

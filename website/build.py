@@ -896,6 +896,8 @@ def main() -> int:
             mstyle = "rosette"
         p["medal"] = mstyle if mstyle in (
             "rosette", "hanging", "outline", "prize", "seal") else ""
+        pos = str(p.get("medal_pos") or "below").lower()
+        p["medal_pos"] = pos if pos in ("below", "above", "inline", "gutter") else "below"
         p["award_label"] = _delatex("; ".join(p["awards"])) if p["awards"] else ""
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))

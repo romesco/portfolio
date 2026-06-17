@@ -70,7 +70,7 @@
       {% for p in publications %}
       {% set has_media = (p.media_list | length) > 0 %}
       <li class="work-row{% if p.year_show %} year-start{% endif %}">
-        <div class="work-rail">
+        <div class="work-rail{% if p.medal %} work-rail--mpos-{{ p.medal_pos }}{% endif %}">
           <cite class="work-venue"{% if p.venue_full %} title="{{ p.venue_full }}"{% endif %}>{{ p.venue }}</cite>
           <span class="work-year">{{ p.year }}</span>
           {% if p.medal %}
