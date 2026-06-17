@@ -35,6 +35,11 @@
 handle: rosarioscalise
 
 posts:
+  - at: 2026-06-17 14:00:00
+    text: "btw, Let's go Knicks!"
+    chip: /img/knicks.svg
+    chip_alt: "New York Knicks"
+
   - at: 2026-06-14 08:30:00
     text: "For a long time I didn't realize other people thought the same way as me and was kind of a bit discouraged about it, but it's nice to see there are others (even folks who are pretty well-respected and who \"figured out the game\") saying this kind of thing. Highly recommend watching it in its entirety! But if you want to focus on one part, listen to the section around timestamp 4:20"
     repost:

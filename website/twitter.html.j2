@@ -36,7 +36,7 @@
             <time class="post-time" datetime="{{ p.iso }}" title="{{ p.full }}">{{ p.display }}</time>
           </div>
           {% if p.repost %}
-            {% if p.has_comment %}<div class="post-text">{{ p.html }}</div>{% endif %}
+            {% if p.has_comment %}<div class="post-text">{{ p.html }}{% if p.chip %} <img class="post-chip" src="{{ p.chip }}" alt="{{ p.chip_alt }}" loading="lazy">{% endif %}</div>{% endif %}
             {% if p.repost.source == 'instagram' %}
             {# Instagram repost in our card style: the post's own /embed/ iframe,
                cropped (.ig-embed-crop) to reveal just the photo. The cover link
@@ -90,7 +90,7 @@
             </div>
             {% endif %}
           {% else %}
-          <div class="post-text">{{ p.html }}</div>
+          <div class="post-text">{{ p.html }}{% if p.chip %} <img class="post-chip" src="{{ p.chip }}" alt="{{ p.chip_alt }}" loading="lazy">{% endif %}</div>
           {% endif %}
         </div>
       </article>

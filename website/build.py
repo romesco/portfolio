@@ -535,6 +535,9 @@ def load_twitter() -> tuple[str, list[dict]]:
             "html": _render_inline_md(comment),
             "has_comment": bool(comment),
             "repost": repost,
+            # Optional little inline logo/badge after the text (e.g. a team logo).
+            "chip": p.get("chip"),
+            "chip_alt": str(p.get("chip_alt") or ""),
             "iso": iso, "display": display, "full": full,
         })
     posts.sort(key=lambda x: x["iso"], reverse=True)
