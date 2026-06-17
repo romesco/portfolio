@@ -50,6 +50,7 @@
   short: SGS
   tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M+ parallel rollouts."
   tldr_style: peek
+  focus: pinned
   venue: Preprint
   media:
     - src: https://sgs-rl.github.io/manipulation.mp4
@@ -322,7 +323,6 @@
   featured: true
   title: "GuILD: Guided Incremental Local Densification for Accelerated Sampling-based Motion Planning"
   title_nowrap: true
-  focus: pinned
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   links: {ieee: "https://ieeexplore.ieee.org/document/10161028"}
