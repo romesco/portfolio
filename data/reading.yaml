@@ -69,6 +69,9 @@ groups:
       - name: Melanie Sclar
         url: https://msclar.github.io/
         note: "A UW CS PhD working on robust reasoning and theory of mind in language models."
+      - name: Mohak Bhardwaj
+        url: https://mohakbhardwaj.github.io/blog/
+        note: "A UW robotics PhD blending model predictive control with reinforcement learning for robot manipulation and control."
       - name: Gokul Swamy
         url: https://gokul.dev/blog/
         # His feed.xml only carries one self-hosted post (a 2017 piece); the
