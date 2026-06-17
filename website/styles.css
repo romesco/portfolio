@@ -325,6 +325,19 @@ section h2 {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* Type sub-headings on the /publications page (Preprints, Journal Articles,
+   ...). Subordinate to the section h2: lighter and without its top rule. */
+.pub-group {
+  margin: 1.9rem 0 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-style: italic;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+  color: var(--fg-faint);
+}
+.pub-group:first-of-type { margin-top: 1rem; }
+
 /* Subtle "+N more" link next to the Selected works heading -> /publications. */
 .works-more {
   margin-left: 0.5rem;

@@ -15,8 +15,11 @@
 {% block content %}
   <section class="works">
     <h2>{{ title }}</h2>
-    {% if publications %}
-    {{ work_list(publications, full=true) }}
+    {% if groups %}
+    {% for g in groups %}
+    <h3 class="pub-group">{{ g.label }}</h3>
+    {{ work_list(g.pubs, full=true) }}
+    {% endfor %}
     {% else %}
     <p class="bio"><em>No publications in <code>publications.yaml</code> yet.</em></p>
     {% endif %}

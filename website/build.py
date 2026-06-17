@@ -1001,10 +1001,23 @@ def main() -> int:
     (ROOT / "index.html").write_text(html)
     print(f"wrote index.html ({len(featured)} publications, {len(news)} news)")
 
-    # Full publication list at /publications (every entry, same format as
-    # Selected works), linked from the "+N more" affordance on the homepage.
+    # Full publication list at /publications (every entry, same work format as
+    # Selected works), grouped by type like the CV, linked from the "+N more"
+    # affordance on the homepage. Each group is sorted year-desc.
+    pub_type_order = [
+        ("preprint", "Preprints"),
+        ("journal", "Journal Articles"),
+        ("conference", "Conference Papers"),
+        ("workshop", "Workshop Papers"),
+    ]
+    pub_groups = [
+        {"label": label,
+         "pubs": sorted((p for p in raw if p.get("type") == key), key=lambda p: -p["year"])}
+        for key, label in pub_type_order
+    ]
+    pub_groups = [g for g in pub_groups if g["pubs"]]
     html = env.get_template("publications.html.j2").render(
-        publications=all_pubs,
+        groups=pub_groups,
         identity=identity,
         title="Publications",
         description=f"Full publication list for {identity.get('name', '')}.".strip(),
