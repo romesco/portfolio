@@ -303,6 +303,8 @@ def render_links(links) -> Markup:
         parts.append(f'<a href="{escape(url)}">github</a>')
     if v := links.get("project"):
         parts.append(f'<a href="{escape(v)}">project</a>')
+    if v := links.get("followup"):
+        parts.append(f'<a href="{escape(v)}" title="Follow-up work">follow-up</a>')
     return Markup(" · ".join(parts))
 
 
@@ -924,6 +926,9 @@ def main() -> int:
         # line uncluttered); the full text stays in `awards` for the CV and in
         # the medal / inline award tooltip.
         p["award_short"] = _delatex(str(p["award_short"])).strip() if p.get("award_short") else ""
+        # Optional tiny "@ <where>" tag (e.g. "@ WS") shown in subtle gray next
+        # to the prize-ribbon medal, to mark a workshop/secondary-venue award.
+        p["award_at"] = _delatex(str(p["award_at"])).strip() if p.get("award_at") else ""
         # Optional one-line TL;DR shown under the title.
         p["tldr"] = _delatex(str(p["tldr"])).strip() if p.get("tldr") else ""
         # Optional shorthand / codename (e.g. "SGS") shown as a quiet muted

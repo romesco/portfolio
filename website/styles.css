@@ -381,10 +381,22 @@ section h2 {
 /* Award medal (prize ribbon), under the year in the rail. Understated accent;
    the glyph is monochrome via currentColor. Shown only on awarded papers. */
 .work-medal {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.22rem;
   margin-top: 0.35rem;
-  line-height: 0;
   color: var(--accent);
+}
+.work-medal svg { display: block; }
+
+/* Subtle "@ WS" qualifier next to the ribbon, marking a workshop/secondary
+   award. Same faint gray as the year, so it stays understated. */
+.work-medal-at {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--fg-faint);
 }
 
 .work-title {

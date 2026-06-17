@@ -161,10 +161,11 @@
   short: MPAIL
   venue: ICLR
   venue_full: International Conference on Learning Representations (ICLR)
-  links: {arxiv: "2507.21533"}
+  links: {arxiv: "2507.21533", followup: "https://mpail2.github.io/"}
   awards:
     - "Best Paper Finalist, Resource-Rational Robot Learning Workshop, CoRL 2025"
   award_short: "Best Paper Finalist"
+  award_at: "WS"
 
 - year: 2025
   type: conference
