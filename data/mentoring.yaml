@@ -27,7 +27,7 @@ mentees:
     project: Robust imitation learning from non-expert data (RISE)
     current: "Now: General Robotics"
     years: 2024-2025
-    now: {name: "General Robotics"}
+    now: {name: "General Robotics", favicon: "https://www.google.com/s2/favicons?domain=generalrobotics.company&sz=64", url: "https://generalrobotics.company"}
   - name: Octi Zhang
     url: "https://zoctipus.github.io/"
     project: Large-Scale Physics-based Simulation
