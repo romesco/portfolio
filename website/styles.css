@@ -533,34 +533,12 @@ details[open] > .work-summary::before {
   color: var(--fg);
 }
 
-/* Optional paper shorthand / codename near the title. Three demo treatments,
-   selected per-entry by `short_style` while we compare them. */
-/* (1) badge: mono "ticker" after the title, accent-tinted, reads as a codename
-   rather than prose. */
+/* Optional paper shorthand / codename after the title: a quiet muted
+   parenthetical, same size as the title, prose-like. */
 .work-short {
-  margin-left: 0.45em;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.7em;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  white-space: nowrap;
-}
-/* (2) paren: muted parenthetical, same size as the title, prose-like. */
-.work-short-paren {
   font-weight: 400;
   color: var(--fg-faint);
   white-space: nowrap;
-}
-/* (3) rail: tiny mono codename in the venue/year margin, out of the title flow. */
-.work-short-rail {
-  margin-top: 0.3rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  line-height: 1;
 }
 
 .work-media {

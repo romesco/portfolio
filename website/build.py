@@ -921,15 +921,12 @@ def main() -> int:
         p["award_label"] = _delatex("; ".join(p["awards"])) if p["awards"] else ""
         # Optional one-line TL;DR shown under the title.
         p["tldr"] = _delatex(str(p["tldr"])).strip() if p.get("tldr") else ""
-        # Optional shorthand / codename (e.g. "SGS") shown as a subtle tag near
-        # the title. Auto-suppressed when it already appears in the title, so
-        # papers whose acronym is already in the title (DROID, VAMOS, LRN) don't
-        # double up. `short_style` selects the visual treatment while we compare
-        # options: badge (mono ticker after title) | paren (muted parenthetical)
-        # | rail (tiny codename in the venue/year margin).
+        # Optional shorthand / codename (e.g. "SGS") shown as a quiet muted
+        # parenthetical after the title. Auto-suppressed when it already appears
+        # in the title, so papers whose acronym is already in the title (DROID,
+        # VAMOS, LRN) don't double up.
         short = _delatex(str(p["short"])).strip() if p.get("short") else ""
         p["short"] = short if short and short.lower() not in p["title"].lower() else ""
-        p["short_style"] = str(p.get("short_style") or "badge").strip()
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))
         p["coverage"] = normalize_coverage(p.get("coverage"))

@@ -78,13 +78,10 @@
             <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M9.6 13 11.9 13 11.1 21.8 9.6 19.8 8 21.8ZM14.4 13 12.1 13 12.9 21.8 14.4 19.8 16 21.8Z"/><path fill-rule="evenodd" d="M12 2a6 6 0 1 1 0 12a6 6 0 1 1 0-12ZM12 4.2 12.94 6.71 15.61 6.83 13.52 8.49 14.23 11.07 12 9.6 9.77 11.07 10.48 8.49 8.39 6.83 11.06 6.71Z"/></svg>
           </span>
           {% endif %}
-          {% if p.short and p.short_style == 'rail' %}
-          <span class="work-short-rail" title="Also known as {{ p.short }}">{{ p.short }}</span>
-          {% endif %}
         </div>
         <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
-            <span class="work-title">{{ p.title }}{% if p.short and p.short_style == 'paren' %} <span class="work-short-paren">({{ p.short }})</span>{% elif p.short and p.short_style == 'badge' %} <span class="work-short" title="Also known as {{ p.short }}">{{ p.short }}</span>{% endif %}</span>
+            <span class="work-title">{{ p.title }}{% if p.short %} <span class="work-short">({{ p.short }})</span>{% endif %}</span>
             <span class="work-meta">{{ p.authors | authors }}{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}{% if p.collaborators %}{{ p.collaborators | collaborators }}{% endif %}{% if p.coverage %}{{ p.coverage | coverage }}{% endif %}</span>
             {% if p.tldr %}<span class="work-tldr" title="{{ p.tldr }}"><strong class="work-tldr-label">TL;DR:</strong> {{ p.tldr }}</span>{% endif %}
           </summary>
