@@ -85,9 +85,9 @@
         </div>
         <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
-            <span class="work-title{% if p.title_nowrap %} work-title-nowrap{% endif %}">{{ p.title }}{% if p.short %} <span class="work-short">({{ p.short }})</span>{% endif %}</span>
+            <span class="work-title{% if p.title_nowrap %} work-title-nowrap{% endif %}{% if p.tldr and p.tldr_style == 'hover' %} title-tldr-cue{% endif %}">{{ p.title }}{% if p.short %} <span class="work-short">({{ p.short }})</span>{% endif %}{% if p.tldr and p.tldr_style == 'footnote' %} <span class="tldr-fn" tabindex="0" role="note" aria-label="TL;DR: {{ p.tldr }}">tl;dr<span class="tldr-pop">{{ p.tldr }}</span></span>{% endif %}</span>
             <span class="work-meta">{{ p.authors | authors }}{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} · <span class="award"{% if p.award_short %} title="{{ p.award_label }}"{% endif %}>{{ p.award_short or (p.awards | join(' · ')) }}</span>{% endif %}{% if p.collaborators %}{{ p.collaborators | collaborators }}{% endif %}{% if p.coverage %}{{ p.coverage | coverage }}{% endif %}</span>
-            {% if p.tldr %}<span class="work-tldr" title="{{ p.tldr }}"><strong class="work-tldr-label">TL;DR:</strong> {{ p.tldr }}</span>{% endif %}
+            {% if p.tldr and p.tldr_style != 'footnote' %}<span class="work-tldr{% if p.tldr_style %} work-tldr-{{ p.tldr_style }}{% endif %}" title="{{ p.tldr }}"><strong class="work-tldr-label">TL;DR:</strong> {{ p.tldr }}{% if p.tldr_style == 'redact' %}<span class="tldr-cover" tabindex="0" role="button" aria-label="Reveal TL;DR">TL;DR</span>{% endif %}</span>{% endif %}
           </summary>
           <div class="work-media">
             {% set media = p.media_list %}
@@ -397,6 +397,21 @@
     window.addEventListener('resize', function () {
       clearTimeout(t);
       t = setTimeout(fit, 120);
+    });
+  })();
+</script>
+<script>
+  // TL;DR reveal prototypes: the footnote marker and the redaction cover live
+  // inside <summary>, so a tap would also toggle the work's dropdown. Swallow
+  // their click (keep focus, which drives the reveal on touch).
+  (function () {
+    var sel = '.tldr-fn, .work-tldr-redact .tldr-cover';
+    Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof el.focus === 'function') el.focus();
+      });
     });
   })();
 </script>

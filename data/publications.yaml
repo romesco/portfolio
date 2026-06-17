@@ -49,6 +49,7 @@
   title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
   short: SGS
   tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M+ parallel rollouts."
+  tldr_style: redact
   venue: Preprint
   media:
     - src: https://sgs-rl.github.io/manipulation.mp4
@@ -137,6 +138,8 @@
   featured: true
   title: Using non-expert data to robustify imitation learning via offline reinforcement learning
   short: RISE
+  tldr: "Offline RL on cheap non-expert data makes imitation policies robust to mistakes experts never demonstrate."
+  tldr_style: hover
   venue: ICRA
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}
@@ -159,6 +162,8 @@
   featured: true
   title: Model predictive adversarial imitation learning for planning from observation
   short: MPAIL
+  tldr: "Pairing model-predictive control with adversarial imitation lets a robot plan from observation alone, no action labels."
+  tldr_style: footnote
   venue: ICLR
   venue_full: International Conference on Learning Representations (ICLR)
   links: {arxiv: "2507.21533", followup: "https://mpail2.github.io/"}
