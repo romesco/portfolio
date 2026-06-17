@@ -35,6 +35,12 @@ mentees:
     current: "Now: General Robotics"
     years: 2024-2025
     now: {name: "General Robotics", favicon: "/img/general-robotics.svg", url: "https://www.linkedin.com/in/preet-shah-795a0a190/"}
+  - name: Jamie Gashler
+    url: "https://gashler.com/jamie/"
+    project: Visualization for Large-Scale Robotics Datasets
+    current: "Now: Meta Robotics Studio"
+    years: 2024-2025
+    now: {name: "Meta Robotics Studio", favicon: "https://www.google.com/s2/favicons?domain=meta.com&sz=64", url: "https://www.linkedin.com/in/jamie-gashler/"}
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: Stealth"
