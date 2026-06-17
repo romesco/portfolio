@@ -905,17 +905,11 @@ def main() -> int:
     links["email"] = identity.get("email")
 
     raw = yaml.safe_load(PUBS_YAML.read_text()) or []
-    featured = [p for p in raw if p.get("featured")]
-    if not featured:
-        print(
-            f"warning: no `featured: true` entries in {PUBS_YAML}",
-            file=sys.stderr,
-        )
-    featured.sort(key=lambda p: -p["year"])
-
-    # Normalize optional fields so the template can iterate without
-    # StrictUndefined errors on entries missing `links`, `awards`, or `media`.
-    for p in featured:
+    # Normalize optional fields on EVERY entry so both the homepage Selected
+    # works and the full /publications list render via the shared work macro
+    # without StrictUndefined errors. (Per-list year clustering is computed in
+    # the macro itself.)
+    for p in raw:
         p.setdefault("links", {})
         p.setdefault("awards", [])
         # Award medal (a prize ribbon, see the template) under the year in the
@@ -953,13 +947,14 @@ def main() -> int:
         p["coverage"] = normalize_coverage(p.get("coverage"))
         p["collaborators"] = normalize_collaborators(p.get("collaborators"))
 
-    # Timeline grouping: show the year label only on the first work of each
-    # year cluster (featured works are sorted year-desc), so Selected Works
-    # reads as a left-anchored timeline like the mentoring section.
-    prev_year = None
-    for p in featured:
-        p["year_show"] = p.get("year") != prev_year
-        prev_year = p.get("year")
+    # Homepage shows featured works; /publications shows the full list. Both
+    # sorted year-desc (equal years keep YAML order). `more_count` drives the
+    # subtle "+N more" link next to Selected works.
+    featured = sorted((p for p in raw if p.get("featured")), key=lambda p: -p["year"])
+    if not featured:
+        print(f"warning: no `featured: true` entries in {PUBS_YAML}", file=sys.stderr)
+    all_pubs = sorted(raw, key=lambda p: -p["year"])
+    more_count = len(all_pubs) - len(featured)
 
     news = load_news()
     mentees = load_mentoring()
@@ -993,6 +988,7 @@ def main() -> int:
     shutil.copy2(HEADSHOT_SRC, HEADSHOT_DEST)
     html = env.get_template("index.html.j2").render(
         publications=featured,
+        more_count=more_count,
         identity=identity,
         description=site.get("description", ""),
         bio=_render_inline_md(site.get("bio", "")),
@@ -1004,6 +1000,19 @@ def main() -> int:
     )
     (ROOT / "index.html").write_text(html)
     print(f"wrote index.html ({len(featured)} publications, {len(news)} news)")
+
+    # Full publication list at /publications (every entry, same format as
+    # Selected works), linked from the "+N more" affordance on the homepage.
+    html = env.get_template("publications.html.j2").render(
+        publications=all_pubs,
+        identity=identity,
+        title="Publications",
+        description=f"Full publication list for {identity.get('name', '')}.".strip(),
+        css_version=css_version,
+        favicons=favicons,
+    )
+    (ROOT / "publications.html").write_text(html)
+    print(f"wrote publications.html ({len(all_pubs)} publications)")
 
     pages = render_pages(env, identity, site.get("description", ""),
                          css_version, favicons)

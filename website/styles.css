@@ -325,6 +325,18 @@ section h2 {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* Subtle "+N more" link next to the Selected works heading -> /publications. */
+.works-more {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--fg-faint);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.works-more:hover { color: var(--accent); }
+
 /* Left-anchored timeline: a year column (shown once per year cluster) and the
    work (disclosure + title + meta). Mirrors the mentoring timeline. */
 .works-list li {
@@ -525,6 +537,12 @@ section h2 {
 details[open] > .work-summary::before {
   transform: rotate(90deg);
 }
+
+/* Flat (non-expandable) row on the full /publications list: no chevron, not
+   interactive. The chevron's space is kept (hidden, not removed) so titles
+   still align with the expandable rows above/below. */
+.work-summary.work-flat { cursor: default; }
+.work-summary.work-flat::before { visibility: hidden; }
 
 .work-summary .work-title {
   grid-column: 2;

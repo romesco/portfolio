@@ -1,0 +1,24 @@
+{# /publications: the full, exhaustive publication list in the same format as
+   the homepage "Selected works" (rail + title + meta, media expandable where
+   present). Linked from the "+N more" affordance next to Selected works.
+   Generated to publications.html by build.py; do NOT hand-edit. #}
+{% extends "_layout.html.j2" %}
+{% from "_works.html.j2" import work_list %}
+
+{% block title %}{{ title }} · {{ identity.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+
+{% block topbar %}
+  <p class="backlink"><a href="/">← root</a></p>
+{% endblock %}
+
+{% block content %}
+  <section class="works">
+    <h2>{{ title }}</h2>
+    {% if publications %}
+    {{ work_list(publications, full=true) }}
+    {% else %}
+    <p class="bio"><em>No publications in <code>publications.yaml</code> yet.</em></p>
+    {% endif %}
+  </section>
+{% endblock %}
