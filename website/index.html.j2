@@ -413,6 +413,17 @@
         if (typeof el.focus === 'function') el.focus();
       });
     });
+    // While the redaction bar is hovered/focused, hold back the media whisper
+    // so uncovering the TL;DR and the video peek don't fire together.
+    Array.prototype.forEach.call(document.querySelectorAll('.work-tldr-redact'), function (bar) {
+      var work = bar.closest('.work');
+      if (!work) return;
+      function hold(on) { work.classList.toggle('tldr-hold', on); }
+      bar.addEventListener('mouseenter', function () { hold(true); });
+      bar.addEventListener('mouseleave', function () { hold(false); });
+      bar.addEventListener('focusin', function () { hold(true); });
+      bar.addEventListener('focusout', function () { hold(false); });
+    });
   })();
 </script>
 {% endblock %}

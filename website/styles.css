@@ -586,7 +586,7 @@ details[open] > .work-summary::before {
   cursor: pointer;
   transition: clip-path 380ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease-out;
 }
-.work-row:hover .work-tldr-redact .tldr-cover,
+.work-tldr-redact:hover .tldr-cover,
 .work-tldr-redact:focus-within .tldr-cover {
   clip-path: inset(0 0 0 100%);
   opacity: 0;
@@ -864,6 +864,14 @@ details.work[open] .work-tldr-hover {
       opacity: 1;
       -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
               mask-image: linear-gradient(to bottom, #000 40%, transparent);
+    }
+    /* While the reader is uncovering a redacted TL;DR, hold the media whisper
+       back so the two hover behaviors don't fire at once (JS toggles the
+       class on pointer/focus over the bar). */
+    .work.has-media.tldr-hold:not([open]):hover::details-content {
+      content-visibility: hidden;
+      height: 0;
+      opacity: 0;
     }
   }
 }
