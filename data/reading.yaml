@@ -29,8 +29,6 @@ groups:
         note: "A reinforcement learning founder's site: his essays and the Sutton and Barto RL textbook."
       - name: Bandit Algorithms
         url: https://banditalgs.com/
-        # A book companion, not an active blog: skip the river's stale "latest".
-        feed: false
         note: "Tor Lattimore and Csaba Szepesvári's book and notes on bandit problems."
 
   - name: Friends & Adventures
