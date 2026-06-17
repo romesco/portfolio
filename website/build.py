@@ -343,7 +343,9 @@ def render_coverage_inline(coverage) -> Markup:
         else:
             parts.append(f'<a class="work-press-glyph work-press-text" href="{url}">{name}</a>')
     if overflow:
-        parts.append(f'<a class="work-press-more" href="{PRESS_PAGE_URL}">+{overflow}</a>')
+        parts.append(
+            f'<a class="work-press-more" href="{PRESS_PAGE_URL}" '
+            f'title="{overflow} more press {"mentions" if overflow != 1 else "mention"}">+{overflow}</a>')
     return Markup('<span class="work-press">' + " ".join(parts) + "</span>")
 
 

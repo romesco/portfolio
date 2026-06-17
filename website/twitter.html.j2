@@ -36,7 +36,7 @@
             <time class="post-time" datetime="{{ p.iso }}" title="{{ p.full }}">{{ p.display }}</time>
           </div>
           {% if p.repost %}
-            {% if p.has_comment %}<div class="post-text">{{ p.html }}{% if p.chip %} <img class="post-chip" src="{{ p.chip }}" alt="{{ p.chip_alt }}" loading="lazy">{% endif %}</div>{% endif %}
+            {% if p.has_comment %}<div class="post-text">{{ p.html }}{% if p.chip %} <img class="post-chip" src="{{ p.chip }}" alt="{{ p.chip_alt }}" title="{{ p.chip_alt }}" loading="lazy">{% endif %}</div>{% endif %}
             {% if p.repost.source == 'instagram' %}
             {# Instagram repost in our card style: the post's own /embed/ iframe,
                cropped (.ig-embed-crop) to reveal just the photo. The cover link
@@ -44,13 +44,13 @@
             <div class="repost repost-instagram" style="--rp-aspect: {{ p.repost.aspect }};">
               {% if not p.has_comment %}<span class="repost-label" aria-hidden="true">↻ reposted</span>{% endif %}
               <span class="repost-head">
-                <span class="repost-ig" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.35" fill="currentColor" stroke="none"/></svg></span>
+                <span class="repost-ig" title="Instagram" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.35" fill="currentColor" stroke="none"/></svg></span>
                 <span class="repost-name">{{ p.repost.author }}</span>
                 {% if p.repost.handle %}<a class="repost-link" href="{{ p.repost.url }}">@{{ p.repost.handle }}</a>{% endif %}
               </span>
               <div class="ig-embed-crop">
                 <iframe src="{{ p.repost.embed_src }}" title="Instagram post" loading="lazy" scrolling="no" allowtransparency="true"></iframe>
-                <a class="ig-embed-cover" href="{{ p.repost.url }}" aria-label="View on Instagram"></a>
+                <a class="ig-embed-cover" href="{{ p.repost.url }}" aria-label="View on Instagram" title="View on Instagram"></a>
               </div>
               {% if p.repost.html %}<div class="repost-text">{{ p.repost.html }}</div>{% endif %}
               <a class="repost-source" href="{{ p.repost.url }}">instagram.com ↗</a>
@@ -62,12 +62,12 @@
             <div class="repost repost-youtube" style="--rp-aspect: {{ p.repost.aspect }};">
               {% if not p.has_comment %}<span class="repost-label" aria-hidden="true">↻ reposted</span>{% endif %}
               <span class="repost-head">
-                <span class="repost-yt" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6z"/></svg></span>
+                <span class="repost-yt" title="YouTube" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6z"/></svg></span>
                 <a class="repost-name repost-link" href="{{ p.repost.url }}">{{ p.repost.author }}</a>
               </span>
               <div class="yt-embed" data-embed="{{ p.repost.embed_src }}">
                 <img class="yt-thumb" src="{{ p.repost.thumb }}" alt="" loading="lazy">
-                <a class="yt-cover" href="{{ p.repost.video_url }}" aria-label="Watch on YouTube"><span class="yt-play" aria-hidden="true"></span></a>
+                <a class="yt-cover" href="{{ p.repost.video_url }}" aria-label="Watch on YouTube" title="Watch on YouTube"><span class="yt-play" aria-hidden="true"></span></a>
               </div>
               {% if p.repost.html %}<div class="repost-text">{{ p.repost.html }}</div>{% endif %}
               <a class="repost-source" href="{{ p.repost.video_url }}">youtube.com ↗</a>
@@ -90,7 +90,7 @@
             </div>
             {% endif %}
           {% else %}
-          <div class="post-text">{{ p.html }}{% if p.chip %} <img class="post-chip" src="{{ p.chip }}" alt="{{ p.chip_alt }}" loading="lazy">{% endif %}</div>
+          <div class="post-text">{{ p.html }}{% if p.chip %} <img class="post-chip" src="{{ p.chip }}" alt="{{ p.chip_alt }}" title="{{ p.chip_alt }}" loading="lazy">{% endif %}</div>
           {% endif %}
         </div>
       </article>
