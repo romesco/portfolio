@@ -26,10 +26,18 @@ groups:
         note: "John Langford's long-running Machine Learning (Theory) blog, sharp on learning theory and practice."
       - name: Richard Sutton
         url: http://incompleteideas.net/
+        # Old flat homepage, no feed: pin his most recent dated essay as the link.
+        latest:
+          title: The Bitter Lesson
+          url: http://incompleteideas.net/IncIdeas/BitterLesson.html
+          date: 2019-03-13
         note: "A reinforcement learning founder's site: his essays and the Sutton and Barto RL textbook."
       - name: Bandit Algorithms
         url: https://banditalgs.com/
         note: "Tor Lattimore and Csaba Szepesvári's book and notes on bandit problems."
+      - name: Dimitri Bertsekas
+        url: https://web.mit.edu/dimitrib/www/RLbook.html
+        note: "An optimization and dynamic programming authority (MIT), with a book bridging reinforcement learning and optimal control."
 
   - name: Friends & Adventures
     links:

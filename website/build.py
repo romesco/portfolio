@@ -680,13 +680,29 @@ def load_reading() -> list[dict]:
             note = ln.get("note")
             feed = ln.get("feed")
             crawl = ln.get("crawl")
+            pinned = ln.get("latest")
             latest = None
             # River source, in order of preference:
+            #   `latest: {title,url,date}` -> a hand-pinned highlight (feed-less sites)
             #   `feed: false`  -> opt out entirely (no latest line)
             #   `crawl: {...}` -> scrape the index page (for stale/unrepresentative feeds)
             #   `feed: <url>`  -> explicit feed URL
             #   (none)         -> auto-discover an RSS/Atom feed from the page
-            if fetch and url and feed is not False:
+            if isinstance(pinned, dict):
+                d = pinned.get("date")
+                if isinstance(d, datetime.datetime):
+                    d = d.date()
+                if isinstance(d, datetime.date):
+                    iso_, disp_, full_ = (d.isoformat(), d.strftime("%b %Y"),
+                                          d.strftime("%b %-d, %Y"))
+                else:
+                    iso_ = disp_ = full_ = str(d or "")
+                latest = {
+                    "title": str(pinned.get("title") or ""),
+                    "url": str(pinned.get("url") or url),
+                    "iso": iso_, "display": disp_, "full": full_,
+                }
+            elif fetch and url and feed is not False:
                 seen.add(url)
                 if crawl:
                     info = _site_latest_by_crawl(url, crawl)
