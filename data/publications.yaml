@@ -47,6 +47,8 @@
     - {name: "B. Boots", dagger: true}
   featured: true
   title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
+  short: SGS
+  short_style: badge
   tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M+ parallel rollouts."
   venue: Preprint
   media:
@@ -135,7 +137,9 @@
     - A. Gupta
   featured: true
   title: Using non-expert data to robustify imitation learning via offline reinforcement learning
-  venue: ICRA 
+  short: RISE
+  short_style: paren
+  venue: ICRA
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}
 
@@ -156,6 +160,8 @@
     - B. Boots
   featured: true
   title: Model predictive adversarial imitation learning for planning from observation
+  short: MPAIL
+  short_style: rail
   venue: ICLR
   venue_full: International Conference on Learning Representations (ICLR)
   links: {arxiv: "2507.21533"}

@@ -1,4 +1,11 @@
 {
+  "https://banditalgs.com/": {
+    "display": "Mar 2019",
+    "full": "Mar 17, 2019",
+    "iso": "2019-03-17T16:19:07",
+    "title": "Bayesian/minimax duality for adversarial bandits",
+    "url": "https://banditalgs.com/2019/03/17/bayesianminimax-duality-for-adversarial-bandits/"
+  },
   "https://distill.pub": {
     "display": "Sep 2021",
     "full": "Sep 2, 2021",
@@ -19,6 +26,13 @@
     "iso": "",
     "title": "Heuristics Considered Harmful: RL With Random Rewards Should Not Make LLMs Reason",
     "url": "https://fuchsia-arch-d8e.notion.site/Heuristics-Considered-Harmful-RL-With-Random-Rewards-Should-Not-Make-LLMs-Reason-21ba29497c4180ca86ffce303f01923d"
+  },
+  "https://hunch.net/": {
+    "display": "Apr 2026",
+    "full": "Apr 27, 2026",
+    "iso": "2026-04-27T18:43:49",
+    "title": "Agentic Coding Ascension Notes",
+    "url": "https://hunch.net/?p=13763837"
   },
   "https://maxwellforbes.com/studio/": {
     "display": "Feb 2025",
