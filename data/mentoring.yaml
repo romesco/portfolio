@@ -43,9 +43,9 @@ mentees:
     now: {name: "Meta Robotics Studio", favicon: "/img/meta.svg", glyph_big: true, url: "https://www.linkedin.com/in/jamie-gashler/"}
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
-    current: "Now: Stealth"
+    current: "Now: MS @ UW"
     years: 2023-2024
-    now: {name: Stealth, emoji: "✈️", url: "https://www.linkedin.com/in/ege-caglar/"}
+    now: {role: MS, name: UW, favicon: "/img/allen-school.png", url: "https://www.linkedin.com/in/ege-caglar/"}
   - name: Quanquan Peng
     url: "https://bariona.github.io/"
     project: Efficient Lifelong Learning through Evolutionary Distillation (PG)
