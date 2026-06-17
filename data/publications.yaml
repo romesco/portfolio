@@ -386,12 +386,16 @@
 
 - year: 2024
   type: workshop
+  featured: true
   authors:
-    - O. Zheng
+    - O. Zhang
     - Q. Peng
     - {name: "R. Scalise", me: true}
     - B. Boots
   title: "Parental Guidance: Efficient Lifelong Learning through Evolutionary Distillation"
+  short: PG-1
+  links:
+    arxiv: 2503.18531
   venue: MAPoDeL Workshop @ CoRL
   venue_full: Workshop on Morphology-Aware Policy and Design Learning at Conference on Robot Learning (CoRL)
   awards: ["Best Paper Award"]
