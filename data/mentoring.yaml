@@ -31,8 +31,12 @@ mentees:
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: Stealth"
-    years: 2023-2025
+    years: 2023
     now: {name: Stealth, emoji: "✈️", url: "https://www.linkedin.com/in/ege-caglar/"}
+  - name: Quanquan Peng
+    url: "https://bariona.github.io/"
+    project: Efficient Lifelong Learning through Evolutionary Distillation (PG)
+    years: 2023-2024
   - name: Tao Jin
     project: Safe Control \& Interaction for Assistive Manipulators
     current: "Now: PhD @ CMU"
