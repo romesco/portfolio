@@ -85,9 +85,9 @@
         </div>
         <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
-            <span class="work-title{% if p.title_nowrap %} work-title-nowrap{% endif %}{% if p.tldr and p.tldr_style == 'hover' %} title-tldr-cue{% endif %}">{{ p.title }}{% if p.short %} <span class="work-short">({{ p.short }})</span>{% endif %}{% if p.tldr and p.tldr_style == 'footnote' %} <span class="tldr-fn" tabindex="0" role="note" aria-label="TL;DR: {{ p.tldr }}">tl;dr<span class="tldr-pop">{{ p.tldr }}</span></span>{% endif %}</span>
+            <span class="work-title{% if p.title_nowrap %} work-title-nowrap{% endif %}{% if p.tldr and p.tldr_style == 'peek' %} title-tldr-cue{% endif %}">{{ p.title }}{% if p.short %} <span class="work-short">({{ p.short }})</span>{% endif %}{% if p.tldr and p.tldr_style == 'footnote' %} <span class="tldr-fn" tabindex="0" role="note" aria-label="TL;DR: {{ p.tldr }}">tl;dr<span class="tldr-pop">{{ p.tldr }}</span></span>{% endif %}</span>
             <span class="work-meta">{{ p.authors | authors }}{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} · <span class="award"{% if p.award_short %} title="{{ p.award_label }}"{% endif %}>{{ p.award_short or (p.awards | join(' · ')) }}</span>{% endif %}{% if p.collaborators %}{{ p.collaborators | collaborators }}{% endif %}{% if p.coverage %}{{ p.coverage | coverage }}{% endif %}</span>
-            {% if p.tldr and p.tldr_style != 'footnote' %}<span class="work-tldr{% if p.tldr_style %} work-tldr-{{ p.tldr_style }}{% endif %}" title="{{ p.tldr }}"><strong class="work-tldr-label">TL;DR:</strong> {{ p.tldr }}{% if p.tldr_style == 'redact' %}<span class="tldr-cover" tabindex="0" role="button" aria-label="Reveal TL;DR">TL;DR</span>{% endif %}</span>{% endif %}
+            {% if p.tldr and p.tldr_style != 'footnote' %}<span class="work-tldr{% if p.tldr_style %} work-tldr-{{ p.tldr_style }}{% endif %}" title="{{ p.tldr }}"><strong class="work-tldr-label">TL;DR:</strong> {{ p.tldr }}</span>{% endif %}
           </summary>
           <div class="work-media">
             {% set media = p.media_list %}
@@ -401,28 +401,16 @@
   })();
 </script>
 <script>
-  // TL;DR reveal prototypes: the footnote marker and the redaction cover live
-  // inside <summary>, so a tap would also toggle the work's dropdown. Swallow
-  // their click (keep focus, which drives the reveal on touch).
+  // The footnote tl;dr marker lives inside <summary>, so a tap would also
+  // toggle the work's dropdown. Swallow its click (keep focus, which drives
+  // the popover on touch).
   (function () {
-    var sel = '.tldr-fn, .work-tldr-redact .tldr-cover';
-    Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
+    Array.prototype.forEach.call(document.querySelectorAll('.tldr-fn'), function (el) {
       el.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof el.focus === 'function') el.focus();
       });
-    });
-    // While the redaction bar is hovered/focused, hold back the media whisper
-    // so uncovering the TL;DR and the video peek don't fire together.
-    Array.prototype.forEach.call(document.querySelectorAll('.work-tldr-redact'), function (bar) {
-      var work = bar.closest('.work');
-      if (!work) return;
-      function hold(on) { work.classList.toggle('tldr-hold', on); }
-      bar.addEventListener('mouseenter', function () { hold(true); });
-      bar.addEventListener('mouseleave', function () { hold(false); });
-      bar.addEventListener('focusin', function () { hold(true); });
-      bar.addEventListener('focusout', function () { hold(false); });
     });
   })();
 </script>

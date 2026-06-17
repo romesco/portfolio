@@ -49,7 +49,7 @@
   title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
   short: SGS
   tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M+ parallel rollouts."
-  tldr_style: redact
+  tldr_style: peek
   venue: Preprint
   media:
     - src: https://sgs-rl.github.io/manipulation.mp4
@@ -139,7 +139,7 @@
   title: Using non-expert data to robustify imitation learning via offline reinforcement learning
   short: RISE
   tldr: "Offline RL on cheap non-expert data makes imitation policies robust to mistakes experts never demonstrate."
-  tldr_style: hover
+  tldr_style: peek
   venue: ICRA
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}

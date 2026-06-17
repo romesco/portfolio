@@ -569,48 +569,33 @@ details[open] > .work-summary::before {
 
 /* ---- TL;DR reveal prototypes (per-paper via tldr_style) ---- */
 
-/* (1) redact: the TL;DR sits under a wipeable "TL;DR" cover bar. */
-.work-tldr-redact { position: relative; }
-.work-tldr-redact .tldr-cover {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  padding-left: 0.1em;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  color: var(--fg-muted);
-  background: color-mix(in oklch, var(--fg) 9%, transparent);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: clip-path 380ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease-out;
-}
-.work-tldr-redact:hover .tldr-cover,
-.work-tldr-redact:focus-within .tldr-cover {
-  clip-path: inset(0 0 0 100%);
-  opacity: 0;
-}
-
-/* (2) hover: the TL;DR is collapsed; the title shows a dotted cue and the line
-   unfurls on row hover (or when the work is expanded, for touch). */
+/* Unified "peek": the TL;DR is collapsed and unfurls on the same hover that
+   cracks the media dropdown open, so they reveal together as one gesture (the
+   TL;DR reads as the headline of the peek, a media sliver fades in beneath it).
+   A dotted title cue hints it's there. Works for media and non-media papers. */
 .title-tldr-cue {
   text-decoration: underline dotted;
   text-decoration-color: var(--fg-faint);
   text-underline-offset: 4px;
   text-decoration-thickness: 1px;
 }
-.work-summary .work-tldr-hover {
+.work-summary .work-tldr-peek {
   max-height: 0;
   margin-top: 0;
   opacity: 0;
-  transition: max-height 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, margin-top 320ms ease-out;
+  transition: max-height 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, margin-top 280ms ease-out;
 }
-.work-row:hover .work-tldr-hover,
-details.work[open] .work-tldr-hover {
-  max-height: 2.2rem;
+details.work[open] .work-tldr-peek {
+  max-height: 2.4rem;
   margin-top: 0.2rem;
   opacity: 1;
+}
+@media (hover: hover) {
+  details.work:hover .work-tldr-peek {
+    max-height: 2.4rem;
+    margin-top: 0.2rem;
+    opacity: 1;
+  }
 }
 
 /* (3) footnote: a "tl;dr" marker by the title pops a small card. */
@@ -864,14 +849,6 @@ details.work[open] .work-tldr-hover {
       opacity: 1;
       -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
               mask-image: linear-gradient(to bottom, #000 40%, transparent);
-    }
-    /* While the reader is uncovering a redacted TL;DR, hold the media whisper
-       back so the two hover behaviors don't fire at once (JS toggles the
-       class on pointer/focus over the bar). */
-    .work.has-media.tldr-hold:not([open]):hover::details-content {
-      content-visibility: hidden;
-      height: 0;
-      opacity: 0;
     }
   }
 }
