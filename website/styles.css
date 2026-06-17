@@ -507,14 +507,20 @@ details[open] > .work-summary::before {
   justify-self: start;
 }
 
-/* Optional one-line TL;DR between the title and the author/meta line. Clamped
-   to a single line; the full text is in the title tooltip if it overflows. */
-.work-summary .work-tldr {
+.work-summary .work-meta {
   grid-column: 2;
   grid-row: 2;
+  margin-top: 0.1rem;
+}
+
+/* Optional one-line TL;DR under the author/meta line. Clamped to a single line;
+   the full text is in the title tooltip if it overflows. */
+.work-summary .work-tldr {
+  grid-column: 2;
+  grid-row: 3;
   justify-self: start;
   max-width: 100%;
-  margin-top: 0.15rem;
+  margin-top: 0.2rem;
   font-size: 0.9rem;
   color: var(--fg-muted);
   white-space: nowrap;
@@ -522,10 +528,9 @@ details[open] > .work-summary::before {
   text-overflow: ellipsis;
 }
 
-.work-summary .work-meta {
-  grid-column: 2;
-  grid-row: 3;
-  margin-top: 0.1rem;
+.work-tldr-label {
+  font-weight: 600;
+  color: var(--fg);
 }
 
 .work-media {

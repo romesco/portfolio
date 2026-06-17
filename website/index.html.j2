@@ -82,8 +82,8 @@
         <details class="work{% if has_media %} has-media{% endif %}">
           <summary class="work-summary">
             <span class="work-title">{{ p.title }}</span>
-            {% if p.tldr %}<span class="work-tldr" title="{{ p.tldr }}">{{ p.tldr }}</span>{% endif %}
             <span class="work-meta">{{ p.authors | authors }}{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} <span class="award">{{ p.awards | join(' · ') }}</span>{% endif %}{% if p.collaborators %}{{ p.collaborators | collaborators }}{% endif %}{% if p.coverage %}{{ p.coverage | coverage }}{% endif %}</span>
+            {% if p.tldr %}<span class="work-tldr" title="{{ p.tldr }}"><strong class="work-tldr-label">TL;DR:</strong> {{ p.tldr }}</span>{% endif %}
           </summary>
           <div class="work-media">
             {% set media = p.media_list %}
