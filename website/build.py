@@ -931,6 +931,9 @@ def main() -> int:
         # small "Workshop" kind tag in the rail, so the full workshop name doesn't
         # clutter the venue line (it stays in the venue_full tooltip).
         p["is_workshop"] = p.get("type") == "workshop"
+        # Optional: let a long title run one line and spill slightly into the
+        # right margin (desktop only) instead of wrapping a trailing word alone.
+        p["title_nowrap"] = bool(p.get("title_nowrap"))
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))
         p["coverage"] = normalize_coverage(p.get("coverage"))

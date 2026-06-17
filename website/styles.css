@@ -329,7 +329,9 @@ section h2 {
    work (disclosure + title + meta). Mirrors the mentoring timeline. */
 .works-list li {
   display: grid;
-  grid-template-columns: 4.25rem 1fr;
+  /* minmax(0, 1fr) (not bare 1fr) so a non-wrapping title overflows visually
+     into the margin instead of expanding the track and blowing out the row. */
+  grid-template-columns: 4.25rem minmax(0, 1fr);
   column-gap: 1.1rem;
   align-items: baseline;
   margin-bottom: 1.1rem;
@@ -487,7 +489,7 @@ section h2 {
 
 .work-summary {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   column-gap: 0.45em;
   cursor: pointer;
   list-style: none;
@@ -518,6 +520,13 @@ details[open] > .work-summary::before {
   /* Shrink to the title text so the meta line below can be capped to its
      width (see the author-meta fit script). */
   justify-self: start;
+}
+
+/* Opt-in: keep a long title on one line, letting it spill a little into the
+   right margin rather than wrapping a trailing word alone. Desktop only, the
+   margin has room there; narrow screens wrap normally. */
+@media (min-width: 900px) {
+  .work-summary .work-title-nowrap { white-space: nowrap; }
 }
 
 .work-summary .work-meta {
