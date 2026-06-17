@@ -140,6 +140,7 @@
   short: RISE
   tldr: "Offline RL on cheap non-expert data makes imitation policies robust to mistakes experts never demonstrate."
   tldr_style: peek
+  focus: spotlight
   venue: ICRA
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}
@@ -280,6 +281,7 @@
     - {affil: {name: "Google DeepMind", domain: "deepmind.google", url: "https://deepmind.google/blog/scaling-up-learning-across-many-different-robot-types/"}}
   featured: true
   title: "Open X-Embodiment: Robotic learning datasets and RT-X models"
+  focus: panel
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   awards: ["Best Paper Award"]
@@ -320,6 +322,7 @@
   featured: true
   title: "GuILD: Guided Incremental Local Densification for Accelerated Sampling-based Motion Planning"
   title_nowrap: true
+  focus: pinned
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   links: {ieee: "https://ieeexplore.ieee.org/document/10161028"}

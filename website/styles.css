@@ -680,6 +680,67 @@ details.work[open] .work-tldr-peek {
   white-space: nowrap;
 }
 
+/* ---- "Solo the work" focus prototypes (homepage only, per-paper via `focus`)
+   Three low-key ways to cut visual noise and let one work stand out, demoed on
+   three spread-out Selected-works entries so they compare side by side. If one
+   is adopted it would apply to every row (A/B follow the cursor; C is
+   always-on). The full /publications list never uses these. ---- */
+
+/* The row fades smoothly when the spotlight (A) dims its neighbors. */
+.works-list li {
+  transition: opacity 300ms ease-out, filter 300ms ease-out;
+}
+
+/* (A) Spotlight, follows curiosity: hovering this row lets every OTHER row
+   recede (dim + desaturate), so the one you're reading is the only crisp entry.
+   Nothing is added to the focused row; focus comes from the rest stepping back.
+   Demoed on RISE. */
+.works-list:has(.focus-spotlight:hover) li:not(:hover) {
+  opacity: 0.45;
+  filter: saturate(0.7);
+}
+
+/* (B) Panel, follows curiosity: hovering this row floats a soft accent panel
+   behind it, lifting it off the page. Neighbors untouched. Demoed on
+   Open X-Embodiment. */
+.work-row.focus-panel,
+.work-row.focus-pinned {
+  position: relative;
+  z-index: 0;
+}
+.work-row.focus-panel::after {
+  content: "";
+  position: absolute;
+  inset: -0.55rem -0.8rem;
+  border-radius: 10px;
+  background: color-mix(in oklch, var(--accent) 8%, transparent);
+  opacity: 0;
+  transition: opacity 260ms ease-out;
+  z-index: -1;
+  pointer-events: none;
+}
+.work-row.focus-panel:hover::after { opacity: 1; }
+
+/* (C) Pinned, always-on: one work is permanently soloed by a quiet accent panel
+   plus an accent-tinted rail, marking it the "lead" with no interaction needed.
+   Demoed on GuILD. */
+.work-row.focus-pinned::after {
+  content: "";
+  position: absolute;
+  inset: -0.55rem -0.8rem;
+  border-radius: 10px;
+  background: color-mix(in oklch, var(--accent) 6%, transparent);
+  z-index: -1;
+  pointer-events: none;
+}
+.work-row.focus-pinned .work-venue,
+.work-row.focus-pinned .work-year { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .works-list li,
+  .work-row.focus-panel::after { transition: none; }
+}
+
 .work-media {
   /* Pad so the placeholder aligns with the meta column (chevron + gap). */
   margin-top: 0.85rem;
