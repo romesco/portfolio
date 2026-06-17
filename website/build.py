@@ -919,6 +919,8 @@ def main() -> int:
         # rail, shown when a paper carries an award.
         p["medal"] = bool(p["awards"])
         p["award_label"] = _delatex("; ".join(p["awards"])) if p["awards"] else ""
+        # Optional one-line TL;DR shown under the title.
+        p["tldr"] = _delatex(str(p["tldr"])).strip() if p.get("tldr") else ""
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))
         p["coverage"] = normalize_coverage(p.get("coverage"))

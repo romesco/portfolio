@@ -507,9 +507,24 @@ details[open] > .work-summary::before {
   justify-self: start;
 }
 
-.work-summary .work-meta {
+/* Optional one-line TL;DR between the title and the author/meta line. Clamped
+   to a single line; the full text is in the title tooltip if it overflows. */
+.work-summary .work-tldr {
   grid-column: 2;
   grid-row: 2;
+  justify-self: start;
+  max-width: 100%;
+  margin-top: 0.15rem;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.work-summary .work-meta {
+  grid-column: 2;
+  grid-row: 3;
   margin-top: 0.1rem;
 }
 
