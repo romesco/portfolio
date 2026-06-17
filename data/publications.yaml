@@ -189,7 +189,10 @@
   title: "Long Range Navigator (LRN): Extending robot planning horizons beyond metric maps"
   venue: CoRL
   venue_full: 2025 Conference on Robot Learning (CoRL)
-  awards: ["Best Paper, ROAR 2025 Workshop @ RSS"]
+  awards:
+    - "Best Paper Award, Resilient Off-road Autonomous Robotics (ROAR) Workshop, RSS 2025"
+  award_short: "Best Paper Award"
+  award_at: "RSS WS"
 
 - year: 2025
   type: conference
