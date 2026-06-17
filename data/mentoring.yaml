@@ -22,6 +22,12 @@ mentees:
     current: "BS/MS -> Now: Google"
     years: 2024-2025
     now: {name: Google, favicon: "/img/google.png", url: "https://www.linkedin.com/in/ayush-agrawal-uw/"}
+  - name: Preet Shah
+    url: "https://10preet.github.io/"
+    project: Robust imitation learning from non-expert data (RISE)
+    current: "Now: General Robotics"
+    years: 2024-2025
+    now: {name: "General Robotics"}
   - name: Octi Zhang
     url: "https://zoctipus.github.io/"
     project: Large-Scale Physics-based Simulation
@@ -31,12 +37,14 @@ mentees:
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: Stealth"
-    years: 2023
+    years: 2023-2024
     now: {name: Stealth, emoji: "✈️", url: "https://www.linkedin.com/in/ege-caglar/"}
   - name: Quanquan Peng
     url: "https://bariona.github.io/"
     project: Efficient Lifelong Learning through Evolutionary Distillation (PG)
+    current: "Now: PhD @ UCSD"
     years: 2023-2024
+    now: {role: PhD, name: UCSD, favicon: "https://www.google.com/s2/favicons?domain=ucsd.edu&sz=64", url: "https://ucsd.edu/"}
   - name: Tao Jin
     project: Safe Control \& Interaction for Assistive Manipulators
     current: "Now: PhD @ CMU"
