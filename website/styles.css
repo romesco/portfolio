@@ -363,6 +363,19 @@ section h2 {
   line-height: 1.1;
 }
 
+/* Venue kind qualifier in the rail (e.g. "Workshop") so the venue line can show
+   the host conference (CoRL) instead of the full workshop name; the full name
+   stays in the venue tooltip. */
+.work-kind {
+  margin-top: 0.12rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--fg-faint);
+  line-height: 1.2;
+}
+
 /* Award medal (prize ribbon), under the year in the rail. Understated accent;
    the glyph is monochrome via currentColor. Shown only on awarded papers. */
 .work-medal {

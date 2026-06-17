@@ -396,8 +396,8 @@
   short: PG-1
   links:
     arxiv: 2503.18531
-  venue: MAPoDeL Workshop @ CoRL
-  venue_full: Workshop on Morphology-Aware Policy and Design Learning at Conference on Robot Learning (CoRL)
+  venue: CoRL
+  venue_full: MAPoDeL Workshop on Morphology-Aware Policy and Design Learning at the Conference on Robot Learning (CoRL)
   awards: ["Best Paper Award"]
 
 - year: 2017

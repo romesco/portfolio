@@ -927,6 +927,10 @@ def main() -> int:
         # VAMOS, LRN) don't double up.
         short = _delatex(str(p["short"])).strip() if p.get("short") else ""
         p["short"] = short if short and short.lower() not in p["title"].lower() else ""
+        # Workshop papers show the host conference as the venue (e.g. CoRL) plus a
+        # small "Workshop" kind tag in the rail, so the full workshop name doesn't
+        # clutter the venue line (it stays in the venue_full tooltip).
+        p["is_workshop"] = p.get("type") == "workshop"
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))
         p["coverage"] = normalize_coverage(p.get("coverage"))
