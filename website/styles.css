@@ -682,7 +682,7 @@ details.work[open] .work-tldr-peek {
    (.works-list-solo); the full /publications list is untouched. ---- */
 .works-list-solo li {
   /* Smooth, prompt restore when you leave the soloed state (no delay). */
-  transition: opacity 550ms ease-out, filter 550ms ease-out;
+  transition: opacity 400ms ease-out, filter 400ms ease-out;
   transition-delay: 0s;
 }
 
