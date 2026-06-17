@@ -318,8 +318,9 @@ PRESS_GLYPH_CAP = 3
 
 
 def render_coverage_inline(coverage) -> Markup:
-    """A compact 'press' tag on a featured work's meta line: the lead outlet named,
-    then the remaining outlets as small brand glyphs, collapsing to a '+N' link to
+    """A compact 'press' tag on a featured work's meta line: the lead outlet named
+    (with its own brand glyph), then the remaining outlets as small brand glyphs,
+    collapsing to a '+N' link to
     the /inthepress archive once the list runs long. The lead and each glyph link
     to their article; the outlet name is the glyph's hover tooltip. The lead is the
     first `coverage:` entry, so order the strongest outlet first. Empty when there's
@@ -327,8 +328,17 @@ def render_coverage_inline(coverage) -> Markup:
     if not coverage:
         return Markup("")
     lead, rest = coverage[0], coverage[1:]
-    parts = [f'<a class="work-press-lead" href="{escape(lead.get("url") or PRESS_PAGE_URL)}">'
-             f'{escape(lead["outlet"])}</a>']
+    lead_url = escape(lead.get("url") or PRESS_PAGE_URL)
+    lead_name = escape(lead["outlet"])
+    # Lead outlet: its name in text, immediately followed by its OWN brand glyph
+    # (the remaining outlets show as glyphs only). No space between the two
+    # anchors, so the name and its chip never wrap apart. alt="" since the name
+    # is already announced by the adjacent text link.
+    parts = [f'<a class="work-press-lead" href="{lead_url}">{lead_name}</a>']
+    if lead.get("favicon"):
+        parts[0] += (f'<a class="work-press-glyph" href="{lead_url}" title="{lead_name}">'
+                     f'<img src="{escape(lead["favicon"])}" alt="" width="16" height="16" '
+                     'loading="lazy" onerror="this.remove()"></a>')
     # Only collapse to "+N" when it actually hides 2+ outlets; a lone hidden
     # outlet saves no space, so just show it.
     if len(rest) - PRESS_GLYPH_CAP >= 2:
