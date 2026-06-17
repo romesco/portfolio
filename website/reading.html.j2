@@ -23,6 +23,7 @@
         <span class="read-head">
           <a class="read-name" href="{{ ln.url }}">{{ ln.name }}</a>
           {% if ln.domain %}<span class="read-domain">{{ ln.domain }}</span>{% endif %}
+          {% for a in ln.also %}<a class="read-also" href="{{ a.url }}">{{ a.label }}</a>{% endfor %}
         </span>
         {% if ln.note %}<span class="read-note">{{ ln.note }}</span>{% endif %}
         {% if ln.latest %}

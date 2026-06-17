@@ -37,6 +37,9 @@ groups:
         note: "Tor Lattimore and Csaba Szepesvári's book and notes on bandit problems."
       - name: Dimitri Bertsekas
         url: https://web.mit.edu/dimitrib/www/RLbook.html
+        also:
+          - label: homepage
+            url: https://web.mit.edu/dimitrib/www/home.html
         note: "An optimization and dynamic programming authority (MIT), with a book bridging reinforcement learning and optimal control."
 
   - name: Friends & Adventures

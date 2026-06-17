@@ -678,6 +678,11 @@ def load_reading() -> list[dict]:
             if host.startswith("www."):
                 host = host[4:]
             note = ln.get("note")
+            # Optional secondary links shown after the domain (e.g. a homepage
+            # alongside a book page): a list of {label, url}.
+            also = [
+                {"label": str(a.get("label") or a.get("url")), "url": str(a["url"])}
+                for a in (ln.get("also") or []) if isinstance(a, dict) and a.get("url")]
             feed = ln.get("feed")
             crawl = ln.get("crawl")
             pinned = ln.get("latest")
@@ -727,6 +732,7 @@ def load_reading() -> list[dict]:
                 # Favicon by domain (no images to host). Swap the service freely.
                 "favicon": f"https://www.google.com/s2/favicons?domain={host}&sz=64" if host else None,
                 "note": _render_inline_md(note) if note else None,
+                "also": also,
                 "latest": latest,
             })
         if links:

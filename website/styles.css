@@ -1468,6 +1468,24 @@ a:focus-visible {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* Secondary links in the header (e.g. a homepage next to a book page). */
+.read-also {
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+.read-also::before {
+  content: "·";
+  margin-right: 0.5rem;
+  color: var(--fg-faint);
+}
+
+.read-also:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 .read-note {
   grid-column: 2;
   display: block;
