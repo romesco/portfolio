@@ -12,6 +12,10 @@
 <title>{% block title %}{{ identity.name }}{% endblock %}</title>
 <meta name="description" content="{% block description %}{{ description }}{% endblock %}">
 {% block head_extra %}{% endblock %}
+{% if analytics.umami_src and analytics.umami_id %}
+<!-- Self-hosted Umami (cookieless analytics). Configured via site.yaml. -->
+<script defer src="{{ analytics.umami_src }}" data-website-id="{{ analytics.umami_id }}"></script>
+{% endif %}
 <script>
   // Apply the saved theme before first paint to avoid a flash. Light is the
   // default (no attribute); only an explicit "dark" choice is applied.
@@ -115,5 +119,31 @@
   })();
 </script>
 {% block scripts %}{% endblock %}
+{% if analytics.umami_src and analytics.umami_id %}
+<script>
+  // Outbound link tracking for Umami: tag every external link so a click fires
+  // an "outbound" event carrying the destination URL. Umami auto-handles any
+  // anchor with a data-umami-event attribute, so this just labels them.
+  (function () {
+    function tagOutbound() {
+      var here = location.host;
+      var links = document.querySelectorAll('a[href]');
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i];
+        if (a.hasAttribute('data-umami-event')) continue;
+        try {
+          var url = new URL(a.href, location.href);
+          if (url.host && url.host !== here && /^https?:$/.test(url.protocol)) {
+            a.setAttribute('data-umami-event', 'outbound');
+            a.setAttribute('data-umami-event-url', url.href);
+          }
+        } catch (e) {}
+      }
+    }
+    if (document.readyState !== 'loading') tagOutbound();
+    else document.addEventListener('DOMContentLoaded', tagOutbound);
+  })();
+</script>
+{% endif %}
 </body>
 </html>

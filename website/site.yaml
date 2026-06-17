@@ -18,3 +18,14 @@ bio: >
 # page load (see the head script in _layout.html.j2). Add/remove freely;
 # emoji that stay legible at ~16px work best.
 favicons: ["🤖", "🦾", "🧠", "🧬", "⚙️", "🛰️", "🔬", "🔭", "⚛️", "✨"]
+
+# Self-hosted Umami analytics (cookieless, privacy-friendly). The tracking
+# snippet in _layout.html.j2 renders ONLY when both fields below are set, so
+# the site stays clean until the Umami instance is live. After deploying Umami
+# (see handoffs/20260617_UMAMI_SELFHOST.md), fill these in and push:
+#   src: the full URL of the tracker script on your Umami host
+#   id:  the website ID (UUID) from the Umami dashboard for this site
+# Outbound link clicks are tracked automatically via a small shim in the layout.
+analytics:
+  umami_src: ""   # e.g. https://analytics.rosarioscalise.com/script.js
+  umami_id: ""    # e.g. 0f7c2e1a-... (from Umami → Settings → Websites)

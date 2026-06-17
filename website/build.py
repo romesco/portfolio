@@ -963,6 +963,11 @@ def main() -> int:
     env.filters["collaborators"] = render_collaborators
     env.globals["build_fp"] = build_fp
     env.globals["year"] = datetime.date.today().year
+    # Optional analytics config (see site.yaml `analytics:`). Exposed to every
+    # template via the shared base layout; the snippet only renders once both
+    # the script src and website id are set, so the site stays clean until the
+    # self-hosted Umami instance is live.
+    env.globals["analytics"] = site.get("analytics") or {}
 
     shutil.copy2(HEADSHOT_SRC, HEADSHOT_DEST)
     html = env.get_template("index.html.j2").render(
