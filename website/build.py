@@ -920,6 +920,10 @@ def main() -> int:
         # rail, shown when a paper carries an award.
         p["medal"] = bool(p["awards"])
         p["award_label"] = _delatex("; ".join(p["awards"])) if p["awards"] else ""
+        # Optional shorter inline award label for the website (keeps the meta
+        # line uncluttered); the full text stays in `awards` for the CV and in
+        # the medal / inline award tooltip.
+        p["award_short"] = _delatex(str(p["award_short"])).strip() if p.get("award_short") else ""
         # Optional one-line TL;DR shown under the title.
         p["tldr"] = _delatex(str(p["tldr"])).strip() if p.get("tldr") else ""
         # Optional shorthand / codename (e.g. "SGS") shown as a quiet muted

@@ -162,6 +162,9 @@
   venue: ICLR
   venue_full: International Conference on Learning Representations (ICLR)
   links: {arxiv: "2507.21533"}
+  awards:
+    - "Best Paper Finalist, Resource-Rational Robot Learning Workshop, CoRL 2025"
+  award_short: "Best Paper Finalist"
 
 - year: 2025
   type: conference
@@ -396,7 +399,7 @@
   title: "Parental Guidance: Efficient Lifelong Learning through Evolutionary Distillation"
   short: PG-1
   links:
-    arxiv: 2503.18531
+    arxiv: "2503.18531"
   venue: CoRL
   venue_full: MAPoDeL Workshop on Morphology-Aware Policy and Design Learning at the Conference on Robot Learning (CoRL)
   awards: ["Best Paper Award"]
