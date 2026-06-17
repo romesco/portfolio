@@ -50,7 +50,6 @@
   short: SGS
   tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M+ parallel rollouts."
   tldr_style: peek
-  focus: pinned
   venue: Preprint
   media:
     - src: https://sgs-rl.github.io/manipulation.mp4
@@ -81,7 +80,9 @@
   title: "VAMOS: A hierarchical vision-language-action model for capability-modulated and steerable navigation"
   venue: arXiv
   links: {arxiv: "2510.20818"}
-  awards: ["Madrona Prize Runner-Up"]
+  awards:
+    - "Madrona Prize Runner-Up"
+    - "Oral, Workshop on Generalist Robot Policies in the Wild, CoRL 2025"
   coverage:
     - {outlet: Allen School News, url: "https://news.cs.washington.edu/2025/11/06/2025-research-showcase-highlights-faculty-and-student-innovation-across-ai-robotics-neuroscience/", favicon: "/img/allen-school.png"}
     - {outlet: Madrona, url: "https://www.madrona.com/madrona-prize-2025-celebrating-innovation-allen-school-research-showcase/"}
@@ -141,7 +142,6 @@
   short: RISE
   tldr: "Offline RL on cheap non-expert data makes imitation policies robust to mistakes experts never demonstrate."
   tldr_style: peek
-  focus: spotlight
   venue: ICRA
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}
@@ -282,7 +282,6 @@
     - {affil: {name: "Google DeepMind", domain: "deepmind.google", url: "https://deepmind.google/blog/scaling-up-learning-across-many-different-robot-types/"}}
   featured: true
   title: "Open X-Embodiment: Robotic learning datasets and RT-X models"
-  focus: panel
   venue: ICRA
   venue_full: International Conference on Robotics \& Automation (ICRA)
   awards: ["Best Paper Award"]
