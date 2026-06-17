@@ -70,7 +70,7 @@ mentees:
     project: Streaming RGBD \& Tactile Data Wirelessly
     project_url: "https://robotfeeding.io/hardware/hri25a/"
     current: "Now: Google"
-    years: 2017-2020
+    years: 2018-2020
     now: {name: Google, favicon: "/img/google.png", url: "https://www.linkedin.com/in/yirenqu/"}
   - name: Maha Alrashed
     project: Crowdsourcing YCB Object Affordances
