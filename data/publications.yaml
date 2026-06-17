@@ -218,7 +218,7 @@
   title: "Demonstrating Wheeled Lab: Modern Sim2Real for Low-cost, Open-source Wheeled Robotics"
   venue: CoRL
   venue_full: Conference on Robot Learning (CoRL)
-  links: {arxiv: "2502.07380"}
+  links: {arxiv: "2502.07380", project: "https://uwrobotlearning.github.io/WheeledLab/"}
   coverage:
     - {outlet: NVIDIA, url: "https://blogs.nvidia.com/blog/national-robotics-week-2025/", favicon: "/img/nvidia.png"}
     - {outlet: LycheeAI, url: "https://www.youtube.com/watch?v=Y4b-cz2xB1w"}

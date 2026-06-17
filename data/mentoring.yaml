@@ -22,18 +22,19 @@ mentees:
     current: "BS/MS -> Now: Google"
     years: 2024-2025
     now: {name: Google, favicon: "/img/google.png", url: "https://www.linkedin.com/in/ayush-agrawal-uw/"}
-  - name: Preet Shah
-    url: "https://10preet.github.io/"
-    project: Robust imitation learning from non-expert data (RISE)
-    current: "Now: General Robotics"
-    years: 2024-2025
-    now: {name: "General Robotics", favicon: "https://www.google.com/s2/favicons?domain=generalrobotics.company&sz=64", url: "https://generalrobotics.company"}
   - name: Octi Zhang
     url: "https://zoctipus.github.io/"
     project: Large-Scale Physics-based Simulation
     current: "Now: Core IsaacLab/Newton @ NVIDIA"
     years: 2023-2025
     now: {role: "Core IsaacLab/Newton", name: NVIDIA, favicon: "/img/nvidia.png", url: "https://www.linkedin.com/in/octi-zhang-0bb521294/"}
+  - name: Preet Shah
+    url: "https://10preet.github.io/"
+    project: "Wheeled Lab: Accessible Modern Sim2Real for Education and Research"
+    project_url: "https://uwrobotlearning.github.io/WheeledLab/"
+    current: "Now: General Robotics"
+    years: 2024-2025
+    now: {name: "General Robotics", favicon: "/img/general-robotics.svg", url: "https://www.linkedin.com/in/preet-shah-795a0a190/"}
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: Stealth"
