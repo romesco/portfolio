@@ -47,7 +47,7 @@
     - {name: "B. Boots", dagger: true}
   featured: true
   title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
-  tldr: "Balancing the data mix, not its size, enables effective learning with >1M+ parallel rollouts."
+  tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M+ parallel rollouts."
   venue: Preprint
   media:
     - src: https://sgs-rl.github.io/manipulation.mp4
