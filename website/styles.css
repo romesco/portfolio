@@ -688,8 +688,8 @@ details.work[open] .work-tldr-peek {
 
 @media (hover: hover) {
   .works-list-solo:has(li:hover) li:not(:hover) {
-    opacity: 0.4;
-    filter: saturate(0.6);
+    opacity: 0.34;
+    filter: saturate(0.58);
     /* The dwell: ~1.5s of continuous hover before the others begin to recede.
        Move the cursor away first and the pending change is cancelled, so a quick
        pass never flickers. */
