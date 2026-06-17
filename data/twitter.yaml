@@ -35,6 +35,16 @@
 handle: rosarioscalise
 
 posts:
+  - at: 2026-06-17 16:30:00
+    text: "Ken Birdwell and Gabe Newell said some stuff in this documentary that has always stuck with me. Obviously playing half-life at my cousins house also shaped my childhood and remains my favorite game of all time. Gaben on Design Philosophy: \"I'm getting a narcissistic injury when the world is ignoring me.\""
+    repost:
+      source: youtube
+      author: Valve
+      url: https://www.youtube.com/@Valve       # link back to the channel
+      video: https://www.youtube.com/watch?v=TbZ3HzvFEto
+      start: 900   # hover preview starts at 15:00 (the highlighted section)
+      text: "Half-Life: 25th Anniversary Documentary"
+
   - at: 2026-06-17 14:00:00
     text: "btw, Let's go Knicks!"
     chip: /img/knicks.svg
