@@ -1298,6 +1298,19 @@ a:focus-visible {
 
 .page-content li { margin-bottom: 0.3rem; }
 
+/* A quiet, easy-to-miss link at the bottom of /bio to the long-form
+   /wholelifestory page. Small + faint at rest; tints to accent on hover. */
+.bio-deeper {
+  margin-top: 3rem;
+  font-size: 0.8rem;
+}
+.bio-deeper a {
+  color: var(--fg-faint);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+.bio-deeper a:hover { color: var(--accent); }
+
 .page-content blockquote {
   margin: 0 0 1rem;
   padding-left: 1rem;
