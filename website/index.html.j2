@@ -70,22 +70,12 @@
       {% for p in publications %}
       {% set has_media = (p.media_list | length) > 0 %}
       <li class="work-row{% if p.year_show %} year-start{% endif %}">
-        <div class="work-rail{% if p.medal %} work-rail--mpos-{{ p.medal_pos }}{% endif %}">
+        <div class="work-rail">
           <cite class="work-venue"{% if p.venue_full %} title="{{ p.venue_full }}"{% endif %}>{{ p.venue }}</cite>
           <span class="work-year">{{ p.year }}</span>
           {% if p.medal %}
-          <span class="work-medal work-medal--{{ p.medal }}"{% if p.award_label %} title="{{ p.award_label }}"{% endif %} aria-label="{{ p.award_label or 'Award' }}">
-            {%- if p.medal == 'rosette' -%}
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M9.4 15.5 7.6 21.5 10.8 19.7ZM14.6 15.5 16.4 21.5 13.2 19.7Z"/><path fill-rule="evenodd" d="M4 11a8 8 0 1 1 16 0a8 8 0 1 1 -16 0ZM12 6.4 13.4 10 17.2 10 14.1 12.3 15.2 16 12 13.8 8.8 16 9.9 12.3 6.8 10 10.6 10Z"/></svg>
-            {%- elif p.medal == 'hanging' -%}
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M8.5 2 10.3 2 13 8.5 11.2 8.5ZM15.5 2 13.7 2 11 8.5 12.8 8.5Z"/><path fill-rule="evenodd" d="M12 8a7 7 0 1 1 0 14a7 7 0 1 1 0-14ZM12 10.6 13.12 13.46 16.18 13.64 13.81 15.59 14.59 18.56 12 16.9 9.41 18.56 10.19 15.59 7.82 13.64 10.88 13.46Z"/></svg>
-            {%- elif p.medal == 'outline' -%}
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 9.6 6.4 3M14.8 9.6 17.6 3"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/></svg>
-            {%- elif p.medal == 'prize' -%}
+          <span class="work-medal"{% if p.award_label %} title="{{ p.award_label }}"{% endif %} aria-label="{{ p.award_label or 'Award' }}">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M9.6 13 11.9 13 11.1 21.8 9.6 19.8 8 21.8ZM14.4 13 12.1 13 12.9 21.8 14.4 19.8 16 21.8Z"/><path fill-rule="evenodd" d="M12 2a6 6 0 1 1 0 12a6 6 0 1 1 0-12ZM12 4.2 12.94 6.71 15.61 6.83 13.52 8.49 14.23 11.07 12 9.6 9.77 11.07 10.48 8.49 8.39 6.83 11.06 6.71Z"/></svg>
-            {%- elif p.medal == 'seal' -%}
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path fill-rule="evenodd" d="M12 4.2A4.84 4.84 0 0 1 16.58 5.69A4.84 4.84 0 0 1 19.42 9.59A4.84 4.84 0 0 1 19.42 14.41A4.84 4.84 0 0 1 16.58 18.31A4.84 4.84 0 0 1 12 19.8A4.84 4.84 0 0 1 7.42 18.31A4.84 4.84 0 0 1 4.58 14.41A4.84 4.84 0 0 1 4.58 9.59A4.84 4.84 0 0 1 7.42 5.69A4.84 4.84 0 0 1 12 4.2M12 7.4 13.18 10.38 16.37 10.58 13.9 12.62 14.7 15.72 12 14 9.3 15.72 10.1 12.62 7.63 10.58 10.82 10.38Z"/></svg>
-            {%- endif -%}
           </span>
           {% endif %}
         </div>

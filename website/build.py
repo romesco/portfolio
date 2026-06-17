@@ -891,16 +891,9 @@ def main() -> int:
     for p in featured:
         p.setdefault("links", {})
         p.setdefault("awards", [])
-        # Award medal in the rail. An explicit `medal:` style wins (used while
-        # we're trying out styles); otherwise any award shows the default style.
-        # One of: ribbon | star | accent.
-        mstyle = str(p.get("medal") or "").lower()
-        if not mstyle and p["awards"]:
-            mstyle = "rosette"
-        p["medal"] = mstyle if mstyle in (
-            "rosette", "hanging", "outline", "prize", "seal") else ""
-        pos = str(p.get("medal_pos") or "below").lower()
-        p["medal_pos"] = pos if pos in ("below", "above", "inline", "gutter") else "below"
+        # Award medal (a prize ribbon, see the template) under the year in the
+        # rail, shown when a paper carries an award.
+        p["medal"] = bool(p["awards"])
         p["award_label"] = _delatex("; ".join(p["awards"])) if p["awards"] else ""
         p["venue_full"] = _delatex(str(p["venue_full"])) if p.get("venue_full") else None
         p["media_list"] = normalize_media_list(p.get("media"))

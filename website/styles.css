@@ -344,7 +344,6 @@ section h2 {
   display: flex;
   flex-direction: column;
   gap: 0.05rem;
-  position: relative;
 }
 
 .work-venue {
@@ -364,36 +363,13 @@ section h2 {
   line-height: 1.1;
 }
 
-/* Award medal, sits under the year in the rail. Understated: the style sets
-   only its color; the glyph is monochrome via currentColor. */
+/* Award medal (prize ribbon), under the year in the rail. Understated accent;
+   the glyph is monochrome via currentColor. Shown only on awarded papers. */
 .work-medal {
   display: block;
   margin-top: 0.35rem;
   line-height: 0;
-}
-
-.work-medal--rosette,
-.work-medal--hanging,
-.work-medal--outline,
-.work-medal--prize,
-.work-medal--seal { color: var(--accent); }
-
-/* Medal position within the rail (trying placements).
-   below (default): after the year. */
-.work-rail--mpos-above .work-medal { order: -1; margin-top: 0; margin-bottom: 0.3rem; }
-
-/* inline: medal sits next to the venue, year drops to its own line below. */
-.work-rail--mpos-inline { flex-flow: row wrap; align-items: center; column-gap: 0.3rem; }
-.work-rail--mpos-inline .work-venue { order: 0; }
-.work-rail--mpos-inline .work-medal { order: 1; margin-top: 0; }
-.work-rail--mpos-inline .work-year  { order: 2; flex-basis: 100%; }
-
-/* gutter: medal floated out into the left margin, beside the venue. */
-.work-rail--mpos-gutter .work-medal {
-  position: absolute;
-  left: -1.4rem;
-  top: 0.05rem;
-  margin-top: 0;
+  color: var(--accent);
 }
 
 .work-title {
