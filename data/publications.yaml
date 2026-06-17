@@ -289,6 +289,8 @@
     - {name: "C. Finn", affil: {name: "Stanford", favicon: "/img/stanford.png", url: "https://ai.stanford.edu/~cbfinn/"}}
   featured: true
   title: "DROID: A large-scale in-the-wild robot manipulation dataset"
+  links:
+    project: https://droid-dataset.github.io/
   media:
     src: https://droid-dataset.github.io/videos/droid_teaser_animated.mp4
     autoplay: true
