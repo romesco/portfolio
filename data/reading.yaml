@@ -40,7 +40,7 @@ groups:
         latest:
           title: Reinforcement Learning and Optimal Control
           url: https://web.mit.edu/dimitrib/www/RLbook.html
-          date: 2019
+          date: 2025
         note: "An optimization and dynamic programming authority (MIT), with a book bridging reinforcement learning and optimal control."
 
   - name: Friends & Adventures
