@@ -147,8 +147,8 @@
 
 # ---------- Conferences ----------
 #
-- year: 2026
-  type: conference 
+- year: 2025
+  type: conference
   authors:
     - {name: "K. Huang", equal: true}
     - {name: "R. Scalise", me: true, equal: true}
@@ -171,8 +171,8 @@
   venue_full: 2025 IEEE International Conference on Robotics and Automation (ICRA)
   links: {arxiv: "2510.19495"}
 
-- year: 2026
-  type: conference 
+- year: 2025
+  type: conference
   authors:
     - T. Han
     - Y. Bao
