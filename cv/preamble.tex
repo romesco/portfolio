@@ -64,6 +64,16 @@
     \end{tabular*}\vspace{-7pt}
 }
 
+% Mentee entry: line 1 = "name | project" (left) + years (right); line 2 puts the
+% trajectory ("Next") on its own line so a long destination can't overflow the margin.
+\newcommand{\resumeMentee}[3]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.99\textwidth}{l@{\extracolsep{\fill}}r}
+      #1 & #2 \\
+      {\small\itshape #3} & \\
+    \end{tabular*}\vspace{-7pt}
+}
+
 \newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-4pt}}
 
 \renewcommand{\labelitemii}{}

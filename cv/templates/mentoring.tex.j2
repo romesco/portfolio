@@ -1,7 +1,12 @@
 \resumeSubHeadingListStart
 \BLOCK{ for m in data.mentees }
+\BLOCK{ if m.current }
+\resumeMentee
+{\textbf{\VAR{ m.name }} | \VAR{ m.project }}{\VAR{ m.years.replace("-", " $\\rightarrow$ ") }}{\VAR{ m.current.replace("->", "$\\rightarrow$") }}
+\BLOCK{ else }
 \resumeSubheadingSingleLine
-{\textbf{\VAR{ m.name }} | \VAR{ m.project }\BLOCK{ if m.current } (\VAR{ m.current })\BLOCK{ endif }}{\VAR{ m.years.replace("-", " $\\rightarrow$ ") }}
+{\textbf{\VAR{ m.name }} | \VAR{ m.project }}{\VAR{ m.years.replace("-", " $\\rightarrow$ ") }}
+\BLOCK{ endif }
 \BLOCK{ endfor }
 \BLOCK{ for o in data.other }
 \resumeSubheadingSingleLine{\textbf{\VAR{ o }}}{Monthly}
