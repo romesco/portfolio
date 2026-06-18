@@ -25,9 +25,12 @@ clean:
 	rm -f cv/main.fdb_latexmk cv/main.fls cv/main.synctex.gz
 	rm -f website/*.html website/headshot.jpg website/CNAME
 
-# Regenerate the CV LaTeX from data/ and refresh the gitignored Overleaf staging
-# mirror (.overleaf-cv: CV source + generated tex, no website). Commits the
-# refresh locally; you push it to the 'overleaf' remote with your token.
+# Regenerate the CV LaTeX and refresh the gitignored Overleaf staging mirror
+# (.overleaf-cv), FLATTENED so main.tex sits at the repo root -- Overleaf
+# compiles from the project root (no `latexmk -cd`), so root-level main.tex +
+# generated/ + preamble.tex resolve with zero config. Contents: main.tex,
+# preamble.tex, generated/*.tex, data/*.yaml (no website, no python generator).
+# Commits locally; you push to 'overleaf' with your token.
 PUBLISH_DIR := .overleaf-cv
 publish-cv:
 	@echo ">> regenerating cv/generated from data/"
@@ -40,16 +43,17 @@ publish-cv:
 		exit 1; \
 	fi
 	@test -d $(PUBLISH_DIR)/.git || { echo "ERROR: $(PUBLISH_DIR)/ staging repo not found -- run the Overleaf sync setup first." >&2; exit 1; }
-	@echo ">> refreshing $(PUBLISH_DIR) (CV source + generated tex; no website)"
-	@find $(PUBLISH_DIR) -mindepth 1 -maxdepth 1 ! -name .git ! -name .gitignore -exec rm -rf {} +
-	@cp -r cv $(PUBLISH_DIR)/cv
-	@mkdir -p $(PUBLISH_DIR)/data
+	@echo ">> refreshing $(PUBLISH_DIR) (flattened: main.tex at root + generated/ + data/)"
+	@find $(PUBLISH_DIR) -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+	@printf '%s\n' '*.aux' '*.log' '*.out' '*.fdb_latexmk' '*.fls' '*.synctex.gz' '*.toc' 'main.pdf' > $(PUBLISH_DIR)/.gitignore
+	@cp cv/main.tex cv/preamble.tex $(PUBLISH_DIR)/
+	@mkdir -p $(PUBLISH_DIR)/generated $(PUBLISH_DIR)/data
+	@cp cv/generated/*.tex $(PUBLISH_DIR)/generated/
 	@for f in identity education experience publications honors teaching mentoring service; do \
 		cp data/$$f.yaml $(PUBLISH_DIR)/data/$$f.yaml; \
 	done
-	@cp pyproject.toml uv.lock $(PUBLISH_DIR)/
 	@cd $(PUBLISH_DIR) && git add -A && \
 		if git diff --cached --quiet; then echo ">> no CV changes to publish"; else \
 			git -c user.name="Rosario Scalise" -c user.email="rosario@cs.uw.edu" \
 				commit -q -m "CV: refresh from portfolio $$(date -u +%FT%TZ)" && echo ">> committed CV refresh"; fi
-	@echo ">> done. Push to Overleaf:  cd $(PUBLISH_DIR) && git push overleaf main:master   (enter your Overleaf token; first push to an existing project may need -f)"
+	@echo ">> done. Push to Overleaf:  cd $(PUBLISH_DIR) && git push -f overleaf main:master   (enter your Overleaf token)"
