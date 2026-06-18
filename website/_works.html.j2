@@ -33,9 +33,8 @@
 
 {# Title + meta + TL;DR. Shared by the <summary> (expandable) and the flat row. #}
 {% macro work_head(p) %}
-<span class="work-title{% if p.title_nowrap %} work-title-nowrap{% endif %}">{{ p.title }}{% if p.short %} <span class="work-short">({{ p.short }})</span>{% endif %}{% if p.tldr and p.tldr_style == 'footnote' %} <span class="tldr-fn" tabindex="0" role="note" aria-label="TL;DR: {{ p.tldr }}">tl;dr<span class="tldr-pop">{{ p.tldr }}</span></span>{% endif %}</span>
+<span class="work-title{% if p.title_nowrap %} work-title-nowrap{% endif %}">{{ p.title }}{% if p.short %} <span class="work-short">({{ p.short }})</span>{% endif %}{% if p.tldr %} <span class="tldr-fn" tabindex="0" role="note" aria-label="TL;DR: {{ p.tldr }}">tl;dr<span class="tldr-pop">{{ p.tldr }}</span></span>{% endif %}</span>
             <span class="work-meta">{{ p.authors | authors }}{% if p.links %} {{ p.links | links }}{% endif %}{% if p.awards %} · <span class="award"{% if p.award_short %} title="{{ p.award_label }}"{% endif %}>{{ p.award_short or (p.awards | join(' · ')) }}</span>{% endif %}{% if p.collaborators %}{{ p.collaborators | collaborators }}{% endif %}{% if p.coverage %}{{ p.coverage | coverage }}{% endif %}</span>
-            {% if p.tldr and p.tldr_style != 'footnote' %}<span class="work-tldr{% if p.tldr_style %} work-tldr-{{ p.tldr_style }}{% endif %}" title="{{ p.tldr }}"><strong class="work-tldr-label">TL;DR:</strong> {{ p.tldr }}</span>{% endif %}
 {% endmacro %}
 
 {% macro work_list(pubs, full=false) %}

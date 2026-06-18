@@ -317,18 +317,4 @@
     });
   })();
 </script>
-<script>
-  // The footnote tl;dr marker lives inside <summary>, so a tap would also
-  // toggle the work's dropdown. Swallow its click (keep focus, which drives
-  // the popover on touch).
-  (function () {
-    Array.prototype.forEach.call(document.querySelectorAll('.tldr-fn'), function (el) {
-      el.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof el.focus === 'function') el.focus();
-      });
-    });
-  })();
-</script>
 {% endblock %}

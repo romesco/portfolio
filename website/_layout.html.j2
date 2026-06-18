@@ -120,6 +120,20 @@
     });
   })();
 </script>
+<script>
+  // The "tl;dr" marker can sit inside a <summary>, so a tap would also toggle
+  // the work's dropdown. Swallow its click (keep focus, which drives the popover
+  // on touch). Shared so it works on the homepage and /publications.
+  (function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.tldr-fn'), function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof el.focus === 'function') el.focus();
+      });
+    });
+  })();
+</script>
 {% block scripts %}{% endblock %}
 {% if analytics.umami_src and analytics.umami_id %}
 <script>

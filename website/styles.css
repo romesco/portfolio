@@ -599,52 +599,8 @@ details[open] > .work-summary::before {
   margin-top: 0.1rem;
 }
 
-/* Optional one-line TL;DR under the author/meta line. Clamped to a single line;
-   the full text is in the title tooltip if it overflows. */
-.work-summary .work-tldr {
-  grid-column: 2;
-  grid-row: 3;
-  justify-self: start;
-  max-width: 100%;
-  margin-top: 0.2rem;
-  font-size: 0.9rem;
-  color: var(--fg-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.work-tldr-label {
-  font-weight: 600;
-  color: var(--fg);
-}
-
-/* ---- TL;DR reveal prototypes (per-paper via tldr_style) ---- */
-
-/* Unified "peek": the TL;DR is collapsed and unfurls on the same hover that
-   cracks the media dropdown open, so they reveal together as one gesture (the
-   TL;DR reads as the headline of the peek, a media sliver fades in beneath it).
-   No explicit title cue: it unfurls on hover. Works for media and non-media papers. */
-.work-summary .work-tldr-peek {
-  max-height: 0;
-  margin-top: 0;
-  opacity: 0;
-  transition: max-height 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 240ms ease-out, margin-top 280ms ease-out;
-}
-details.work[open] .work-tldr-peek {
-  max-height: 2.4rem;
-  margin-top: 0.2rem;
-  opacity: 1;
-}
-@media (hover: hover) {
-  details.work:hover .work-tldr-peek {
-    max-height: 2.4rem;
-    margin-top: 0.2rem;
-    opacity: 1;
-  }
-}
-
-/* (3) footnote: a "tl;dr" marker by the title pops a small card. */
+/* The TL;DR: a small "tl;dr" marker (a faint pill) by the title that pops a
+   card on hover/focus. The single TL;DR style across the site. */
 .tldr-fn {
   position: relative;
   margin-left: 0.4em;

@@ -935,10 +935,6 @@ def main() -> int:
         p["award_at"] = _delatex(str(p["award_at"])).strip() if p.get("award_at") else ""
         # Optional one-line TL;DR shown under the title.
         p["tldr"] = _delatex(str(p["tldr"])).strip() if p.get("tldr") else ""
-        # Optional reveal style for the TL;DR (prototype): "" = always visible,
-        # "redact" = wipeable cover, "hover" = unfurl on row hover, "footnote" =
-        # a tl;dr marker by the title that pops a card.
-        p["tldr_style"] = str(p["tldr_style"]).strip() if p.get("tldr_style") else ""
         # Optional shorthand / codename (e.g. "SGS") shown as a quiet muted
         # parenthetical after the title. Auto-suppressed when it already appears
         # in the title, so papers whose acronym is already in the title (DROID,
