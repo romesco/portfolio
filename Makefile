@@ -1,4 +1,4 @@
-.PHONY: all cv site serve watch test clean
+.PHONY: all cv site serve watch test clean publish-cv
 
 all: cv site
 
@@ -24,3 +24,32 @@ clean:
 	rm -f cv/generated/*.tex cv/main.pdf cv/main.aux cv/main.log cv/main.out
 	rm -f cv/main.fdb_latexmk cv/main.fls cv/main.synctex.gz
 	rm -f website/*.html website/headshot.jpg website/CNAME
+
+# Regenerate the CV LaTeX from data/ and refresh the gitignored Overleaf staging
+# mirror (.overleaf-cv: CV source + generated tex, no website). Commits the
+# refresh locally; you push it to the 'overleaf' remote with your token.
+PUBLISH_DIR := .overleaf-cv
+publish-cv:
+	@echo ">> regenerating cv/generated from data/"
+	@if command -v uv >/dev/null 2>&1; then \
+		uv run python cv/build.py; \
+	elif [ -x .venv/bin/python ] && .venv/bin/python -c "import pydantic, jinja2" 2>/dev/null; then \
+		.venv/bin/python cv/build.py; \
+	else \
+		echo "ERROR: need 'uv' on PATH or a populated .venv to regenerate (system python3 lacks pydantic/jinja2) -- run 'make publish-cv' on the host." >&2; \
+		exit 1; \
+	fi
+	@test -d $(PUBLISH_DIR)/.git || { echo "ERROR: $(PUBLISH_DIR)/ staging repo not found -- run the Overleaf sync setup first." >&2; exit 1; }
+	@echo ">> refreshing $(PUBLISH_DIR) (CV source + generated tex; no website)"
+	@find $(PUBLISH_DIR) -mindepth 1 -maxdepth 1 ! -name .git ! -name .gitignore -exec rm -rf {} +
+	@cp -r cv $(PUBLISH_DIR)/cv
+	@mkdir -p $(PUBLISH_DIR)/data
+	@for f in identity education experience publications honors teaching mentoring service; do \
+		cp data/$$f.yaml $(PUBLISH_DIR)/data/$$f.yaml; \
+	done
+	@cp pyproject.toml uv.lock $(PUBLISH_DIR)/
+	@cd $(PUBLISH_DIR) && git add -A && \
+		if git diff --cached --quiet; then echo ">> no CV changes to publish"; else \
+			git -c user.name="Rosario Scalise" -c user.email="rosario@cs.uw.edu" \
+				commit -q -m "CV: refresh from portfolio $$(date -u +%FT%TZ)" && echo ">> committed CV refresh"; fi
+	@echo ">> done. Push to Overleaf:  cd $(PUBLISH_DIR) && git push overleaf main:master   (enter your Overleaf token; first push to an existing project may need -f)"
