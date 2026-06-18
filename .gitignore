@@ -26,6 +26,10 @@ website/CNAME
 # uncommitted; see notes/applications-and-honors.md
 notes/
 
+# Overleaf CV publish staging — a local mirror (CV source + generated tex, no
+# website) pushed to the Overleaf git remote. Not part of the portfolio repo.
+.overleaf-cv/
+
 # Memory & harness
 .claude-memory/
 .xdg-config/
