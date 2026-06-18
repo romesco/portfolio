@@ -647,16 +647,31 @@ details.work[open] .work-tldr-peek {
 /* (3) footnote: a "tl;dr" marker by the title pops a small card. */
 .tldr-fn {
   position: relative;
-  margin-left: 0.3em;
-  font-size: 0.58em;
+  margin-left: 0.4em;
+  padding: 0.1em 0.4em;
+  font-size: 0.6em;
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   vertical-align: super;
-  color: var(--fg-faint);
+  color: var(--fg-muted);
+  /* A faint pill so it reads as an interactive chip rather than just tiny text,
+     while staying understated. Brightens on hover/focus. */
+  background: color-mix(in oklch, var(--accent) 7%, transparent);
+  border: 1px solid color-mix(in oklch, var(--accent) 22%, transparent);
+  border-radius: 5px;
   cursor: help;
   white-space: nowrap;
+  transition: color 160ms ease-out, background 160ms ease-out, border-color 160ms ease-out;
 }
-.tldr-fn:hover, .tldr-fn:focus { color: var(--accent); outline: none; }
+.tldr-fn:hover, .tldr-fn:focus {
+  color: var(--accent);
+  background: color-mix(in oklch, var(--accent) 15%, transparent);
+  border-color: color-mix(in oklch, var(--accent) 42%, transparent);
+  outline: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tldr-fn { transition: none; }
+}
 .tldr-pop {
   position: absolute;
   left: -0.2em;
