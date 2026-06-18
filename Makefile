@@ -56,4 +56,4 @@ publish-cv:
 		if git diff --cached --quiet; then echo ">> no CV changes to publish"; else \
 			git -c user.name="Rosario Scalise" -c user.email="rosario@cs.uw.edu" \
 				commit -q -m "CV: refresh from portfolio $$(date -u +%FT%TZ)" && echo ">> committed CV refresh"; fi
-	@echo ">> done. Push to Overleaf:  cd $(PUBLISH_DIR) && git push -f overleaf main:master   (enter your Overleaf token)"
+	@echo ">> done. Push to Overleaf:  cd $(PUBLISH_DIR) && git push overleaf main:main   (enter your Overleaf token)"
