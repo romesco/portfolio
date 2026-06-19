@@ -1,12 +1,8 @@
 \resumeSubHeadingListStart
+\#{ CV drops the " (RISE)" short-name from the project; the website keeps it. A mentee with no trajectory (empty 3rd arg) still gets the second line, so it spaces like the rest. }
 \BLOCK{ for m in data.mentees }
-\BLOCK{ if m.current }
 \resumeMentee
-{\textbf{\VAR{ m.name }} | \VAR{ m.project }}{\VAR{ m.years.replace("-", " $\\rightarrow$ ") }}{\VAR{ m.current.replace("->", "$\\rightarrow$") }}
-\BLOCK{ else }
-\resumeSubheadingSingleLine
-{\textbf{\VAR{ m.name }} | \VAR{ m.project }}{\VAR{ m.years.replace("-", " $\\rightarrow$ ") }}
-\BLOCK{ endif }
+{\textbf{\VAR{ m.name }} | \VAR{ m.project.replace(" (RISE)", "") }}{\VAR{ m.years.replace("-", " $\\rightarrow$ ") }}{\VAR{ (m.current or "").replace("->", "$\\rightarrow$") }}
 \BLOCK{ endfor }
 \BLOCK{ for o in data.other }
 \resumeSubheadingSingleLine{\textbf{\VAR{ o }}}{Monthly}
