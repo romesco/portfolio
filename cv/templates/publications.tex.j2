@@ -3,9 +3,13 @@
 \VAR{ format_authors(p.authors) } (\VAR{ p.year }).
 \VAR{ p.title }.
 \BLOCK{ if p.venue }\textit{\VAR{ p.venue_full or p.venue }}. \BLOCK{ endif }\VAR{ format_links(p.links) }
+\BLOCK{ if p.cv_award }
+\textcolor{red}{\textbf{\VAR{ p.cv_award }}}\BLOCK{ if p.cv_award_venue } \textperiodcentered{} \textit{\VAR{ p.cv_award_venue }}\BLOCK{ endif }
+\BLOCK{ else }
 \BLOCK{ for award in p.awards }
 \textcolor{red}{\textbf{\VAR{ award }}}
 \BLOCK{ endfor }
+\BLOCK{ endif }
 \vspace{-3pt}
 \BLOCK{ endmacro }
 \BLOCK{ if groups.preprint }

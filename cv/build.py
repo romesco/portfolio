@@ -154,6 +154,13 @@ class Publication(BaseModel):
     venue_full: str | None = None
     links: Links = Field(default_factory=Links)
     awards: list[str] = Field(default_factory=list)
+    # CV-only award rendering. When `cv_award` is set it replaces the verbose
+    # `awards` strings in the CV: a short red label (e.g. "Best Paper Award",
+    # "Finalist"), optionally followed by `cv_award_venue` styled like a venue
+    # (e.g. "ROAR Workshop @ RSS") for awards won at a workshop whose parent
+    # conference differs from the paper's own venue. The website ignores both.
+    cv_award: str | None = None
+    cv_award_venue: str | None = None
 
     @field_validator("authors", mode="before")
     @classmethod

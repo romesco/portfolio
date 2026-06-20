@@ -197,6 +197,9 @@
     - "Best Paper Finalist, Resource-Rational Robot Learning Workshop, CoRL 2025"
   award_short: "Best Paper Finalist"
   award_at: "CoRL WS"
+  # CV-only: short red label + workshop styled as a venue (paper's own venue is ICLR).
+  cv_award: "Finalist"
+  cv_award_venue: "Resource-Rational Robot Learning Workshop @ CoRL"
 
 - year: 2025
   type: conference
@@ -217,6 +220,9 @@
     - "Best Paper Award, Resilient Off-road Autonomous Robotics (ROAR) Workshop, RSS 2025"
   award_short: "Best Paper Award"
   award_at: "RSS WS"
+  # CV-only: short red label + workshop styled as a venue (paper's own venue is CoRL).
+  cv_award: "Best Paper Award"
+  cv_award_venue: "ROAR Workshop @ RSS"
 
 - year: 2025
   type: conference
