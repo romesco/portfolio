@@ -68,7 +68,7 @@ IMAGE_EXTS = {".gif", ".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg"}
 
 # Fallback favicon pool if site.yaml doesn't define `favicons`. A random one
 # is rendered as an inline SVG emoji on each page load.
-DEFAULT_FAVICONS = ["🤖", "🦾", "🧠", "🧬", "⚙️", "🛰️", "🔬", "🔭", "⚛️", "✨"]
+DEFAULT_FAVICONS = ["🤖", "🦾", "🧪", "🧬", "⚙️", "🛰️", "🔬", "🔭", "⚛️", "✨"]
 
 FRONT_MATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 
