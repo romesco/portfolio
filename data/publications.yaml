@@ -198,7 +198,7 @@
   award_short: "Best Paper Finalist"
   award_at: "CoRL WS"
   # CV-only: short red label + workshop styled as a venue (paper's own venue is ICLR).
-  cv_award: "Finalist"
+  cv_award: "Best Paper Finalist"
   cv_award_venue: "Resource-Rational Robot Learning Workshop @ CoRL"
 
 - year: 2025
