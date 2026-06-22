@@ -841,6 +841,7 @@ def load_teaching() -> list[dict]:
             "institution": _delatex(str(t.get("institution") or "")).strip(),
             "term": _delatex(str(t.get("term") or "")).strip(),
             "highlight": _delatex(str(t.get("highlight") or "")).strip(),
+            "students": _delatex(str(t.get("students") or "")).strip(),
         })
     return courses
 

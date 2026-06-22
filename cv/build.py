@@ -50,6 +50,7 @@ class Teaching(BaseModel):
     institution: str
     term: str | None = None
     highlight: str | None = None  # optional red note under the entry (e.g. a rating)
+    students: str | None = None  # optional enrollment note shown next to the role
 
 
 class Mentee(BaseModel):
@@ -231,6 +232,8 @@ def latex_escape(s) -> str:
         "~": r"\textasciitilde{}",
         "^": r"\textasciicircum{}",
         "\\": r"\textbackslash{}",
+        ">": r"\textgreater{}",  # OT1 renders a bare > as ¿ — escape it
+        "<": r"\textless{}",     # OT1 renders a bare < as ¡ — escape it
     }
     return "".join(replacements.get(ch, ch) for ch in str(s))
 

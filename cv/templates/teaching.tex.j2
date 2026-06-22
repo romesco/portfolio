@@ -2,7 +2,7 @@
 \resumeSubHeadingListStart
 \BLOCK{ for t in entries }
 \resumeSubheading
-{\VAR{ t.course }}{\VAR{ t.role }}
+{\VAR{ t.course }}{\VAR{ t.role }\BLOCK{ if t.students } \textperiodcentered{} \VAR{ t.students|latex_escape }\BLOCK{ endif }}
 {\VAR{ t.institution }\BLOCK{ if t.highlight } \textperiodcentered{} \textcolor{red}{\textbf{\VAR{ t.highlight|latex_escape }}}\BLOCK{ endif }}{\VAR{ t.term or "" }}
 \BLOCK{ endfor }
 \resumeSubHeadingListEnd

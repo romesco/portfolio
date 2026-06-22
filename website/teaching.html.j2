@@ -18,7 +18,7 @@
       {% for c in courses %}
       <li class="teaching-item">
         <span class="teaching-course">{{ c.course }}</span>
-        <span class="teaching-meta">{{ c.role }}{% if c.institution %} · {{ c.institution }}{% endif %}{% if c.term %} · {{ c.term }}{% endif %}</span>
+        <span class="teaching-meta">{{ c.role }}{% if c.students %} · {{ c.students }}{% endif %}{% if c.institution %} · {{ c.institution }}{% endif %}{% if c.term %} · {{ c.term }}{% endif %}</span>
         {% if c.highlight %}<span class="teaching-highlight">{{ c.highlight }}</span>{% endif %}
       </li>
       {% endfor %}
