@@ -1801,3 +1801,28 @@ a.press-outlet-link:hover .press-outlet-name {
   color: var(--fg-muted);
   font-variant-numeric: lining-nums tabular-nums;
 }
+
+/* ----------------------------------------------------------------
+   Awards & honors (/awards): a quiet, dignified column of names.
+   Years are intentionally omitted for now; hairline rules carry the
+   rhythm, so the list stays calm without bullets, chips, or chrome.
+---------------------------------------------------------------- */
+.awards-list {
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  /* A comfortable reading measure: award names, not full paragraphs. */
+  max-width: 60ch;
+}
+
+.award-item {
+  margin: 0;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 1.0625rem;
+  line-height: var(--leading-tight);
+  color: var(--fg);
+}
+
+.award-item:first-child { padding-top: 0.15rem; }
+.award-item:last-child { border-bottom: 0; }

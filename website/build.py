@@ -47,6 +47,7 @@ DATA_DIR = ROOT.parent / "data"
 SITE_YAML = ROOT / "site.yaml"
 IDENTITY_YAML = DATA_DIR / "identity.yaml"
 PUBS_YAML = DATA_DIR / "publications.yaml"
+HONORS_YAML = DATA_DIR / "honors.yaml"
 NEWS_YAML = DATA_DIR / "news.yaml"
 MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
@@ -780,6 +781,23 @@ def load_press() -> list[dict]:
     return works
 
 
+def load_honors() -> list[dict]:
+    """Load data/honors.yaml (the same awards/fellowships list the CV uses) into
+    render-ready dicts for the /awards page. Preserves file order (newest-first).
+    The `year` is carried through but the page deliberately omits it for now;
+    names are de-LaTeXed (e.g. `\\&` -> `&`) for the web."""
+    if not HONORS_YAML.exists():
+        return []
+    raw = yaml.safe_load(HONORS_YAML.read_text()) or []
+    honors: list[dict] = []
+    for h in raw:
+        name = _delatex(str(h.get("name") or "")).strip()
+        if not name:
+            continue
+        honors.append({"name": name, "year": str(h.get("year") or "").strip()})
+    return honors
+
+
 def _delatex(s: str) -> str:
     for k, v in _LATEX_UNESCAPE.items():
         s = s.replace(k, v)
@@ -1096,6 +1114,21 @@ def main() -> int:
         (ROOT / "inthepress.html").write_text(html)
         hits = sum(len(w["coverage"]) for w in press_works)
         print(f"wrote inthepress.html ({hits} hits across {len(press_works)} works)")
+
+    # Awards & honors: a standalone page at /awards, sourced from data/honors.yaml
+    # (the same list the CV uses). Years are intentionally omitted for now.
+    honors = load_honors()
+    if honors:
+        html = env.get_template("awards.html.j2").render(
+            identity=identity,
+            title="Awards & Honors",
+            description=f"Awards, fellowships, and honors received by {identity.get('name', '')}.".strip(),
+            honors=honors,
+            css_version=css_version,
+            favicons=favicons,
+        )
+        (ROOT / "awards.html").write_text(html)
+        print(f"wrote awards.html ({len(honors)} honors)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.

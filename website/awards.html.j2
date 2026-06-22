@@ -1,0 +1,27 @@
+{# /awards: awards, fellowships, and honors, sourced from data/honors.yaml (the
+   same list the CV uses, single source of truth). Years are intentionally
+   omitted for now. Extends the shared layout. Generated to awards.html by
+   build.py: do NOT hand-edit. #}
+{% extends "_layout.html.j2" %}
+
+{% block title %}{{ title }} · {{ identity.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+
+{% block topbar %}
+  <p class="backlink"><a href="/">← root</a></p>
+{% endblock %}
+
+{% block content %}
+  <section class="awards-section">
+    <h2>{{ title }}</h2>
+    {% if honors %}
+    <ul class="awards-list">
+      {% for h in honors %}
+      <li class="award-item">{{ h.name }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="bio"><em>No honors recorded yet: add entries to <code>data/honors.yaml</code>.</em></p>
+    {% endif %}
+  </section>
+{% endblock %}
