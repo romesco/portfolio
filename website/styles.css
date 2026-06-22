@@ -1826,3 +1826,47 @@ a.press-outlet-link:hover .press-outlet-name {
 
 .award-item:first-child { padding-top: 0.15rem; }
 .award-item:last-child { border-bottom: 0; }
+
+/* Grants Awarded: a sibling section under Awards & Honors. Each grant stacks
+   its title, funding agency, and monetary total, the total set in lining
+   tabular figures so amounts read as a clean column down the page. */
+.grants-list {
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 60ch;
+}
+
+.grant-item {
+  margin: 0;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.grant-item:first-child { padding-top: 0.15rem; }
+.grant-item:last-child { border-bottom: 0; }
+
+.grant-title {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--fg);
+}
+
+.grant-agency {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+}
+
+.grant-amount {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--fg);
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.01em;
+}

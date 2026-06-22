@@ -48,6 +48,7 @@ SITE_YAML = ROOT / "site.yaml"
 IDENTITY_YAML = DATA_DIR / "identity.yaml"
 PUBS_YAML = DATA_DIR / "publications.yaml"
 HONORS_YAML = DATA_DIR / "honors.yaml"
+GRANTS_YAML = DATA_DIR / "grants.yaml"
 NEWS_YAML = DATA_DIR / "news.yaml"
 MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
@@ -798,6 +799,29 @@ def load_honors() -> list[dict]:
     return honors
 
 
+def load_grants() -> list[dict]:
+    """Load data/grants.yaml into render-ready dicts for the /awards "Grants
+    Awarded" section. Preserves file order. `title`, `agency`, and `amount` are
+    shown; `amount` is the monetary total as a display string. `year`/`role` are
+    carried through but not displayed yet. Names are de-LaTeXed for the web."""
+    if not GRANTS_YAML.exists():
+        return []
+    raw = yaml.safe_load(GRANTS_YAML.read_text()) or []
+    grants: list[dict] = []
+    for g in raw:
+        title = _delatex(str(g.get("title") or "")).strip()
+        if not title:
+            continue
+        grants.append({
+            "title": title,
+            "agency": _delatex(str(g.get("agency") or "")).strip(),
+            "amount": _delatex(str(g.get("amount") or "")).strip(),
+            "role": _delatex(str(g.get("role") or "")).strip(),
+            "year": str(g.get("year") or "").strip(),
+        })
+    return grants
+
+
 def _delatex(s: str) -> str:
     for k, v in _LATEX_UNESCAPE.items():
         s = s.replace(k, v)
@@ -1116,19 +1140,22 @@ def main() -> int:
         print(f"wrote inthepress.html ({hits} hits across {len(press_works)} works)")
 
     # Awards & honors: a standalone page at /awards, sourced from data/honors.yaml
-    # (the same list the CV uses). Years are intentionally omitted for now.
+    # (the same list the CV uses). Years are intentionally omitted for now. A
+    # "Grants Awarded" section below it is sourced from data/grants.yaml.
     honors = load_honors()
-    if honors:
+    grants = load_grants()
+    if honors or grants:
         html = env.get_template("awards.html.j2").render(
             identity=identity,
             title="Awards & Honors",
-            description=f"Awards, fellowships, and honors received by {identity.get('name', '')}.".strip(),
+            description=f"Awards, fellowships, grants, and honors received by {identity.get('name', '')}.".strip(),
             honors=honors,
+            grants=grants,
             css_version=css_version,
             favicons=favicons,
         )
         (ROOT / "awards.html").write_text(html)
-        print(f"wrote awards.html ({len(honors)} honors)")
+        print(f"wrote awards.html ({len(honors)} honors, {len(grants)} grants)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.

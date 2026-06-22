@@ -1,0 +1,20 @@
+# Grants written and won. Shown in the "Grants Awarded" section of the /awards
+# page (directly under Awards & Honors). Single source of truth: the CV can read
+# this list too if/when we wire it into the commented "Grant Proposals" section.
+#
+# Each entry:
+#   title:  grant / proposal title            (required)
+#   agency: funding agency or sponsor         (required)
+#   amount: monetary total, as a display string e.g. "$250,000" or "$1.2M"
+#                                              (required; shown underneath)
+#   role:   optional, e.g. "PI" / "co-PI"     (carried; not shown yet)
+#   year:   optional; carried but NOT displayed yet (years are off /awards for now)
+#
+# The section stays hidden until at least one real entry is added below. Example
+# shape (delete this comment block's example and add your own):
+#
+# - title: "Robust Imitation Learning for Assistive Manipulation"
+#   agency: National Science Foundation (NSF)
+#   amount: "$500,000"
+#   role: PI
+#   year: "2024"

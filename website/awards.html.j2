@@ -24,4 +24,19 @@
     <p class="bio"><em>No honors recorded yet: add entries to <code>data/honors.yaml</code>.</em></p>
     {% endif %}
   </section>
+
+  {% if grants %}
+  <section class="grants-section">
+    <h2>Grants Awarded</h2>
+    <ul class="grants-list">
+      {% for g in grants %}
+      <li class="grant-item">
+        <span class="grant-title">{{ g.title }}</span>
+        {% if g.agency %}<span class="grant-agency">{{ g.agency }}</span>{% endif %}
+        {% if g.amount %}<span class="grant-amount">{{ g.amount }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
 {% endblock %}
