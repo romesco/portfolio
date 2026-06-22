@@ -413,8 +413,9 @@
   venue: HRI
   venue_full: International Conference on Human-Robot Interaction (HRI)
   links: {pdf: "https://personalrobotics.cs.washington.edu/publications/bhattacharjee2020userpref.pdf"}
-  # CV-only: NeurIPS best-demo award for this robot-assisted feeding work (moved from Honors).
-  cv_award: "Best Demonstration Award @ NeurIPS"
+  # CV-only: NeurIPS best-demo award for this robot-assisted feeding work (also in Honors).
+  cv_award: "Best Demonstration Award"
+  cv_award_venue: "NeurIPS"
   coverage:
     - {outlet: Futurism, url: "https://futurism.com/autonomous-robot-arm-feeds-people"}
     - {outlet: New Atlas, url: "https://newatlas.com/autonomous-robot-arm-feeding/58844/"}
