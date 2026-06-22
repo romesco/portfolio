@@ -49,7 +49,7 @@ publish-cv:
 	@cp cv/main.tex cv/preamble.tex $(PUBLISH_DIR)/
 	@mkdir -p $(PUBLISH_DIR)/generated $(PUBLISH_DIR)/data
 	@cp cv/generated/*.tex $(PUBLISH_DIR)/generated/
-	@for f in identity education experience publications honors teaching mentoring service; do \
+	@for f in identity education experience publications honors grants teaching mentoring service; do \
 		cp data/$$f.yaml $(PUBLISH_DIR)/data/$$f.yaml; \
 	done
 	@cd $(PUBLISH_DIR) && git add -A && \

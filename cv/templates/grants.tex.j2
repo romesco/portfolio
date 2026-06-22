@@ -1,0 +1,8 @@
+\BLOCK{ if entries }
+\section{Grants}
+\resumeSubHeadingListStart
+\BLOCK{ for g in entries }
+\resumeSubheading{\VAR{ g.title|latex_escape }}{\VAR{ g.amount|latex_escape }}{\VAR{ g.agency|latex_escape }}{}
+\BLOCK{ endfor }
+\resumeSubHeadingListEnd
+\BLOCK{ endif }

@@ -28,6 +28,14 @@ class Honor(BaseModel):
     year: str  # may be a year, range, or compound like "2013, 2014, 2015"
 
 
+class Grant(BaseModel):
+    title: str
+    agency: str
+    amount: str  # display string, e.g. "$500,000"; the `$` is LaTeX-escaped
+    role: str | None = None  # e.g. PI / co-PI; carried, not rendered yet
+    year: str | None = None  # carried, not rendered yet
+
+
 class Education(BaseModel):
     degree: str
     field: str | None = None
@@ -175,6 +183,7 @@ class Publication(BaseModel):
 SECTIONS: list[tuple[str, type, str]] = [
     ("identity", IdentityModel, "root"),
     ("honors", Honor, "list"),
+    ("grants", Grant, "list"),
     ("education", Education, "list"),
     ("teaching", Teaching, "list"),
     ("mentoring", MentoringSection, "root"),
