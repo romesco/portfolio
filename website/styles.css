@@ -1870,3 +1870,45 @@ a.press-outlet-link:hover .press-outlet-name {
   font-variant-numeric: lining-nums tabular-nums;
   letter-spacing: 0.01em;
 }
+
+/* Teaching (/teaching): courses taught & assisted, same calm list rhythm as
+   Awards. The meta line is muted; the optional highlight uses the accent in
+   italic, matching how a publication award reads inline. */
+.teaching-list {
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 60ch;
+}
+
+.teaching-item {
+  margin: 0;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.teaching-item:first-child { padding-top: 0.15rem; }
+.teaching-item:last-child { border-bottom: 0; }
+
+.teaching-course {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--fg);
+}
+
+.teaching-meta {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+}
+
+.teaching-highlight {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--accent);
+}

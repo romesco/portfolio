@@ -49,6 +49,7 @@ IDENTITY_YAML = DATA_DIR / "identity.yaml"
 PUBS_YAML = DATA_DIR / "publications.yaml"
 HONORS_YAML = DATA_DIR / "honors.yaml"
 GRANTS_YAML = DATA_DIR / "grants.yaml"
+TEACHING_YAML = DATA_DIR / "teaching.yaml"
 NEWS_YAML = DATA_DIR / "news.yaml"
 MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
@@ -822,6 +823,28 @@ def load_grants() -> list[dict]:
     return grants
 
 
+def load_teaching() -> list[dict]:
+    """Load data/teaching.yaml (the same list the CV uses) into render-ready dicts
+    for the /teaching page. Preserves file order. `highlight` is an optional note
+    (e.g. a TA-rating standing). Text is de-LaTeXed for the web."""
+    if not TEACHING_YAML.exists():
+        return []
+    raw = yaml.safe_load(TEACHING_YAML.read_text()) or []
+    courses: list[dict] = []
+    for t in raw:
+        course = _delatex(str(t.get("course") or "")).strip()
+        if not course:
+            continue
+        courses.append({
+            "course": course,
+            "role": _delatex(str(t.get("role") or "")).strip(),
+            "institution": _delatex(str(t.get("institution") or "")).strip(),
+            "term": _delatex(str(t.get("term") or "")).strip(),
+            "highlight": _delatex(str(t.get("highlight") or "")).strip(),
+        })
+    return courses
+
+
 def _delatex(s: str) -> str:
     for k, v in _LATEX_UNESCAPE.items():
         s = s.replace(k, v)
@@ -1156,6 +1179,22 @@ def main() -> int:
         )
         (ROOT / "awards.html").write_text(html)
         print(f"wrote awards.html ({len(honors)} honors, {len(grants)} grants)")
+
+    # Teaching: a standalone page at /teaching, sourced from data/teaching.yaml
+    # (the same list the CV uses). Each course shows role, institution, term, and
+    # an optional highlight note.
+    teaching = load_teaching()
+    if teaching:
+        html = env.get_template("teaching.html.j2").render(
+            identity=identity,
+            title="Teaching",
+            description=f"Courses {identity.get('name', '')} has taught and assisted.".strip(),
+            courses=teaching,
+            css_version=css_version,
+            favicons=favicons,
+        )
+        (ROOT / "teaching.html").write_text(html)
+        print(f"wrote teaching.html ({len(teaching)} courses)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.

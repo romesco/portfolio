@@ -1,0 +1,30 @@
+{# /teaching: courses taught & assisted, sourced from data/teaching.yaml (the
+   same list the CV uses, single source of truth). Extends the shared layout.
+   Generated to teaching.html by build.py: do NOT hand-edit. #}
+{% extends "_layout.html.j2" %}
+
+{% block title %}{{ title }} · {{ identity.name }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
+
+{% block topbar %}
+  <p class="backlink"><a href="/">← root</a></p>
+{% endblock %}
+
+{% block content %}
+  <section class="teaching-section">
+    <h2>{{ title }}</h2>
+    {% if courses %}
+    <ul class="teaching-list">
+      {% for c in courses %}
+      <li class="teaching-item">
+        <span class="teaching-course">{{ c.course }}</span>
+        <span class="teaching-meta">{{ c.role }}{% if c.institution %} · {{ c.institution }}{% endif %}{% if c.term %} · {{ c.term }}{% endif %}</span>
+        {% if c.highlight %}<span class="teaching-highlight">{{ c.highlight }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="bio"><em>No courses recorded yet: add entries to <code>data/teaching.yaml</code>.</em></p>
+    {% endif %}
+  </section>
+{% endblock %}
