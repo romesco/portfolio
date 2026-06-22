@@ -49,6 +49,7 @@ class Teaching(BaseModel):
     role: str
     institution: str
     term: str | None = None
+    highlight: str | None = None  # optional red note under the entry (e.g. a rating)
 
 
 class Mentee(BaseModel):

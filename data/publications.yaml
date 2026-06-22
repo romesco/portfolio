@@ -465,8 +465,8 @@
   authors:
     - O. Zhang
     - Q. Peng
-    - {name: "R. Scalise", me: true}
-    - B. Boots
+    - {name: "R. Scalise", me: true, dagger: true}
+    - {name: "B. Boots", dagger: true}
   title: "Parental Guidance: Efficient Lifelong Learning through Evolutionary Distillation"
   short: PG-1
   links:

@@ -1,20 +1,16 @@
 # Grants written and won. Shown in the "Grants Awarded" section of the /awards
-# page (directly under Awards & Honors). Single source of truth: the CV can read
-# this list too if/when we wire it into the commented "Grant Proposals" section.
+# page and the "Grants" section of the CV. Single source of truth for both.
 #
 # Each entry:
 #   title:  grant / proposal title            (required)
 #   agency: funding agency or sponsor         (required)
-#   amount: monetary total, as a display string e.g. "$250,000" or "$1.2M"
-#                                              (required; shown underneath)
+#   amount: monetary total, as a display string, e.g. "$250,000". For a compute
+#           allocation, give the literal award plus an estimated cash-equivalent,
+#           e.g. "50,000 GPU-hours (est. $150,000)".
 #   role:   optional, e.g. "PI" / "co-PI"     (carried; not shown yet)
 #   year:   optional; carried but NOT displayed yet (years are off /awards for now)
-#
-# The section stays hidden until at least one real entry is added below. Example
-# shape (delete this comment block's example and add your own):
-#
-# - title: "Robust Imitation Learning for Assistive Manipulation"
-#   agency: National Science Foundation (NSF)
-#   amount: "$500,000"
-#   role: PI
-#   year: "2024"
+
+- title: "NSF ACCESS Allocation"
+  agency: National Science Foundation (NSF)
+  # 50,000 GPU-hours valued at a cloud-equivalent ~$3.00/A100-GPU-hour on-demand.
+  amount: "50,000 GPU-hours (est. $150,000)"

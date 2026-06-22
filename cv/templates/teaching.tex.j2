@@ -4,6 +4,11 @@
 \resumeSubheading
 {\VAR{ t.course }}{\VAR{ t.role }}
 {\VAR{ t.institution }}{\VAR{ t.term or "" }}
+\BLOCK{ if t.highlight }
+\resumeItemListStart
+\resumeItem{\textcolor{red}{\textbf{\VAR{ t.highlight|latex_escape }}}}
+\resumeItemListEnd
+\BLOCK{ endif }
 \BLOCK{ endfor }
 \resumeSubHeadingListEnd
 \BLOCK{ endif }
