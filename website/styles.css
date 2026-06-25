@@ -1942,9 +1942,6 @@ a.press-outlet-link:hover .press-outlet-name {
   border-radius: 10px;
   overflow: hidden;
   background-color: var(--bg);
-  /* faint dot grid for an "infinite canvas" feel */
-  background-image: radial-gradient(circle at 1px 1px, var(--rule) 1px, transparent 1.4px);
-  background-size: 26px 26px;
 }
 
 #tree-canvas {

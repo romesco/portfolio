@@ -117,8 +117,9 @@
     gNodes.appendChild(g);
   });
 
-  // --- view transform (pan / zoom) ---
+  // --- view transform (pan / zoom) + cursor field ---
   var view = { x: 0, y: 0, k: 1 };
+  var mouse = { x: 0, y: 0, active: false };
   function applyView() {
     gViewport.setAttribute('transform',
       'translate(' + view.x + ',' + view.y + ') scale(' + view.k + ')');
@@ -143,6 +144,9 @@
   // --- physics: spring-to-target + soft anti-overlap + slow drift, well damped ---
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var K_SPRING = 0.02, DAMP = 0.85, MIN_DIST = 108, K_REPEL = 0.04, MAX_PUSH = 1.2, DRIFT = 2.2;
+  // Subtle cursor field: nearby names ease a few px away from the pointer, then
+  // the spring eases them back. CURSOR_MAX / K_SPRING bounds the displacement.
+  var CURSOR_R = 170, K_CURSOR = 0.0014, CURSOR_MAX = 0.18;
   var t = 0, raf = 0;
   function step() {
     t += 0.016;
@@ -163,6 +167,17 @@
           var mag = Math.min(K_REPEL * (MIN_DIST - d), MAX_PUSH);
           var ux = (dx / d) * mag, uy = (dy / d) * mag;
           a.fX += ux; a.fY += uy; b.fX -= ux; b.fY -= uy;
+        }
+      }
+    }
+    if (mouse.active) {
+      for (i = 0; i < nodes.length; i++) {
+        n = nodes[i];
+        var cdx = n.x - mouse.x, cdy = n.y - mouse.y;
+        var cd = Math.sqrt(cdx * cdx + cdy * cdy) || 0.01;
+        if (cd < CURSOR_R) {
+          var cmag = Math.min(K_CURSOR * (CURSOR_R - cd), CURSOR_MAX);
+          n.fX += (cdx / cd) * cmag; n.fY += (cdy / cd) * cmag;
         }
       }
     }
@@ -205,10 +220,15 @@
     svg.classList.add('is-grabbing');
   });
   svg.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'mouse') {
+      var w = toWorld(e.clientX, e.clientY);
+      mouse.x = w.x; mouse.y = w.y; mouse.active = true;
+    }
     if (!panning) return;
     view.x += e.clientX - panLast.x; view.y += e.clientY - panLast.y;
     panLast = { x: e.clientX, y: e.clientY }; applyView();
   });
+  svg.addEventListener('pointerleave', function () { mouse.active = false; });
   function endPan() { panning = false; svg.classList.remove('is-grabbing'); }
   svg.addEventListener('pointerup', endPan);
   svg.addEventListener('pointercancel', endPan);
