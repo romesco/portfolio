@@ -125,19 +125,22 @@
       'translate(' + view.x + ',' + view.y + ') scale(' + view.k + ')');
   }
   function fit() {
-    var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    var minX = Infinity, maxX = -Infinity, maxY = -Infinity;
     nodes.forEach(function (n) {
       if (n.tx < minX) minX = n.tx; if (n.tx > maxX) maxX = n.tx;
-      if (n.ty < minY) minY = n.ty; if (n.ty > maxY) maxY = n.ty;
+      if (n.ty > maxY) maxY = n.ty;
     });
     var r = svg.getBoundingClientRect();
     if (!r.width || !r.height) return;
-    var pad = 90, w = (maxX - minX) || 1, h = (maxY - minY) || 1;
-    var k = Math.min((r.width - pad * 2) / w, (r.height - pad * 2) / h, 1.15);
+    var pad = 80, w = (maxX - minX) || 1;
+    // The tree is tall and narrow: fit its width (zoomed in a bit), capped, and
+    // anchor the BOTTOM of the tree in the lower-middle so it opens near the
+    // most-recent generation. Pan up for ancestors.
+    var k = Math.min((r.width - pad * 2) / w, 1.1);
     if (!isFinite(k) || k <= 0) k = 1;
     view.k = k;
     view.x = r.width / 2 - ((minX + maxX) / 2) * k;
-    view.y = pad - minY * k;
+    view.y = r.height * 0.7 - maxY * k;
     applyView();
   }
 
