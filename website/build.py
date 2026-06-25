@@ -50,6 +50,7 @@ PUBS_YAML = DATA_DIR / "publications.yaml"
 HONORS_YAML = DATA_DIR / "honors.yaml"
 GRANTS_YAML = DATA_DIR / "grants.yaml"
 TEACHING_YAML = DATA_DIR / "teaching.yaml"
+TREE_YAML = DATA_DIR / "tree.yaml"
 NEWS_YAML = DATA_DIR / "news.yaml"
 MENTORING_YAML = DATA_DIR / "mentoring.yaml"
 BUCKETLIST_YAML = DATA_DIR / "bucketlist.yaml"
@@ -846,6 +847,41 @@ def load_teaching() -> list[dict]:
     return courses
 
 
+def load_tree() -> dict:
+    """Load data/tree.yaml (academic genealogy) into a render-ready graph for the
+    /tree page: `nodes` ({id, name, subtitle, accent}), `links` ({source, target}
+    advisor->student), and `edges_named` ({advisor, student}) for the no-JS text
+    fallback. Edges may be [advisor, student] pairs or {from, to} dicts."""
+    if not TREE_YAML.exists():
+        return {"nodes": [], "links": [], "edges_named": []}
+    raw = yaml.safe_load(TREE_YAML.read_text()) or {}
+    nodes: list[dict] = []
+    for p in (raw.get("people") or []):
+        pid, name = str(p.get("id") or "").strip(), _delatex(str(p.get("name") or "")).strip()
+        if not pid or not name:
+            continue
+        nodes.append({
+            "id": pid,
+            "name": name,
+            "subtitle": _delatex(str(p.get("subtitle") or "")).strip(),
+            "accent": bool(p.get("accent")),
+        })
+    name_by_id = {n["id"]: n["name"] for n in nodes}
+    links: list[dict] = []
+    for e in (raw.get("edges") or []):
+        if isinstance(e, (list, tuple)) and len(e) >= 2:
+            a, b = str(e[0]).strip(), str(e[1]).strip()
+        elif isinstance(e, dict) and e.get("from") and e.get("to"):
+            a, b = str(e["from"]).strip(), str(e["to"]).strip()
+        else:
+            continue
+        if a in name_by_id and b in name_by_id:
+            links.append({"source": a, "target": b})
+    edges_named = [{"advisor": name_by_id[l["source"]], "student": name_by_id[l["target"]]}
+                   for l in links]
+    return {"nodes": nodes, "links": links, "edges_named": edges_named}
+
+
 def _delatex(s: str) -> str:
     for k, v in _LATEX_UNESCAPE.items():
         s = s.replace(k, v)
@@ -1196,6 +1232,22 @@ def main() -> int:
         )
         (ROOT / "teaching.html").write_text(html)
         print(f"wrote teaching.html ({len(teaching)} courses)")
+
+    # Academic tree: an interactive infinite-canvas genealogy at /tree, sourced
+    # from data/tree.yaml. The graph is built client-side; a text outline is
+    # rendered server-side as the no-JS / accessibility fallback.
+    tree = load_tree()
+    if tree["nodes"]:
+        html = env.get_template("tree.html.j2").render(
+            identity=identity,
+            title="Academic Tree",
+            description=f"An interactive academic genealogy around {identity.get('name', '')}.".strip(),
+            tree=tree,
+            css_version=css_version,
+            favicons=favicons,
+        )
+        (ROOT / "tree.html").write_text(html)
+        print(f"wrote tree.html ({len(tree['nodes'])} nodes, {len(tree['links'])} edges)")
 
     # Custom-domain CNAME for GitHub Pages, derived from identity.yaml so the
     # domain stays single-sourced. Removed if `website` is cleared.

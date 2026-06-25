@@ -1,0 +1,39 @@
+# Academic genealogy for the /tree page (advisor -> student lineage).
+#
+# people: each node is { id, name, subtitle? (small italic line), accent? (bool) }
+# edges:  [advisor_id, student_id] pairs (advisor is the parent in the tree).
+#
+# ---------------------------------------------------------------------------
+# PLACEHOLDER / SAMPLE DATA (illustrative; some advisor edges are approximate).
+# A famous math -> AI -> robotics descent, ending near robot learning. Replace
+# with your verified lineage (Boots / Srinivasa / ...) when ready.
+# ---------------------------------------------------------------------------
+
+people:
+  - {id: euler,     name: Leonhard Euler,        subtitle: "1707"}
+  - {id: lagrange,  name: Joseph-Louis Lagrange}
+  - {id: poisson,   name: Siméon Poisson}
+  - {id: dirichlet, name: Gustav Dirichlet}
+  - {id: lipschitz, name: Rudolf Lipschitz}
+  - {id: klein,     name: Felix Klein}
+  - {id: lefschetz, name: Solomon Lefschetz}
+  - {id: tucker,    name: Albert W. Tucker,      subtitle: "Princeton"}
+  - {id: nash,      name: John Nash,             subtitle: "game theory"}
+  - {id: minsky,    name: Marvin Minsky,         subtitle: "AI"}
+  - {id: mccarthy,  name: John McCarthy,         subtitle: "AI"}
+  - {id: brooks,    name: Rodney Brooks,         subtitle: "robotics", accent: true}
+  - {id: moravec,   name: Hans Moravec,          subtitle: "robotics", accent: true}
+
+edges:
+  - [euler, lagrange]
+  - [lagrange, poisson]
+  - [poisson, dirichlet]
+  - [dirichlet, lipschitz]
+  - [lipschitz, klein]
+  - [klein, lefschetz]
+  - [lefschetz, tucker]
+  - [tucker, nash]
+  - [tucker, minsky]
+  - [lefschetz, mccarthy]
+  - [mccarthy, brooks]
+  - [mccarthy, moravec]

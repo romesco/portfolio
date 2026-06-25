@@ -1912,3 +1912,90 @@ a.press-outlet-link:hover .press-outlet-name {
   font-style: italic;
   color: var(--accent);
 }
+
+/* Screen-reader-only text (kept off-screen but readable by assistive tech). */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* ----------------------------------------------------------------
+   Academic tree (/tree): an interactive, pannable/zoomable canvas.
+   A tidy genealogy that quietly breathes; vanilla SVG + JS.
+---------------------------------------------------------------- */
+.tree-hint {
+  margin: 0.3rem 0 0.9rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  text-transform: lowercase;
+  color: var(--fg-faint);
+}
+
+.tree-stage {
+  position: relative;
+  width: 100%;
+  height: min(78vh, 760px);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--bg);
+  /* faint dot grid for an "infinite canvas" feel */
+  background-image: radial-gradient(circle at 1px 1px, var(--rule) 1px, transparent 1.4px);
+  background-size: 26px 26px;
+}
+
+#tree-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#tree-canvas.is-grabbing { cursor: grabbing; }
+
+.tree-edge {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1.4;
+}
+
+.tree-node { cursor: grab; }
+.tree-node.is-held { cursor: grabbing; }
+.tree-hit { fill: transparent; }
+
+.tree-name {
+  font-family: var(--serif);
+  font-size: 13px;
+  fill: var(--fg);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.tree-sub {
+  font-family: var(--serif);
+  font-size: 10.5px;
+  font-style: italic;
+  fill: var(--fg-muted);
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+}
+.tree-node.is-accent .tree-name { fill: var(--accent); }
+
+/* No-JS / accessibility fallback: a plain advisor -> student outline, hidden
+   once JS reveals the interactive canvas. */
+.tree-fallback {
+  margin: 1.4rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.tree-section.tree-live .tree-fallback { display: none; }
