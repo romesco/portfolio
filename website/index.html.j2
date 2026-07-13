@@ -135,6 +135,15 @@
     }
 
     document.querySelectorAll('details.work').forEach(function (d) {
+      // Analytics: fire when a work is expanded (opened), tagged with its title,
+      // so the dashboard shows which works draw opens. Inert until analytics is
+      // active. childNodes[0] is the bare title text, before the (short)/tl;dr spans.
+      var wt = d.querySelector('.work-title');
+      var wtitle = wt ? ((wt.childNodes[0] ? wt.childNodes[0].textContent : wt.textContent) || '').trim() : '';
+      d.addEventListener('toggle', function () {
+        if (d.open) { try { if (window.umami) umami.track('work-expand', { title: wtitle }); } catch (e) {} }
+      });
+
       // Clicking the hover-revealed media sliver (the dropdown content) opens
       // the entry too: not just the summary text. Only while closed, so it
       // never interferes with carousel arrows / links / video controls once open.
@@ -175,6 +184,12 @@
       var label = wrap.querySelector('.expandable-label');
       var list = vp && vp.querySelector('ul, ol');
       if (!vp || !btn || !label || !list) return;
+
+      // Section label (News / Mentoring / ...) from the enclosing <h2>, used to
+      // tag the analytics expand event below.
+      var sec = wrap.closest('section');
+      var h2 = sec && sec.querySelector('h2');
+      var sectionName = h2 ? h2.textContent.trim() : '';
 
       var peek = parseInt(wrap.getAttribute('data-peek'), 10) || 3;
       var items = list.children;
@@ -229,6 +244,7 @@
 
       function expand() {
         open = true;
+        try { if (window.umami) umami.track('section-expand', { section: sectionName }); } catch (e) {}
         wrap.classList.add('is-open');
         wrap.classList.remove('is-collapsed');
         btn.setAttribute('aria-expanded', 'true');
