@@ -41,6 +41,10 @@ mentees:
     current: "Now: Meta Robotics Studio"
     years: 2024-2025
     now: {name: "Meta Robotics Studio", favicon: "/img/meta.svg", glyph_big: true, url: "https://www.linkedin.com/in/jamie-gashler/"}
+  - name: Omar Aziz
+    url: "https://www.linkedin.com/in/abdel-aziz-omar/"
+    project: Visualization for Large-Scale Robotics Datasets
+    years: 2024-2025
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: MS @ UW"
