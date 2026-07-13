@@ -216,6 +216,16 @@
     return { x: (cx - r.left - view.x) / view.k, y: (cy - r.top - view.y) / view.k };
   }
   var panning = false, panLast = null;
+  // Fire once, the first time the visitor actually manipulates the canvas
+  // (pan / zoom / drag a node) — lets the dashboard tell genuine engagement
+  // with the graph apart from a passing glance. No-op if analytics is absent
+  // or blocked.
+  var explored = false;
+  function markExplored(via) {
+    if (explored) return;
+    explored = true;
+    try { if (window.umami) window.umami.track('tree-explored', { via: via }); } catch (e) {}
+  }
   svg.addEventListener('pointerdown', function (e) {
     if (e.target.closest && e.target.closest('.tree-node')) return;
     panning = true; panLast = { x: e.clientX, y: e.clientY };
@@ -228,6 +238,7 @@
       mouse.x = w.x; mouse.y = w.y; mouse.active = true;
     }
     if (!panning) return;
+    markExplored('pan');
     view.x += e.clientX - panLast.x; view.y += e.clientY - panLast.y;
     panLast = { x: e.clientX, y: e.clientY }; applyView();
   });
@@ -237,6 +248,7 @@
   svg.addEventListener('pointercancel', endPan);
   svg.addEventListener('wheel', function (e) {
     e.preventDefault();
+    markExplored('zoom');
     var r = svg.getBoundingClientRect();
     var sx = e.clientX - r.left, sy = e.clientY - r.top;
     var wx = (sx - view.x) / view.k, wy = (sy - view.y) / view.k;
@@ -254,6 +266,7 @@
     });
     g.addEventListener('pointermove', function (e) {
       if (!n.held) return;
+      markExplored('drag');
       var w = toWorld(e.clientX, e.clientY);
       n.x = w.x + n._ox; n.y = w.y + n._oy;
       if (reduce) render();

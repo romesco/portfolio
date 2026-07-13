@@ -286,29 +286,41 @@ def render_authors(authors) -> Markup:
     return Markup(out)
 
 
-def render_links(links) -> Markup:
+def render_links(links, title=None) -> Markup:
     """Render available links in fixed order: arxiv, pdf, doi, ieee, github,
-    project. Joined by middots. Matches the CV's format_links ordering."""
+    project. Joined by middots. Matches the CV's format_links ordering.
+
+    Each anchor carries a Umami custom event (`paper-link`) tagged with the
+    asset `type` (arxiv/pdf/doi/...) and, when a `title` is threaded in, the
+    paper `title`, so the analytics dashboard can break clicks down by which
+    paper and which asset type drew them. Attributes are inert until analytics
+    is active."""
     if not links:
         return Markup("")
+    title_attr = f' data-umami-event-title="{escape(title)}"' if title else ""
+
+    def ev(kind: str) -> str:
+        return (f' data-umami-event="paper-link"'
+                f' data-umami-event-type="{kind}"{title_attr}')
+
     parts: list[str] = []
     if v := links.get("arxiv"):
         url = v if str(v).startswith("http") else f"https://arxiv.org/abs/{v}"
-        parts.append(f'<a href="{escape(url)}">arxiv</a>')
+        parts.append(f'<a href="{escape(url)}"{ev("arxiv")}>arxiv</a>')
     if v := links.get("pdf"):
-        parts.append(f'<a href="{escape(v)}">pdf</a>')
+        parts.append(f'<a href="{escape(v)}"{ev("pdf")}>pdf</a>')
     if v := links.get("doi"):
         url = v if str(v).startswith("http") else f"https://doi.org/{v}"
-        parts.append(f'<a href="{escape(url)}">doi</a>')
+        parts.append(f'<a href="{escape(url)}"{ev("doi")}>doi</a>')
     if v := links.get("ieee"):
-        parts.append(f'<a href="{escape(v)}">ieee</a>')
+        parts.append(f'<a href="{escape(v)}"{ev("ieee")}>ieee</a>')
     if v := links.get("github"):
         url = v if str(v).startswith("http") else f"https://github.com/{v}"
-        parts.append(f'<a href="{escape(url)}">github</a>')
+        parts.append(f'<a href="{escape(url)}"{ev("github")}>github</a>')
     if v := links.get("project"):
-        parts.append(f'<a href="{escape(v)}">project</a>')
+        parts.append(f'<a href="{escape(v)}"{ev("project")}>project</a>')
     if v := links.get("followup"):
-        parts.append(f'<a href="{escape(v)}" title="Follow-up work">follow-up</a>')
+        parts.append(f'<a href="{escape(v)}"{ev("follow-up")} title="Follow-up work">follow-up</a>')
     return Markup(" · ".join(parts))
 
 
