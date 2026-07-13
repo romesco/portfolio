@@ -14,11 +14,11 @@
     "url": "https://distill.pub/2021/understanding-gnns"
   },
   "https://galenweld.com/blog": {
-    "display": "Jun 2026",
-    "full": "Jun 13, 2026",
-    "iso": "2026-06-13T02:31:05",
-    "title": "Trip Report: Running the Stone Ridge Trail on the Big Sur Coast",
-    "url": "https://galenweld.com/blog/2026/6/12/trip-report-running-the-stone-ridge-trail-on-the-big-sur-coast"
+    "display": "Jul 2026",
+    "full": "Jul 4, 2026",
+    "iso": "2026-07-04T07:07:10",
+    "title": "Trip Report: Garibaldi Lake Circumnavigation",
+    "url": "https://galenweld.com/blog/2026/7/4/trip-report-garibaldi-lake-circumnavigation"
   },
   "https://gokul.dev/blog/": {
     "display": "",
@@ -42,11 +42,11 @@
     "url": "https://buttondown.com/mbforbes/archive/february-2025-monthly-digest/"
   },
   "https://mtmason.com/matt-mason-robotics-blog/": {
-    "display": "May 2026",
-    "full": "May 4, 2026",
-    "iso": "2026-05-04T20:27:50",
-    "title": "The Glory of Manipulation",
-    "url": "https://mtmason.com/the-glory-of-manipulation/"
+    "display": "Jul 2026",
+    "full": "Jul 13, 2026",
+    "iso": "2026-07-13T11:41:08",
+    "title": "Sensorless Manipulation",
+    "url": "https://mtmason.com/sensorless-manipulation/"
   },
   "https://thegradient.pub": {
     "display": "Feb 2026",
@@ -54,5 +54,19 @@
     "iso": "2026-02-18T23:25:52",
     "title": "After Orthogonality: Virtue-Ethical Agency and AI Alignment",
     "url": "https://thegradient.pub/virtue-ethics-ai-alignment/"
+  },
+  "https://timdettmers.com/": {
+    "display": "Jan 2026",
+    "full": "Jan 27, 2026",
+    "iso": "2026-01-27T12:32:00",
+    "title": "My Journey Towards Coding Agents: Building SERA",
+    "url": "https://timdettmers.com/2026/01/27/building-open-coding-agent-sera/"
+  },
+  "https://www.argmin.net/": {
+    "display": "Jul 2026",
+    "full": "Jul 9, 2026",
+    "iso": "2026-07-09T15:04:37",
+    "title": "Range of Motion",
+    "url": "https://www.argmin.net/p/range-of-motion"
   }
 }

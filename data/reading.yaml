@@ -72,6 +72,12 @@ groups:
       - name: Mohak Bhardwaj
         url: https://mohakbhardwaj.github.io/blog/
         note: "A UW robotics PhD blending model predictive control with reinforcement learning for robot manipulation and control."
+      - name: Tim Dettmers
+        url: https://timdettmers.com/
+        # WordPress RSS at /feed/ (not always auto-discoverable), so point at it
+        # directly, like the Maxwell Forbes entry.
+        feed: https://timdettmers.com/feed/
+        note: "A UW CS PhD (now at Ai2 / CMU) known for QLoRA and the bitsandbytes library, whose 'Which GPU to Get for Deep Learning' guide is a field rite of passage."
       - name: Gokul Swamy
         url: https://gokul.dev/blog/
         # His feed.xml only carries one self-hosted post (a 2017 piece); the
