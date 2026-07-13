@@ -31,4 +31,4 @@ favicons: ["🤖", "🦾", "🧪", "🧬", "⚙️", "🛰️", "🔬", "🔭", 
 # (see handoffs/20260617_UMAMI_SELFHOST.md).
 analytics:
   umami_src: "https://cloud.umami.is/script.js"
-  umami_id: ""    # paste the Website ID (UUID) from cloud.umami.is to activate
+  umami_id: "b3fad5ea-4eb5-42ed-9bfa-95bf0bdfcc76"    # cloud.umami.is Website ID for rosarioscalise.com
