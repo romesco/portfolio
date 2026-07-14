@@ -21,6 +21,10 @@ cv/main.synctex.gz
 website/*.html
 website/headshot.jpg
 website/CNAME
+# Generated arXiv sources for garage posts (main.tex + copied figures + LaTeX
+# build junk). The SOURCE is website/pages/garage-*.md; committed fallback
+# figures live in website/img/garage/<slug>/ (tracked).
+website/garage/
 
 # Private working notes (application targets, honors collation) — intentionally
 # uncommitted; see notes/applications-and-honors.md

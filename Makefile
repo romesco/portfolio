@@ -1,4 +1,4 @@
-.PHONY: all cv site serve watch test clean publish-cv
+.PHONY: all cv site paper serve watch test clean publish-cv
 
 all: cv site
 
@@ -10,6 +10,22 @@ cv:
 
 site:
 	uv run python website/build.py
+
+# Compile a garage post's arXiv PDF from the main.tex that `make site` emits for
+# any post with `arxiv: true`. Compiles ONLY where a LaTeX engine exists (host);
+# CI/container just generate the .tex (upload that to arXiv, which compiles it).
+#   make paper GARAGE_SLUG=garage-compression-is-intelligence
+GARAGE_SLUG ?= garage-compression-is-intelligence
+paper: site
+	@tex=website/garage/$(GARAGE_SLUG)/main.tex; \
+	if [ ! -f "$$tex" ]; then echo ">> no $$tex (set 'arxiv: true' in the post front-matter)" >&2; exit 1; fi; \
+	if command -v tectonic >/dev/null 2>&1; then \
+		tectonic "$$tex"; \
+	elif command -v latexmk >/dev/null 2>&1; then \
+		latexmk -pdf -interaction=nonstopmode -cd "$$tex"; \
+	else \
+		echo ">> generated $$tex (no tectonic/latexmk here; upload to arXiv or compile on the host)"; \
+	fi
 
 serve: site
 	cd website && python3 -m http.server 8000 --bind 127.0.0.1
@@ -24,6 +40,7 @@ clean:
 	rm -f cv/generated/*.tex cv/main.pdf cv/main.aux cv/main.log cv/main.out
 	rm -f cv/main.fdb_latexmk cv/main.fls cv/main.synctex.gz
 	rm -f website/*.html website/headshot.jpg website/CNAME
+	rm -rf website/garage
 
 # Regenerate the CV LaTeX and refresh the gitignored Overleaf staging mirror
 # (.overleaf-cv), FLATTENED so main.tex sits at the repo root -- Overleaf

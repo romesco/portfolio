@@ -42,6 +42,8 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from markupsafe import Markup, escape
 
+import paper_render  # markdown -> LaTeX + dual-target fence handling for garage posts
+
 ROOT = Path(__file__).parent
 DATA_DIR = ROOT.parent / "data"
 SITE_YAML = ROOT / "site.yaml"
@@ -62,6 +64,7 @@ READING_YAML = DATA_DIR / "reading.yaml"
 # committed; the deploy runner can't write it back (Pages token is read-only).
 READING_CACHE = DATA_DIR / "reading-cache.json"
 PAGES_DIR = ROOT / "pages"
+GARAGE_DIR = ROOT / "garage"  # generated arXiv sources: garage/<slug>/main.tex (gitignored)
 HEADSHOT_SRC = ROOT.parent / "assets" / "headshot.jpg"
 HEADSHOT_DEST = ROOT / "headshot.jpg"
 
@@ -988,7 +991,9 @@ def render_pages(env: Environment, identity: dict, default_description: str,
     Returns the slugs written."""
     if not PAGES_DIR.is_dir():
         return []
-    md = mistune.create_markdown(escape=False)
+    # `table`/`strikethrough` let garage posts use pipe tables and ~~del~~;
+    # escape=False passes embedded widget HTML/SVG/<script> through untouched.
+    md = mistune.create_markdown(escape=False, plugins=["table", "strikethrough"])
     template = env.get_template("page.html.j2")
     written: list[str] = []
     for path in sorted(PAGES_DIR.glob("*.md")):
@@ -996,17 +1001,88 @@ def render_pages(env: Environment, identity: dict, default_description: str,
         meta, body = split_front_matter(path.read_text())
         title = meta.get("title") or slug.replace("-", " ").title()
         description = meta.get("description") or default_description
+        # Dual-target garage posts: protect {=web}/{=paper} fences + $math$,
+        # render Markdown, then restore the raw widget HTML into its comment
+        # placeholders and the literal math (KaTeX renders it client-side).
+        web_body, webs, maths = paper_render.prepare_web(body)
+        content = md(web_body)
+        for i, w in enumerate(webs):
+            content = content.replace(f"<!--WB{i}-->", w)
+        for i, mm in enumerate(maths):
+            content = content.replace(f"zZmathZ{i}Zz", mm)
         html = template.render(
             identity=identity,
             title=title,
             description=description,
-            content_html=Markup(md(body)),
+            content_html=Markup(content),
+            head_extra=Markup(meta.get("head") or ""),   # per-page <head> (CSS, meta)
+            scripts=Markup(meta.get("scripts") or ""),    # per-page end-of-body JS
             css_version=css_version,
             favicons=favicons,
         )
         (ROOT / f"{slug}.html").write_text(html)
         written.append(slug)
+        # Garage posts get an author-facing lint pass and, when `arxiv: true`,
+        # an arXiv-ready main.tex generated from the SAME body.
+        if slug.startswith("garage") or meta.get("arxiv"):
+            for issue in paper_render.lint(body, meta):
+                print(f"  lint[{slug}]: {issue}")
+        if meta.get("arxiv"):
+            render_paper(meta, body, slug)
     return written
+
+
+# Minimal article scaffold for the arXiv target. Only `%(...)s` placeholders use
+# `%`; there are no literal `%` (LaTeX comments) in the template, so the `%`
+# format operator is safe against the many LaTeX braces in the body.
+PAPER_TEX = r"""\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=black,linkcolor=black]{hyperref}
+\graphicspath{{./}}
+\title{%(title)s}
+\author{%(authors)s}
+\date{\today}
+\begin{document}
+\maketitle
+%(abstract)s
+%(body)s
+\end{document}
+"""
+
+
+def render_paper(meta: dict, body: str, slug: str) -> None:
+    """Emit website/garage/<slug>/main.tex (arXiv source) from the same post
+    body, copying committed fallback figures next to it (flat, so the dir tars
+    straight to an arXiv upload). Never compiled here; arXiv/host compiles it."""
+    out_dir = GARAGE_DIR / slug
+    out_dir.mkdir(parents=True, exist_ok=True)
+    img_dir = ROOT / "img" / "garage" / slug
+    if img_dir.is_dir():
+        for p in sorted(img_dir.iterdir()):
+            if p.suffix.lower() in {".png", ".jpg", ".jpeg", ".pdf"}:
+                shutil.copy(p, out_dir / p.name)
+    authors = meta.get("authors") or ([meta["author"]] if meta.get("author") else [])
+    if isinstance(authors, str):
+        authors = [authors]
+    author_tex = r" \and ".join(paper_render.latex_escape(a) for a in authors)
+    abstract_tex = ""
+    if meta.get("abstract"):
+        abstract_tex = ("\\begin{abstract}\n"
+                        + paper_render.md_to_latex(str(meta["abstract"]))
+                        + "\n\\end{abstract}")
+    tex = PAPER_TEX % {
+        "title": paper_render.latex_escape(meta.get("title") or slug),
+        "authors": author_tex,
+        "abstract": abstract_tex,
+        "body": paper_render.md_to_latex(body),
+    }
+    (out_dir / "main.tex").write_text(tex)
+    print(f"wrote garage/{slug}/main.tex (arXiv source)")
 
 
 def main() -> int:
