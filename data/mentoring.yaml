@@ -44,7 +44,9 @@ mentees:
   - name: Omar Aziz
     url: "https://www.linkedin.com/in/abdel-aziz-omar/"
     project: Visualization for Large-Scale Robotics Datasets
+    current: "Now: Researcher @ Ai2"
     years: 2024-2025
+    now: {role: Researcher, name: Ai2, favicon: "/img/ai2.png", url: "https://www.linkedin.com/in/abdel-aziz-omar/"}
   - name: Ege Caglar
     project: Self-Righting and Recovery in the Wild
     current: "Now: MS @ UW"
