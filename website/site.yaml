@@ -17,7 +17,7 @@ bio: >
 # Homepage banner rendered as raw HTML between the masthead and News.
 # Keep the markup here so it is easy to edit if the copy changes.
 banner_html: >-
-  As Will Hunting would say: <strong><span style="color: red;">I'm on the job maahkit! Send me a lettah!</span></strong>
+  As Will Hunting would say: <strong><span style="color: red;">I'm on the jahb maahkit! Send me a lettah!</span></strong>
 # Favicon pool: a random one is rendered as an inline SVG emoji on every
 # page load (see the head script in _layout.html.j2). Add/remove freely;
 # emoji that stay legible at ~16px work best.
