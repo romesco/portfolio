@@ -78,7 +78,6 @@ IMAGE_EXTS = {".gif", ".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg"}
 DEFAULT_FAVICONS = ["🤖", "🦾", "🧪", "🧬", "⚙️", "🛰️", "🔬", "🔭", "⚛️", "✨"]
 
 FRONT_MATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
-SHORT_BIO_RE = re.compile(r"^## Short Bio\s*\n+(.*?)(?:\n^## Long Bio\s*$|\Z)", re.DOTALL | re.MULTILINE)
 
 
 def _detect_media_type(src: str) -> str:
@@ -986,34 +985,7 @@ def split_front_matter(text: str) -> tuple[dict, str]:
     return meta, text[m.end():]
 
 
-# The homepage short bio is trusted site content and may contain raw HTML so
-# the masthead can reflect the same markup used on /bio.
-_INLINE_MD_HTML = mistune.create_markdown(escape=False)
-
-
-def _render_inline_md_html(text: str) -> Markup:
-    """Render a single line as inline HTML, allowing trusted raw HTML."""
-    html = _INLINE_MD_HTML(text or "").strip()
-    if html.startswith("<p>") and html.endswith("</p>"):
-        html = html[3:-4]
-    return Markup(html)
-
-
 def load_short_bio() -> Markup:
-    """Load the homepage intro from website/pages/bio.md.
-
-    The standalone /bio page remains the canonical source; the homepage reuses
-    its Short Bio section so the copy stays in one place.
-    """
-    path = PAGES_DIR / "bio.md"
-    if not path.exists():
-        return Markup("")
-    _, body = split_front_matter(path.read_text())
-    m = SHORT_BIO_RE.search(body)
-    short = m.group(1).strip() if m else body.strip()
-    return _render_inline_md_html(short)
-
-
 def render_pages(env: Environment, identity: dict, default_description: str,
                  css_version: str, favicons: list[str]) -> list[str]:
     """Render every website/pages/*.md to website/<slug>.html via page.html.j2.
@@ -1205,7 +1177,6 @@ def main() -> int:
     env.filters["collaborators"] = render_collaborators
     env.globals["build_fp"] = build_fp
     env.globals["year"] = datetime.date.today().year
-    env.globals["show_masthead_bio"] = False
     # Optional analytics config (see site.yaml `analytics:`). Exposed to every
     # template via the shared base layout; the snippet only renders once both
     # the script src and website id are set, so the site stays clean until the
@@ -1218,8 +1189,7 @@ def main() -> int:
         more_count=more_count,
         identity=identity,
         description=site.get("description", ""),
-        bio=load_short_bio(),
-        show_masthead_bio=True,
+        bio=_render_inline_md(site.get("bio", "")),
         banner_html=Markup((site.get("banner_html") or "").strip()),
         links=links,
         news=news,
