@@ -1205,6 +1205,7 @@ def main() -> int:
     env.filters["collaborators"] = render_collaborators
     env.globals["build_fp"] = build_fp
     env.globals["year"] = datetime.date.today().year
+    env.globals["show_masthead_bio"] = False
     # Optional analytics config (see site.yaml `analytics:`). Exposed to every
     # template via the shared base layout; the snippet only renders once both
     # the script src and website id are set, so the site stays clean until the
