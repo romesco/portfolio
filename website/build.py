@@ -1220,6 +1220,7 @@ def main() -> int:
         description=site.get("description", ""),
         bio=load_short_bio(),
         show_masthead_bio=True,
+        banner_html=Markup((site.get("banner_html") or "").strip()),
         links=links,
         news=news,
         mentees=mentees,
