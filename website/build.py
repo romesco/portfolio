@@ -983,9 +983,6 @@ def split_front_matter(text: str) -> tuple[dict, str]:
         return {}, text
     meta = yaml.safe_load(m.group(1)) or {}
     return meta, text[m.end():]
-
-
-def load_short_bio() -> Markup:
 def render_pages(env: Environment, identity: dict, default_description: str,
                  css_version: str, favicons: list[str]) -> list[str]:
     """Render every website/pages/*.md to website/<slug>.html via page.html.j2.
