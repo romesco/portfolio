@@ -90,6 +90,9 @@
       </div>
       <p class="title">{{ identity.title }}</p>
       <p class="affiliation">{{ identity.affiliation }}</p>
+      {% if show_masthead_bio and bio %}
+      <p class="bio">{{ bio }}</p>
+      {% endif %}
     </div>
   </header>
 

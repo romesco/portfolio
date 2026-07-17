@@ -1,21 +1,6 @@
 # Used for <title> and meta description. Keep it short.
 description: Personal site of Rosario Scalise, PhD student at the University of Washington.
 
-# 2–3 sentences. YAML's `>` folds newlines into spaces, so you can wrap
-# freely in this file without affecting the rendered output.
-# Rendered as inline Markdown (links/emphasis), so lab affiliations can be woven
-# in. The [![](favicon)Name](url) chips show a small UW glyph before the label.
-bio: >
-  Rosario is a PhD candidate at the University of Washington in
-  [![](/img/allen-school.png)Machine Learning](https://wail.uw.edu/)
-  & [Robotics](https://robotics.cs.washington.edu/). His research, in the
-  [![](/img/robot-learning-lab.png)Robot Learning Lab](https://robotlearning.cs.washington.edu/),
-  applies machine learning and optimization to continual learning,
-  reinforcement learning, large-scale physics-based simulation, and the
-  science of transferring learned behaviors to physical systems.
-
-  As Will Hunting would say: <strong><span style="color: red;">I'm on the job maahkit</span></strong>.
-
 # Favicon pool: a random one is rendered as an inline SVG emoji on every
 # page load (see the head script in _layout.html.j2). Add/remove freely;
 # emoji that stay legible at ~16px work best.
