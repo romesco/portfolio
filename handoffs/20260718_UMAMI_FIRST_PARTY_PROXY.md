@@ -1,77 +1,75 @@
 # Umami first-party proxy (ad-blocker coverage)
 
-> **CORRECTION (2026-07-18):** The "subdomain delegation, apex untouched" method
-> below does NOT work on Cloudflare's **free** plan: adding a subdomain as its own
-> zone is an Enterprise-only feature
-> (https://developers.cloudflare.com/dns/zone-setups/subdomain-setup/). On free,
-> the only Cloudflare option is **full setup** (move the whole domain's
-> nameservers to Cloudflare). The lower-disruption alternative is a **single
-> CNAME to a Vercel/Netlify proxy** (no nameserver move). This doc's Cloudflare
-> steps 1-2 are being revised once the path is chosen; see the chat decision.
-
-You (Rosario) run these steps in your **Cloudflare dashboard** and **Google Cloud
-DNS** console. Nothing here can be done from the container: it touches external
-accounts. Budget ~15 minutes. The repo side (Worker code + the one-line site
-flip) is already written; the last step just uncomments the flip.
+You (Rosario) run these steps in **Vercel** and **Google Cloud DNS**. Nothing
+here can be done from the container: it touches external accounts. Budget ~15
+minutes. The repo side (proxy code + the one-line site flip) is already written;
+the last step just uncomments the flip.
 
 ## Why
 
 Ad / tracker blockers drop `cloud.umami.is` by hostname, so blocker users are
 never counted (the standing gotcha in the analytics-umami memory). Serving the
-tracker from a first-party subdomain you control evades that. This does NOT touch
-your apex, GitHub Pages, or the delicate cross-account custom-domain / cert
-setup: it only adds a new subdomain.
+tracker from a first-party subdomain you control evades that.
+
+## Decision (2026-07-18)
+
+- **Topology:** innocuous subdomain `m.rosarioscalise.com` (change the label if
+  you like; keep it non-analytics-sounding). Umami is cookieless and the tracker
+  is `defer`, so visitors notice nothing; only your data coverage improves.
+- **Host:** **Vercel** (free Hobby), attached with a **single CNAME**. Chosen
+  over Cloudflare because free Cloudflare cannot host a subdomain-only zone
+  (that is Enterprise), so it would force moving your whole domain's nameservers.
+  Vercel needs only one CNAME record, leaving your apex, GitHub Pages,
+  nameservers, and the delicate cross-account domain setup completely untouched.
+  (Cloudflare-full remains a reference alternative: see the appendix +
+  `infra/umami-proxy/cloudflare/`.)
 
 ## Current state (verified 2026-07-18)
 
-- DNS: **Google Cloud DNS** (nameservers `ns-cloud-d{1..4}.googledomains.com`).
-- Hosting: **GitHub Pages**, served directly (`rosarioscalise.com` -> `185.199.108.153`).
-- No edge/proxy in front today. GitHub Pages cannot proxy, hence Cloudflare.
+- DNS: Google Cloud DNS (`ns-cloud-d{1..4}.googledomains.com`).
+- Hosting: GitHub Pages, served directly (`rosarioscalise.com` -> `185.199.108.153`).
+- No edge/proxy in front today.
 
-## Decision
+## Repo artifacts (already committed)
 
-- **Topology:** innocuous **subdomain** `m.rosarioscalise.com` (change the label
-  if you like; keep it non-analytics-sounding). Chosen over a same-origin apex
-  path to keep the apex + GitHub Pages entirely untouched. See the handoff-time
-  discussion: near-zero risk, recovers most blocked visitors, no user-facing
-  change (Umami is cookieless + the tracker is `defer`).
-- **Edge:** Cloudflare Workers (free tier, 100k req/day is plenty).
-- **DNS method:** **subdomain delegation** (below) so your apex zone stays on
-  Google Cloud DNS exactly as it is. (Alternative: move the whole zone to
-  Cloudflare. Don't, unless you want the CDN: it means replicating every apex
-  record AND the GitHub-Pages verification TXT, and reconciling the cert. More
-  risk for no added blocker benefit.)
+- `infra/umami-proxy/vercel/middleware.js` : the Edge Middleware reverse proxy
+  (forwards the visitor IP via X-Forwarded-For so geo stays correct).
+- `infra/umami-proxy/vercel/public/index.html` : placeholder so Vercel has a
+  static output dir; all real paths are handled by the middleware.
+- `website/site.yaml` : the proxied `umami_src` is staged as a comment, ready to
+  uncomment in step 5.
 
 ## Steps
 
-### 1. Cloudflare: add the subdomain as a zone
-1. Create a free Cloudflare account if you don't have one.
-2. **Add a site** -> enter `m.rosarioscalise.com` (the subdomain, not the apex).
-   Pick the **Free** plan. Cloudflare assigns two nameservers, e.g.
-   `xxx.ns.cloudflare.com` / `yyy.ns.cloudflare.com`. Note them.
+### 1. Deploy the proxy on Vercel
+Create a free Vercel account if needed (GitHub login works). Then either:
 
-### 2. Google Cloud DNS: delegate just that subdomain
-1. Open the `rosarioscalise.com` zone in Google Cloud DNS.
-2. Add an **NS** record set:
-   - Name: `m` (i.e. `m.rosarioscalise.com`)
-   - Type: `NS`
-   - Data: the two Cloudflare nameservers from step 1.
-3. Save. This delegates only `m.rosarioscalise.com` to Cloudflare; the apex and
-   `www` keep resolving through Google straight to GitHub Pages, unchanged.
-   (Delegation can take up to a few hours to propagate; usually minutes.)
+- **Git import (recommended, auto-redeploys):** Vercel > **Add New… > Project** >
+  import the `romesco/portfolio` repo. Set **Root Directory** to
+  `infra/umami-proxy/vercel`. Framework Preset: **Other**. Deploy. With the root
+  directory scoped to that subfolder, Vercel only ever builds the proxy, never
+  the main site.
+- **CLI (one-off):** `cd infra/umami-proxy/vercel && npx vercel --prod` and
+  follow the prompts. (Runnable from the container if you log in with a token.)
 
-### 3. Deploy the Worker
-Option A (dashboard, simplest):
-1. Cloudflare > **Workers & Pages** > **Create** > **Worker**. Name it
-   `umami-proxy`. Replace the starter code with the contents of
-   `infra/umami-proxy/worker.js` from this repo. **Deploy**.
-2. Worker > **Settings** > **Domains & Routes** > **Add** > **Custom Domain** >
-   `m.rosarioscalise.com`. Cloudflare provisions a cert for it automatically.
+You'll get a `*.vercel.app` URL. Sanity check:
+`curl -s https://<project>.vercel.app/script.js | head -c 200` should return the
+Umami tracker JS.
 
-Option B (CLI): `cd infra/umami-proxy`, then `wrangler deploy` (needs
-`CLOUDFLARE_API_TOKEN`). Uncomment the `routes` block in `wrangler.toml` first so
-it binds the custom domain. This can be run from the container if you export a
-token; the dashboard is fine too.
+### 2. Attach the subdomain in Vercel
+Project > **Settings > Domains** > add `m.rosarioscalise.com`. Vercel shows the
+DNS record to create, currently a **CNAME** `m` -> `cname.vercel-dns.com` (use
+whatever it shows).
+
+### 3. Add that one CNAME in Google Cloud DNS
+In the `rosarioscalise.com` zone, add a record set:
+- Name: `m`  (i.e. `m.rosarioscalise.com`)
+- Type: `CNAME`
+- Data: `cname.vercel-dns.com.`  (exactly what Vercel showed)
+
+Save. This is the ONLY DNS change. Your apex, `www`, MX/email, and the
+GitHub-Pages verification records are all untouched. Vercel auto-provisions TLS
+for the subdomain within a few minutes.
 
 ### 4. Verify the proxy is live
 ```
@@ -81,34 +79,40 @@ curl -s -i -X POST https://m.rosarioscalise.com/api/send \
   --data '{"type":"event","payload":{"website":"b3fad5ea-4eb5-42ed-9bfa-95bf0bdfcc76","hostname":"rosarioscalise.com","url":"/proxy-test"}}'
 ```
 The POST should return `200` with a token body, and a `/proxy-test` pageview
-should appear in the Umami dashboard within a minute. If geolocation looks wrong
-(all one country), re-check the `X-Forwarded-For` line in `worker.js`.
+should appear in Umami within a minute. If geolocation looks wrong (everything in
+one datacenter region), the X-Forwarded-For forwarding isn't reaching Umami :
+re-check `middleware.js`.
 
 ### 5. Flip the site to the proxy (repo side)
-In `website/site.yaml`, under `analytics:`, swap the tracker src to the proxy and
-remove the now-inaccurate blocklist caveat. The proxied value is already staged
-as a comment there:
+In `website/site.yaml`, under `analytics:`, uncomment the proxied line and delete
+the cloud one (`umami_id` stays the same):
 ```yaml
-  # umami_src: "https://m.rosarioscalise.com/script.js"   # <- uncomment, use this
-  umami_src: "https://cloud.umami.is/script.js"           # <- delete this line
+  # umami_src: "https://m.rosarioscalise.com/script.js"   # <- uncomment
+  umami_src: "https://cloud.umami.is/script.js"           # <- delete
 ```
-Leave `umami_id` unchanged. Commit + push -> Pages redeploys. The tracker now
-loads from `m.` and auto-posts events to `m./api/send` (Umami derives the collect
-host from the script's own origin).
+Commit + push -> Pages redeploys. The tracker now loads from `m.` and auto-posts
+events to `m./api/send` (Umami derives the collect host from the script origin).
+The CI deploy-event job follows `umami_src`, so it starts using the proxy too.
 
 ### 6. Confirm the fix
 Load the site with uBlock Origin enabled. Before: no request to `cloud.umami.is`.
-After: a request to `m.rosarioscalise.com/script.js` + `/api/send` that the
-blocker leaves alone, and the visit shows in Umami.
+After: a request to `m.rosarioscalise.com/script.js` + `/api/send` the blocker
+leaves alone, and the visit shows in Umami.
 
 ## Rollback
-Revert step 5 (point `umami_src` back at `cloud.umami.is/script.js`). Optionally
-delete the Worker, custom domain, and the `m` NS record. The site itself is never
-affected by any of this.
+Delete the `m` CNAME and revert step 5. The site itself is never affected.
 
 ## Notes
-- Free Worker tier: 100k requests/day. Each engaged visit is a handful of
-  requests (script + a few events); comfortably within budget.
-- Update the `analytics-umami` memory and the self-host handoff
-  (`20260617_UMAMI_SELFHOST.md`) once this is live, since the blocklist gotcha is
-  then resolved.
+- Vercel Hobby is for non-commercial use; a personal-portfolio analytics proxy is
+  fine. Edge Middleware invocation limits are generous for this traffic.
+- Update the `analytics-umami` memory once live, since the blocklist gotcha is
+  then resolved. This also front-runs part of the self-host plan
+  (`20260617_UMAMI_SELFHOST.md`).
+
+## Appendix: Cloudflare alternative (only if you move DNS there)
+`infra/umami-proxy/cloudflare/worker.js` does the same job as a Worker. It needs
+the zone on Cloudflare, which on the free plan means a **full nameserver move**
+(Google -> Cloudflare) with all records replicated (apex A -> GitHub Pages kept
+DNS-only/grey-cloud, `www`, MX/SPF, and the `_github-pages-challenge` TXT). More
+surface area for no extra blocker benefit; only worth it if you want Cloudflare's
+CDN anyway.

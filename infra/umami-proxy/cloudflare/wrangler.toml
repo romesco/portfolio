@@ -1,7 +1,9 @@
 # Cloudflare Worker: first-party reverse proxy for Umami Cloud.
-# See ../../handoffs/20260718_UMAMI_FIRST_PARTY_PROXY.md for the full setup.
+# Alternative to the default Vercel proxy (../vercel/); needs a full nameserver
+# move to Cloudflare on the free plan. See the appendix in
+# ../../../handoffs/20260718_UMAMI_FIRST_PARTY_PROXY.md.
 #
-# Deploy:  cd infra/umami-proxy && wrangler deploy   (needs a Cloudflare API token)
+# Deploy:  cd infra/umami-proxy/cloudflare && wrangler deploy   (needs a Cloudflare API token)
 # Or paste worker.js into the dashboard (Workers & Pages > Create > Worker).
 
 name = "umami-proxy"
