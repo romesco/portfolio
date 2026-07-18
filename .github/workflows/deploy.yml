@@ -70,13 +70,16 @@ jobs:
       - name: Send "deploy" event to Umami
         run: |
           set -euo pipefail
+          # `|| true` on each extraction: grep exits 1 on no-match, which with
+          # pipefail+errexit would kill the step (e.g. blank ops_umami_id) before
+          # the emptiness guard below runs. Let the guard handle missing values.
           SRC=$(grep -E '^\s*umami_src:' website/site.yaml | head -1 \
-            | sed -E 's/.*"(https?:\/\/[^/"]+).*/\1/')
+            | sed -E 's/.*"(https?:\/\/[^/"]+).*/\1/' || true)
           UUID='[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
-          MAIN_ID=$(grep -E '^\s*umami_id:' website/site.yaml | grep -oiE "$UUID" | head -1)
+          MAIN_ID=$(grep -E '^\s*umami_id:' website/site.yaml | grep -oiE "$UUID" | head -1 || true)
           # Prefer a dedicated "ops" website so the deploy marker doesn't pollute
           # real traffic; fall back to the main site if ops_umami_id is blank.
-          OPS_ID=$(grep -E '^\s*ops_umami_id:' website/site.yaml | grep -oiE "$UUID" | head -1)
+          OPS_ID=$(grep -E '^\s*ops_umami_id:' website/site.yaml | grep -oiE "$UUID" | head -1 || true)
           ID="${OPS_ID:-$MAIN_ID}"
           if [ -z "$SRC" ] || [ -z "$ID" ]; then
             echo "::warning::could not read umami_src/umami_id from site.yaml; skipping deploy event"
