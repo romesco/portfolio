@@ -164,5 +164,87 @@
   })();
 </script>
 {% endif %}
+{% if analytics.umami_src and analytics.umami_id %}
+<script>
+  // Richer Umami signals, both cookieless and inert until the tracker loads:
+  //  1. Cross-device stitching for links you share personally (?v=<tag>).
+  //  2. Engagement events so a single-page "/" visit is more than a 0s bounce.
+  // Umami's built-in visit-duration and bounce count PAGEVIEW events only
+  // (custom events don't move them), so #2 is read in the Events report, not
+  // the headline "average visit time" (see github.com/umami-software/umami#3518).
+  (function () {
+    // The umami tracker is deferred: run fn once it exists (give up after ~8s).
+    function ready(fn) {
+      if (window.umami) return fn();
+      var n = 0, t = setInterval(function () {
+        if (window.umami) { clearInterval(t); fn(); }
+        else if (++n > 20) { clearInterval(t); }
+      }, 400);
+    }
+    function track(name, data) { ready(function () { try { umami.track(name, data); } catch (e) {} }); }
+
+    // 1. Cross-device stitch. Umami cannot merge an anonymous visitor's phone
+    // and laptop on its own (there is no shared key). But a link you send with
+    // ?v=<tag> tags this visit, and the tag is remembered on the device, so
+    // every visit that used the link (any device) shares one distinct id you
+    // can filter the dashboard by.
+    try {
+      var v = new URLSearchParams(location.search).get('v');
+      var KEY = 'umami:v';
+      if (v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      var id = v || stored;
+      if (id) ready(function () { try { umami.identify(id, { via: v ? 'link' : 'return' }); } catch (e) {} });
+    } catch (e) {}
+
+    {% if analytics.engagement %}
+    // 2. Engagement signals for this page view.
+    var path = location.pathname;
+
+    // Active time: tick a second only while the tab is visible AND recently
+    // used, so idle/background tabs do not inflate it. Fire escalating
+    // milestones so dwell is captured even if the exit event below is dropped.
+    var active = 0, lastAct = Date.now(), IDLE = 20000, MILES = [15, 60, 180, 600], mi = 0;
+    ['pointerdown', 'keydown', 'scroll', 'pointermove', 'touchstart'].forEach(function (ev) {
+      addEventListener(ev, function () { lastAct = Date.now(); }, { passive: true });
+    });
+    setInterval(function () {
+      if (document.visibilityState !== 'visible') return;
+      if (Date.now() - lastAct > IDLE) return;
+      active++;
+      while (mi < MILES.length && active >= MILES[mi]) {
+        track('engaged-time', { reached: MILES[mi] < 60 ? MILES[mi] + 's' : (MILES[mi] / 60) + 'm', path: path });
+        mi++;
+      }
+    }, 1000);
+
+    // Scroll depth: fire once each at 50% and 100% of the scrollable height.
+    var DEPTHS = [50, 100], di = 0;
+    function onScroll() {
+      var el = document.documentElement, max = el.scrollHeight - el.clientHeight;
+      var pct = max > 0 ? Math.round((el.scrollTop || document.body.scrollTop) / max * 100) : 100;
+      while (di < DEPTHS.length && pct >= DEPTHS[di]) { track('scroll-depth', { pct: DEPTHS[di], path: path }); di++; }
+      if (di >= DEPTHS.length) removeEventListener('scroll', onScroll);
+    }
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Best-effort final dwell when the tab is hidden or closed, bucketed to keep
+    // the Events report low-cardinality. May be dropped on a hard close; the
+    // milestones above are the reliable signal.
+    var sent = false;
+    function dwell() {
+      if (sent) return;
+      sent = true;
+      var b = active < 15 ? '<15s' : active < 60 ? '15-60s' : active < 180 ? '1-3m' : active < 600 ? '3-10m' : '10m+';
+      track('page-dwell', { bucket: b, path: path });
+    }
+    addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') dwell(); });
+    addEventListener('pagehide', dwell);
+    {% endif %}
+  })();
+</script>
+{% endif %}
 </body>
 </html>

@@ -33,6 +33,15 @@ favicons: ["🤖", "🦾", "🧪", "🧬", "⚙️", "🛰️", "🔬", "🔭", 
 # (e.g. eu.umami.is), swap it. Set `umami_id` to this site's Website ID to go
 # live. To move to a self-hosted instance later, just change these two fields
 # (see handoffs/20260617_UMAMI_SELFHOST.md).
+#
+# `engagement: true` adds custom events for scroll depth + active time + a
+# best-effort exit dwell, so a single-page "/" visit shows real engagement in
+# the Events report (Umami's built-in visit-duration/bounce count pageviews
+# only, so they still read ~0s for single-page visits). It also enables
+# cross-device stitching for links you share with ?v=<tag>. Each engaged visit
+# emits a handful of extra events: set to false to disable if the free-tier
+# event cap gets tight.
 analytics:
   umami_src: "https://cloud.umami.is/script.js"
   umami_id: "b3fad5ea-4eb5-42ed-9bfa-95bf0bdfcc76"    # cloud.umami.is Website ID for rosarioscalise.com
+  engagement: true
