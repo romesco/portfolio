@@ -1,5 +1,14 @@
 # Umami first-party proxy (ad-blocker coverage)
 
+> **CORRECTION (2026-07-18):** The "subdomain delegation, apex untouched" method
+> below does NOT work on Cloudflare's **free** plan: adding a subdomain as its own
+> zone is an Enterprise-only feature
+> (https://developers.cloudflare.com/dns/zone-setups/subdomain-setup/). On free,
+> the only Cloudflare option is **full setup** (move the whole domain's
+> nameservers to Cloudflare). The lower-disruption alternative is a **single
+> CNAME to a Vercel/Netlify proxy** (no nameserver move). This doc's Cloudflare
+> steps 1-2 are being revised once the path is chosen; see the chat decision.
+
 You (Rosario) run these steps in your **Cloudflare dashboard** and **Google Cloud
 DNS** console. Nothing here can be done from the container: it touches external
 accounts. Budget ~15 minutes. The repo side (Worker code + the one-line site
