@@ -62,14 +62,25 @@ Vercel shows a **CNAME** to create. The target is **unique to your project**
 (e.g. `d1d4fc829fe7bc7c.vercel-dns-017.com`, NOT the old generic
 `cname.vercel-dns.com`), so copy the exact value it displays.
 
-### 3. Add that one CNAME in Google Cloud DNS
-DNS is on Google Cloud DNS, so records go in the **Google Cloud Console**
-(console.cloud.google.com > Network Services > Cloud DNS), not a registrar panel.
-In the `rosarioscalise.com` zone, **Add Standard** record set:
-- DNS name: `m`  (becomes `m.rosarioscalise.com`)
-- Resource record type: `CNAME`
-- Canonical name / data: the exact target Vercel showed
-  (e.g. `d1d4fc829fe7bc7c.vercel-dns-017.com.`), **with a trailing dot**
+### 3. Find where DNS is managed, then add ONE CNAME
+The domain is registered at **Squarespace** (ex-Google Domains, per RDAP) and
+served by `ns-cloud-*.googledomains.com` nameservers, which BOTH Squarespace's
+managed DNS and Google Cloud DNS use, so the name alone does not say where the
+records live. Log into **Squarespace** (account.squarespace.com, using the email
+that owned the old Google Domains registration) > the domain > **DNS / Name
+servers**:
+- **If it shows Squarespace/Google name servers with an editable DNS records
+  table** -> add the record there: Host `m`, Type `CNAME`, Data = Vercel's target
+  (`...vercel-dns-0XX.com`).
+- **If it shows custom name servers `ns-cloud-*.googledomains.com`** -> DNS is
+  delegated to a **Google Cloud DNS** zone. In console.cloud.google.com find the
+  project holding the `rosarioscalise.com` zone (Network Services > Cloud DNS;
+  try each of your Google accounts/projects, or `gcloud dns managed-zones list
+  --project=<id>`), then **Add Standard** record set: DNS name `m`, type `CNAME`,
+  canonical name = Vercel's target **with a trailing dot**
+  (e.g. `d1d4fc829fe7bc7c.vercel-dns-017.com.`).
+
+Either way it is the same single record; only the console differs.
 
 Save. This is the ONLY DNS change. Your apex, `www`, MX/email, and the
 GitHub-Pages verification records are all untouched. Vercel auto-provisions TLS
