@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "range": "SAMPLE data",
+    "generated": "illustrative",
+    "note": "Committed demo so the ?heatmap overlay renders without real data. Real counts go in website/heatmap-data.json (gitignored) via scripts/umami-heatmap-export.py. Schema: event[name]=count OR {title|url: count}; section[name]=count."
+  },
+  "event": {
+    "contact-email": 14,
+    "contact-scholar": 9,
+    "contact-github": 27,
+    "buymeacoffee": 3,
+    "paper-link": {
+      "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control": 41,
+      "DROID: A large-scale in-the-wild robot manipulation dataset": 23,
+      "Demonstrating Wheeled Lab: Modern Sim2Real for Low-cost, Open-source Wheeled Robotics": 12,
+      "Model predictive adversarial imitation learning for planning from observation": 7
+    },
+    "work-expand": {
+      "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control": 33,
+      "Demonstrating Wheeled Lab: Modern Sim2Real for Low-cost, Open-source Wheeled Robotics": 15,
+      "Model predictive adversarial imitation learning for planning from observation": 6
+    }
+  },
+  "section": {
+    "news": 96,
+    "selected-works": 138,
+    "mentoring": 44,
+    "elsewhere": 19
+  }
+}

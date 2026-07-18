@@ -281,5 +281,20 @@
   })();
 </script>
 {% endif %}
+<script>
+  // Internal attention overlay (Path A): visit any page with ?heatmap to tint
+  // instrumented elements by engagement count (loads website/heatmap.js on
+  // demand; no-op for normal visitors). Local-only by default; on the live site
+  // use ?heatmap=live to force it (shows sample data). See docs/ANALYTICS.md.
+  (function () {
+    var qs = new URLSearchParams(location.search);
+    if (!qs.has('heatmap')) return;
+    var h = location.hostname, local = h === 'localhost' || h === '127.0.0.1' || h === '';
+    if (!local && qs.get('heatmap') !== 'live') return;
+    var s = document.createElement('script');
+    s.src = '/heatmap.js?' + Date.now();
+    document.body.appendChild(s);
+  })();
+</script>
 </body>
 </html>

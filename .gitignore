@@ -21,6 +21,10 @@ cv/main.synctex.gz
 website/*.html
 website/headshot.jpg
 website/CNAME
+# Real attention-overlay data (generated per-account from Umami). The committed
+# website/heatmap-data.sample.json is the template/demo the tool falls back to;
+# generate the real one with scripts/umami-heatmap-export.py (local only).
+website/heatmap-data.json
 # Generated arXiv sources for garage posts (main.tex + copied figures + LaTeX
 # build junk). The SOURCE is website/pages/garage-*.md; committed fallback
 # figures live in website/img/garage/<slug>/ (tracked).

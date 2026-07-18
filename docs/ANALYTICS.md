@@ -74,3 +74,34 @@ You already emit the events; flip these on in Umami when you want them:
 - **Goals** for `contact-*`, `buymeacoffee`, `paper-link`, `not-found`.
 - **Funnel**: landed -> `scroll-depth` 50 -> `paper-link` -> `contact-*`.
 - **Retention / Journey** for returning visitors.
+
+## 6. Attention overlay (element-level heatmap)
+
+A local "poor-man's heatmap": it tints each instrumented element by its
+engagement count, right on the rendered page. It's element-level (colors the
+things you track), NOT a coordinate density plot: that would need click-coord
+capture (a separate, bigger build).
+
+**Use it:**
+1. Generate the data (needs a Umami API key from Cloud > Settings > API keys):
+   `UMAMI_API_KEY=... python scripts/umami-heatmap-export.py 30`
+   -> writes `website/heatmap-data.json` (gitignored).
+2. `make serve`, then open `http://localhost:8000/?heatmap` (or `/publications`,
+   `/reading`, a garage post, ...). Regions (sections + works) get a light fill;
+   click targets (paper links, contacts, ...) get a stronger tint + a count badge.
+   Two color scales (regions vs targets) since section views >> click counts.
+
+**No data yet?** It falls back to the committed `heatmap-data.sample.json` and
+shows a `SAMPLE` badge, so the tool renders out of the box. Dashed outline = a
+tracked element with zero/absent count.
+
+**On the live site** the toggle is off by default (it's a local tool); append
+`?heatmap=live` to force it there, where it shows the sample (the real
+`heatmap-data.json` is gitignored, so it isn't deployed).
+
+Files: `website/heatmap.js` (overlay), the `?heatmap` loader in
+`_layout.html.j2`, `scripts/umami-heatmap-export.py` (data), `heatmap-data.json`
+(gitignored real data) / `heatmap-data.sample.json` (committed demo). If the
+export script's endpoints 404 (Umami API drift), hand-edit the JSON to the schema
+in that script's header. For a true coordinate density plot, see "Path B" in the
+chat notes (click-coord capture + KDE render): not built.
