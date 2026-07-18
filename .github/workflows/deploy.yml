@@ -51,12 +51,13 @@ jobs:
   # Server-side "deploy" event: a marker in Umami each time the site publishes,
   # so you can line up traffic changes against releases. Runs only after a
   # successful deploy. No secrets: the website ID is public and /api/send needs
-  # no auth. Host + ID are read from site.yaml, so this auto-follows the
-  # first-party proxy once `umami_src` is flipped (see
-  # handoffs/20260718_UMAMI_FIRST_PARTY_PROXY.md). Best-effort: a failure here
-  # never fails the deploy. Note: this registers as a small CI-origin "visit" in
-  # Umami (~1-2/day); it carries a bot User-Agent and url=/deploy so it's easy to
-  # spot or filter.
+  # no auth. Host + ID are read from site.yaml, so this follows the first-party
+  # proxy automatically (see handoffs/20260718_UMAMI_FIRST_PARTY_PROXY.md).
+  # Best-effort: a failure here never fails the deploy. Identify it in Umami by
+  # name=deploy / url=/deploy. It sends a browser-like User-Agent on purpose:
+  # Umami silently DROPS events whose UA looks like a bot (returns {"beep":"boop"}),
+  # so a "deploy-bot" UA would never record. Tradeoff: it registers as a small
+  # CI-origin "visit" (~1-2/day) from the runner's datacenter IP.
   deploy-event:
     needs: deploy
     runs-on: ubuntu-latest
@@ -88,7 +89,7 @@ jobs:
               data:{sha:$sha, ref:$ref, run:$run, trigger:$trig}}}')
           curl -sf -m 15 -X POST "$SRC/api/send" \
             -H 'Content-Type: application/json' \
-            -A 'portfolio-deploy-bot/1.0 (+github-actions)' \
+            -A 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36' \
             -d "$PAYLOAD" \
             && echo ">> sent deploy event to $SRC/api/send" \
             || echo "::warning::deploy event POST failed (non-fatal)"
