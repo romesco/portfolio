@@ -42,6 +42,10 @@ favicons: ["🤖", "🦾", "🧪", "🧬", "⚙️", "🛰️", "🔬", "🔭", 
 # emits a handful of extra events: set to false to disable if the free-tier
 # event cap gets tight.
 analytics:
+  # First-party proxy (ad-blocker coverage): once the Cloudflare Worker is live
+  # (see handoffs/20260718_UMAMI_FIRST_PARTY_PROXY.md), uncomment the proxied
+  # line below and delete the cloud.umami.is one. `umami_id` stays the same.
+  # umami_src: "https://m.rosarioscalise.com/script.js"
   umami_src: "https://cloud.umami.is/script.js"
   umami_id: "b3fad5ea-4eb5-42ed-9bfa-95bf0bdfcc76"    # cloud.umami.is Website ID for rosarioscalise.com
   engagement: true

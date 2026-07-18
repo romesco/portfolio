@@ -1,0 +1,21 @@
+# Cloudflare Worker: first-party reverse proxy for Umami Cloud.
+# See ../../handoffs/20260718_UMAMI_FIRST_PARTY_PROXY.md for the full setup.
+#
+# Deploy:  cd infra/umami-proxy && wrangler deploy   (needs a Cloudflare API token)
+# Or paste worker.js into the dashboard (Workers & Pages > Create > Worker).
+
+name = "umami-proxy"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+
+# Bind the Worker to your first-party subdomain. This requires the subdomain to
+# be a zone on Cloudflare (subdomain delegation from Google Cloud DNS keeps your
+# apex + GitHub Pages untouched -- see the handoff). Easiest path is the
+# dashboard: Worker > Settings > Domains & Routes > Add > Custom Domain >
+# `m.rosarioscalise.com`. Or uncomment below and `wrangler deploy` once the zone
+# exists. Change the subdomain label ("m") to whatever you prefer; keep it
+# innocuous (avoid "analytics"/"umami"/"stats").
+#
+# routes = [
+#   { pattern = "m.rosarioscalise.com", custom_domain = true }
+# ]
