@@ -57,15 +57,19 @@ You'll get a `*.vercel.app` URL. Sanity check:
 Umami tracker JS.
 
 ### 2. Attach the subdomain in Vercel
-Project > **Settings > Domains** > add `m.rosarioscalise.com`. Vercel shows the
-DNS record to create, currently a **CNAME** `m` -> `cname.vercel-dns.com` (use
-whatever it shows).
+Project > **Settings > Domains** > **Add Domain** > `m.rosarioscalise.com`.
+Vercel shows a **CNAME** to create. The target is **unique to your project**
+(e.g. `d1d4fc829fe7bc7c.vercel-dns-017.com`, NOT the old generic
+`cname.vercel-dns.com`), so copy the exact value it displays.
 
 ### 3. Add that one CNAME in Google Cloud DNS
-In the `rosarioscalise.com` zone, add a record set:
-- Name: `m`  (i.e. `m.rosarioscalise.com`)
-- Type: `CNAME`
-- Data: `cname.vercel-dns.com.`  (exactly what Vercel showed)
+DNS is on Google Cloud DNS, so records go in the **Google Cloud Console**
+(console.cloud.google.com > Network Services > Cloud DNS), not a registrar panel.
+In the `rosarioscalise.com` zone, **Add Standard** record set:
+- DNS name: `m`  (becomes `m.rosarioscalise.com`)
+- Resource record type: `CNAME`
+- Canonical name / data: the exact target Vercel showed
+  (e.g. `d1d4fc829fe7bc7c.vercel-dns-017.com.`), **with a trailing dot**
 
 Save. This is the ONLY DNS change. Your apex, `www`, MX/email, and the
 GitHub-Pages verification records are all untouched. Vercel auto-provisions TLS
