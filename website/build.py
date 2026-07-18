@@ -31,7 +31,9 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 from pathlib import Path
@@ -1084,6 +1086,79 @@ def render_paper(meta: dict, body: str, slug: str) -> None:
     print(f"wrote garage/{slug}/main.tex (arXiv source)")
 
 
+# --- inline-script syntax guard --------------------------------------------
+# A template edit can splice broken markup into an inline <script> (e.g. a
+# stray <p> or a clobbered function header) and still produce valid-looking
+# HTML that builds fine but ships dead JavaScript. `node --check` parses every
+# inline script so that class of bug fails `make site` instead of the browser.
+_SCRIPT_RE = re.compile(r"<script\b([^>]*)>(.*?)</script>", re.DOTALL | re.IGNORECASE)
+_SCRIPT_SRC_RE = re.compile(r"\bsrc\s*=", re.IGNORECASE)
+_SCRIPT_TYPE_RE = re.compile(r"""\btype\s*=\s*['"]([^'"]*)['"]""", re.IGNORECASE)
+_JS_SCRIPT_TYPES = {"", "text/javascript", "application/javascript", "module"}
+
+
+def _iter_inline_scripts(html: str):
+    """Yield (is_module, body) for each inline JavaScript <script> in `html`,
+    skipping external (`src=`) and non-JS (`type=application/ld+json`, etc.)
+    blocks that node cannot / should not parse."""
+    for m in _SCRIPT_RE.finditer(html):
+        attrs, body = m.group(1), m.group(2)
+        if _SCRIPT_SRC_RE.search(attrs):
+            continue  # external script: no inline source to check
+        tm = _SCRIPT_TYPE_RE.search(attrs)
+        stype = tm.group(1).strip().lower() if tm else ""
+        if stype not in _JS_SCRIPT_TYPES:
+            continue  # JSON-LD / templates / other non-JavaScript payloads
+        if body.strip():
+            yield stype == "module", body
+
+
+def check_inline_scripts(html_files) -> list[str]:
+    """Syntax-check every inline <script> in the generated pages with
+    `node --check`. Returns a list of human-readable failure messages (empty
+    when all pass). Best-effort: if node is not on PATH, warn once and skip so
+    environments without node still build. Identical scripts (the shared layout
+    JS repeats on every page) are checked once."""
+    node = shutil.which("node")
+    if not node:
+        print(">> warning: node not found; skipping inline-script syntax check",
+              file=sys.stderr)
+        return []
+    seen: set[str] = set()
+    failures: list[str] = []
+    for path in sorted(html_files):
+        try:
+            html = Path(path).read_text()
+        except OSError:
+            continue
+        for idx, (is_module, body) in enumerate(_iter_inline_scripts(html), 1):
+            key = hashlib.sha1(body.encode()).hexdigest()
+            if key in seen:
+                continue  # same script on another page: already checked
+            seen.add(key)
+            with tempfile.NamedTemporaryFile(
+                    "w", suffix=".mjs" if is_module else ".js", delete=False) as f:
+                f.write(body)
+                tmp = f.name
+            try:
+                r = subprocess.run([node, "--check", tmp],
+                                   capture_output=True, text=True)
+            finally:
+                os.unlink(tmp)
+            if r.returncode != 0:
+                lines = [ln.strip() for ln in r.stderr.splitlines() if ln.strip()]
+                # node prints "<tmpfile>:<line>" first, then the offending
+                # source and a "SyntaxError: ..." line. Report the error and
+                # the line number, not the temp path.
+                lineno = ""
+                first = lines[0] if lines else ""
+                if ":" in first and first.rsplit(":", 1)[-1].isdigit():
+                    lineno = f"line {first.rsplit(':', 1)[-1]}: "
+                err = next((ln for ln in lines if "Error:" in ln), "syntax error")
+                failures.append(f"{Path(path).name} inline script #{idx}: {lineno}{err}")
+    return failures
+
+
 def main() -> int:
     if not SITE_YAML.exists():
         print(f"error: {SITE_YAML} not found.", file=sys.stderr)
@@ -1347,6 +1422,16 @@ def main() -> int:
         print(f"wrote CNAME ({cname})")
     elif cname_path.exists():
         cname_path.unlink()
+
+    # Guard: fail the build if any inline <script> has a syntax error, so a
+    # template edit that mangles JS never ships as a silently-dead page.
+    script_errors = check_inline_scripts(ROOT.glob("*.html"))
+    if script_errors:
+        print("ERROR: inline <script> syntax check failed:", file=sys.stderr)
+        for e in script_errors:
+            print(f"  {e}", file=sys.stderr)
+        return 1
+    print(f"checked inline <script> syntax across pages ({shutil.which('node') and 'node' or 'skipped'})")
 
     return 0
 
