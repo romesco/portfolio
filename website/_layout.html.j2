@@ -242,6 +242,32 @@
     }
     addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') dwell(); });
     addEventListener('pagehide', dwell);
+
+    // Section attention: fire `section-view` once per [data-section] region when
+    // it holds the viewport (>=50% of itself, or filling >=50% of the screen for
+    // tall sections) for ~1s, so a quick scroll-past does not count. Shows which
+    // parts of a page actually draw the eye, not just total dwell.
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var el = en.target;
+          var vh = window.innerHeight || document.documentElement.clientHeight || 1;
+          var visible = en.isIntersecting &&
+            (en.intersectionRatio >= 0.5 || en.intersectionRect.height >= vh * 0.5);
+          if (visible) {
+            if (el.__secFired || el.__secTimer) return;
+            el.__secTimer = setTimeout(function () {
+              el.__secFired = true; el.__secTimer = 0; io.unobserve(el);
+              track('section-view', { name: el.getAttribute('data-section'), path: path });
+            }, 1000);
+          } else if (el.__secTimer) {
+            clearTimeout(el.__secTimer); el.__secTimer = 0;
+          }
+        });
+      }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
+      var secs = document.querySelectorAll('[data-section]');
+      for (var si = 0; si < secs.length; si++) io.observe(secs[si]);
+    }
     {% endif %}
   })();
 </script>

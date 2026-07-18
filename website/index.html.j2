@@ -28,7 +28,7 @@
   <p class="banner">{{ banner_html }}</p>
   {% endif %}
   {% if news %}
-  <section class="news-section">
+  <section class="news-section" data-section="news">
     <h2>News</h2>
     {% call expandable(3) %}
     <ul class="news">
@@ -43,7 +43,7 @@
   </section>
   {% endif %}
 
-  <section class="works">
+  <section class="works" data-section="selected-works">
     <h2>Selected works{% if more_count %} <a class="works-more" href="/publications" title="See the full publication list">+{{ more_count }} more</a>{% endif %}</h2>
     {% if publications %}
     {{ work_list(publications) }}
@@ -53,7 +53,7 @@
   </section>
 
   {% if mentees %}
-  <section class="mentoring-section">
+  <section class="mentoring-section" data-section="mentoring">
     <h2>Mentoring</h2>
     {% call expandable(3) %}
     <ul class="mentoring">
@@ -71,7 +71,7 @@
   </section>
   {% endif %}
 
-  <section class="elsewhere-section">
+  <section class="elsewhere-section" data-section="elsewhere">
     <h2>Elsewhere</h2>
     <div class="elsewhere-row">
       <ul class="elsewhere">
