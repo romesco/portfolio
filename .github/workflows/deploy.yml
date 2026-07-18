@@ -47,3 +47,48 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Server-side "deploy" event: a marker in Umami each time the site publishes,
+  # so you can line up traffic changes against releases. Runs only after a
+  # successful deploy. No secrets: the website ID is public and /api/send needs
+  # no auth. Host + ID are read from site.yaml, so this auto-follows the
+  # first-party proxy once `umami_src` is flipped (see
+  # handoffs/20260718_UMAMI_FIRST_PARTY_PROXY.md). Best-effort: a failure here
+  # never fails the deploy. Note: this registers as a small CI-origin "visit" in
+  # Umami (~1-2/day); it carries a bot User-Agent and url=/deploy so it's easy to
+  # spot or filter.
+  deploy-event:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send "deploy" event to Umami
+        run: |
+          set -euo pipefail
+          SRC=$(grep -E '^\s*umami_src:' website/site.yaml | head -1 \
+            | sed -E 's/.*"(https?:\/\/[^/"]+).*/\1/')
+          ID=$(grep -oiE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' \
+            website/site.yaml | head -1)
+          if [ -z "$SRC" ] || [ -z "$ID" ]; then
+            echo "::warning::could not read umami_src/umami_id from site.yaml; skipping deploy event"
+            exit 0
+          fi
+          PAYLOAD=$(jq -n \
+            --arg w "$ID" \
+            --arg sha "${GITHUB_SHA:0:7}" \
+            --arg ref "${GITHUB_REF_NAME:-}" \
+            --arg run "${GITHUB_RUN_ID:-}" \
+            --arg trig "${GITHUB_EVENT_NAME:-}" \
+            '{type:"event", payload:{website:$w, hostname:"rosarioscalise.com",
+              url:"/deploy", title:"deploy", name:"deploy",
+              data:{sha:$sha, ref:$ref, run:$run, trigger:$trig}}}')
+          curl -sf -m 15 -X POST "$SRC/api/send" \
+            -H 'Content-Type: application/json' \
+            -A 'portfolio-deploy-bot/1.0 (+github-actions)' \
+            -d "$PAYLOAD" \
+            && echo ">> sent deploy event to $SRC/api/send" \
+            || echo "::warning::deploy event POST failed (non-fatal)"
