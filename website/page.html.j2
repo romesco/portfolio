@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="page-content">
+  <div class="page-content"{% if page_slug and page_slug.startswith('garage-') %} data-section="{{ page_slug }}"{% endif %}>
 {{ content_html }}
   </div>
 {% endblock %}

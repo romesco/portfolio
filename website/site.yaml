@@ -51,3 +51,8 @@ analytics:
   # umami_src: "https://cloud.umami.is/script.js"   # direct fallback (ad-blockable)
   umami_id: "b3fad5ea-4eb5-42ed-9bfa-95bf0bdfcc76"    # Website ID for rosarioscalise.com
   engagement: true
+  # Route the CI "deploy" marker to a SEPARATE Umami website so datacenter CI
+  # hits don't pollute real traffic/geo. Create a 2nd website in Umami (e.g.
+  # "portfolio ops") and paste its Website ID here. Blank = deploy events fall
+  # back to the main site. Read by .github/workflows/deploy.yml only.
+  ops_umami_id: ""

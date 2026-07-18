@@ -183,6 +183,15 @@
     }
     function track(name, data) { ready(function () { try { umami.track(name, data); } catch (e) {} }); }
 
+    // 0. Self-exclude. Visit /?notme once on each of your own devices to stop
+    // counting yourself (Umami honors localStorage['umami.disabled']); /?trackme
+    // re-enables. Takes effect from the next page load on that device.
+    try {
+      var sx = new URLSearchParams(location.search);
+      if (sx.has('notme')) localStorage.setItem('umami.disabled', '1');
+      if (sx.has('trackme')) localStorage.removeItem('umami.disabled');
+    } catch (e) {}
+
     // 1. Cross-device stitch. Umami cannot merge an anonymous visitor's phone
     // and laptop on its own (there is no shared key). But a link you send with
     // ?v=<tag> tags this visit, and the tag is remembered on the device, so

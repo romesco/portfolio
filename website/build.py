@@ -985,6 +985,15 @@ def split_front_matter(text: str) -> tuple[dict, str]:
         return {}, text
     meta = yaml.safe_load(m.group(1)) or {}
     return meta, text[m.end():]
+
+
+def slugify(s) -> str:
+    """Lowercase, hyphenated slug for analytics section ids etc.
+    'Friends & Adventures' -> 'friends-adventures'."""
+    s = re.sub(r"[^\w\s-]", "", str(s).lower())
+    return re.sub(r"[\s_-]+", "-", s).strip("-")
+
+
 def render_pages(env: Environment, identity: dict, default_description: str,
                  css_version: str, favicons: list[str]) -> list[str]:
     """Render every website/pages/*.md to website/<slug>.html via page.html.j2.
@@ -1247,6 +1256,7 @@ def main() -> int:
     env.filters["links"] = render_links
     env.filters["coverage"] = render_coverage_inline
     env.filters["collaborators"] = render_collaborators
+    env.filters["slugify"] = slugify
     env.globals["build_fp"] = build_fp
     env.globals["year"] = datetime.date.today().year
     env.globals["show_masthead_bio"] = False

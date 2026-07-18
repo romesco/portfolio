@@ -72,12 +72,17 @@ jobs:
           set -euo pipefail
           SRC=$(grep -E '^\s*umami_src:' website/site.yaml | head -1 \
             | sed -E 's/.*"(https?:\/\/[^/"]+).*/\1/')
-          ID=$(grep -oiE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' \
-            website/site.yaml | head -1)
+          UUID='[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+          MAIN_ID=$(grep -E '^\s*umami_id:' website/site.yaml | grep -oiE "$UUID" | head -1)
+          # Prefer a dedicated "ops" website so the deploy marker doesn't pollute
+          # real traffic; fall back to the main site if ops_umami_id is blank.
+          OPS_ID=$(grep -E '^\s*ops_umami_id:' website/site.yaml | grep -oiE "$UUID" | head -1)
+          ID="${OPS_ID:-$MAIN_ID}"
           if [ -z "$SRC" ] || [ -z "$ID" ]; then
             echo "::warning::could not read umami_src/umami_id from site.yaml; skipping deploy event"
             exit 0
           fi
+          echo ">> deploy event -> website ${ID} ($([ -n "$OPS_ID" ] && echo ops || echo main))"
           PAYLOAD=$(jq -n \
             --arg w "$ID" \
             --arg sha "${GITHUB_SHA:0:7}" \

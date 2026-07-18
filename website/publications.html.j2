@@ -17,7 +17,7 @@
     <h2>{{ title }}</h2>
     {% if groups %}
     {% for g in groups %}
-    <h3 class="pub-group">{{ g.label }}</h3>
+    <h3 class="pub-group" data-section="pub:{{ g.label | slugify }}">{{ g.label }}</h3>
     {{ work_list(g.pubs, full=true) }}
     {% endfor %}
     {% else %}

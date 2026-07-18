@@ -16,7 +16,7 @@
     {% if groups %}
     {% for g in groups %}
     <h3 class="reading-group">{{ g.name }}</h3>
-    <ul class="reading">
+    <ul class="reading" data-section="read:{{ g.name | slugify }}">
       {% for ln in g.links %}
       <li class="read-item">
         {% if ln.favicon %}<img class="read-favicon" src="{{ ln.favicon }}" alt="" width="16" height="16" loading="lazy" onerror="this.style.visibility='hidden'">{% else %}<span class="read-favicon" aria-hidden="true"></span>{% endif %}
