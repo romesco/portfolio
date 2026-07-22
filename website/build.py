@@ -417,16 +417,22 @@ def cname_from_website(url: str | None) -> str | None:
 
 # One-liners (news updates, bucket-list items) are rendered as inline Markdown
 # so they can carry a link or emphasis. Raw HTML is escaped; only Markdown
-# syntax is honored.
+# syntax is honored, plus one house extension: `==x==` tints x with the themed
+# accent color (see .accent in styles.css), e.g. the "2"s in "Sim==2==Real...".
+# The token works inside link text too. It requires x to start and end with a
+# non-space char, so ordinary prose like "a == b" is left untouched.
 _INLINE_MD = mistune.create_markdown(escape=True)
+_ACCENT_RE = re.compile(r"==(\S(?:[^=]*\S)?)==")
 
 
 def _render_inline_md(text: str) -> Markup:
     """Render a single line as inline HTML, stripping the enclosing <p> that
-    mistune adds so it sits inline."""
+    mistune adds so it sits inline. `==x==` becomes an accent-tinted span; the
+    captured text is already HTML-escaped by mistune, so the span is safe."""
     html = _INLINE_MD(text or "").strip()
     if html.startswith("<p>") and html.endswith("</p>"):
         html = html[3:-4]
+    html = _ACCENT_RE.sub(r'<span class="accent">\1</span>', html)
     return Markup(html)
 
 

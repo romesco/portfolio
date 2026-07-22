@@ -300,6 +300,11 @@ main {
   text-decoration: underline;
 }
 
+/* Inline accent: the `==x==` one-liner token (build.py) tints a fragment with
+   the themed accent, e.g. the "2"s in "Sim2Real2Field". Use sparingly. Works
+   inside links too (higher specificity than the prose-colored anchor). */
+.accent { color: var(--accent); }
+
 /* Inline brand glyphs: author affiliation chips and bio lab chips share ONE
    size / rounding / baseline so they sit identically wherever they appear. */
 .collab-favicon,
