@@ -3,12 +3,19 @@
 \begin{document}
 \input{generated/identity.tex}
 
+% Per-recipient tracked link tag: the header website link carries ?v=<tag>, which
+% Umami's identify hook (website/_layout.html.j2) picks up and remembers across
+% devices. The tag is an opaque hash; the hash -> recipient mapping lives in the
+% gitignored notes/cv-link-tags.csv, never in git. Before exporting a CV for a
+% new recipient: mint a fresh hash, swap it here, add a CSV row.
+\newcommand{\cvLinkTag}{e7a1c673}
+
 %----------HEADING-----------------
 %HACK
 \hskip-20pt
 \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
 \multirow{2}{*}{\textbf{\Huge \cvName}} 
-& \multicolumn{1}{l}{\href{\cvWebsite}{rosarioscalise.com}} \\
+& \multicolumn{1}{l}{\href{\cvWebsite?v=\cvLinkTag}{rosarioscalise.com}} \\
 & \multicolumn{1}{l}{\href{mailto:\cvEmail}{\cvEmail}}
 \end{tabular*}
 
