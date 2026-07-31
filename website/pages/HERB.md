@@ -32,8 +32,8 @@ head: |
 ---
 
 <iframe class="herb-player"
-  src="https://player.vimeo.com/video/63348513?app_id=122963&title=0&byline=0&portrait=0"
-  title="OREO Separator Machines - HERB (Vimeo)"
+  src="https://www.youtube-nocookie.com/embed/IxyrD-l5e8I?rel=0"
+  title="HERB the Robot Stars in Oreo Video (Carnegie Mellon, YouTube)"
   allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
   allowfullscreen
   referrerpolicy="strict-origin-when-cross-origin"></iframe>
