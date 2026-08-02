@@ -29,7 +29,9 @@ head: |
     }
     .backlink a:hover, .backlink a:focus-visible,
     .story-link a:hover, .story-link a:focus-visible { opacity: 1; }
-    .story-link { position: fixed; top: .75rem; right: .75rem; z-index: 20; margin: 0; }
+    /* One "line" below the top edge so it clears YouTube's upper-right
+       overlay controls (watch-later / share). */
+    .story-link { position: fixed; top: 3rem; right: .75rem; z-index: 20; margin: 0; }
     .site-footer { display: none; }
   </style>
 ---
