@@ -35,6 +35,15 @@
 handle: rosarioscalise
 
 posts:
+  - at: 2026-08-13 16:40:24
+    text: "I highly recommend all ML/AI researchers watch this video to appreciate how we got to where we are before proceeding!"
+    repost:
+      source: youtube
+      author: "Reinforcement Learning Conference"
+      url: https://www.youtube.com/@RL-conference   # link back to the channel
+      video: https://www.youtube.com/watch?v=-gQNM7rAWP0
+      text: "Andy Barto - In the Beginning ML was RL - RLC 2024"
+
   - at: 2026-06-17 18:00:00
     text: "now that we have AI Agents, there are only 3 traits left to provide true value in this world:  \ncompassion, passion, and ass"
 
