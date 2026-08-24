@@ -1,11 +1,27 @@
 organization:
+  - venue: CoRL
+    year: "2026"
+    detail: "Workshop: Sim-to-Real-to-Field: The Science of Transfer"
+    role: Co-Chair
+  - venue: IROS
+    year: "2026"
+    detail: "Workshop: Rethinking Uncertainty for Modern Robotics Paradigms"
+    role: Co-Chair
+  - venue: DARPA TIAMAT
+    year: "2025, 2026"
+    detail: Program PI Meeting
+    role: Organizer
   - venue: IROS
     year: "2019"
     detail: Session on Semantic Scene Understanding
     role: Chair
 
 refereeing:
-  ICRA: [2022, 2023, 2024]
-  IROS: [2019]
-  RO-MAN: [2017]
-  HRI: [2019, 2020]
+  conferences:
+    CoRL: [2024, 2025, 2026]
+    ICRA: [2022, 2023, 2024, 2025, 2026]
+    IROS: [2019]
+    RO-MAN: [2017]
+    HRI: [2019, 2020]
+  journals:
+    RA-L: [2024, 2025, 2026]

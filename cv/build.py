@@ -79,9 +79,14 @@ class OrgRole(BaseModel):
     role: str
 
 
+class Refereeing(BaseModel):
+    conferences: dict[str, list[int]] = Field(default_factory=dict)
+    journals: dict[str, list[int]] = Field(default_factory=dict)
+
+
 class ServiceSection(BaseModel):
     organization: list[OrgRole] = Field(default_factory=list)
-    refereeing: dict[str, list[int]] = Field(default_factory=dict)
+    refereeing: Refereeing = Field(default_factory=Refereeing)
 
 
 class SubsectionItem(BaseModel):

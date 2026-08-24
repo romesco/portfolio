@@ -9,9 +9,14 @@
 \BLOCK{ endfor }
 \vspace{-3pt}
 \BLOCK{ endif }
-\BLOCK{ if data.refereeing }
+\BLOCK{ if data.refereeing.conferences }
 \resumeSubheadingSingleLine{\textit{Conference Refereeing}}{}
 \resumeSubheadingSingleLine
-{\BLOCK{ for venue, years in data.refereeing.items() }\textbf{\VAR{ venue }}: \VAR{ years|join(", ") }\BLOCK{ if not loop.last }; \BLOCK{ endif }\BLOCK{ endfor }}{}
+{\BLOCK{ for venue, years in data.refereeing.conferences.items() }\textbf{\VAR{ venue }}: \VAR{ years|join(", ") }\BLOCK{ if not loop.last }; \BLOCK{ endif }\BLOCK{ endfor }}{}
+\BLOCK{ endif }
+\BLOCK{ if data.refereeing.journals }
+\resumeSubheadingSingleLine{\textit{Journal Refereeing}}{}
+\resumeSubheadingSingleLine
+{\BLOCK{ for venue, years in data.refereeing.journals.items() }\textbf{\VAR{ venue }}: \VAR{ years|join(", ") }\BLOCK{ if not loop.last }; \BLOCK{ endif }\BLOCK{ endfor }}{}
 \BLOCK{ endif }
 \resumeSubHeadingListEnd
