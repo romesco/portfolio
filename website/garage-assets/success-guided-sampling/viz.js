@@ -457,12 +457,27 @@
         fill: p[i] < 0.1 || p[i] > 0.9 ? 'var(--fg-faint)' : 'var(--prob)', opacity: 0.75 }, cv);
     }
 
-    // where each sampler spends: uniform = area fractions; SGS = paper-kernel mass on the same p
+    // Where each sampler actually spends episodes, starting from this snapshot: both
+    // samplers take over the same policy (learning frozen, so the map's success rates
+    // stay true) and the same sliding-window estimates, run 3,000 episodes, and every
+    // episode is binned by its cell's ground-truth success rate. SGS chooses with its
+    // own lagging p-hat, exactly as in live training.
     const cat = (x) => (x < 0.1 ? 0 : x > 0.9 ? 2 : 1);
-    const uni = [0, 0, 0], sgs = [0, 0, 0];
-    const probs = E.kernelProbs(p, E.PRESETS.paper);
-    for (let i = 0; i < world.N; i++) { uni[cat(p[i])] += 1 / world.N; sgs[cat(p[i])] += probs[i]; }
-    drawSpendBars($('signal-bars'), [['uniform', uni], ['SGS', sgs]]);
+    function takeOver(mode) {
+      const t = new E.Trainer({ mode, envs: 64, seed: 99 });
+      t.K.set(tr.K); t.V.set(tr.V);
+      const m = t.monitor, src = tr.monitor;
+      m.buf.set(src.buf); m.ptr.set(src.ptr); m.count.set(src.count); m.sum.set(src.sum); m.rate.set(src.rate);
+      t.learn.alpha = 0;
+      t.refreshProbs();
+      for (const e of t.envs) t.resetEnv(e);
+      const c = [0, 0, 0];
+      t.onEpisode = (env, o, i) => c[cat(p[i])]++;
+      while (c[0] + c[1] + c[2] < 3000) t.tick(false);
+      const n = c[0] + c[1] + c[2];
+      return c.map((x) => x / n);
+    }
+    drawSpendBars($('signal-bars'), [['uniform', takeOver('uniform')], ['SGS', takeOver('sgs')]]);
   })();
 
   function drawSpendBars(svg, rows, labels) {
@@ -736,7 +751,7 @@
       $('k-eps-out').textContent = c.eps.toExponential(0);
     }
     ids.forEach((id) => ($('k-' + id).oninput = () => { labels(); draw(); }));
-    const PRE = { paper: E.PRESETS.paper, loco: E.PRESETS.loco, manip: E.PRESETS.manip, sharp: { target: 0.5, kappa: 20, T: 1, eps: 1e-8 } };
+    const PRE = { paper: E.PRESETS.paper, page: E.PRESETS.page, loco: E.PRESETS.loco, manip: E.PRESETS.manip, sharp: { target: 0.5, kappa: 20, T: 1, eps: 1e-8 } };
     document.querySelectorAll('[data-preset]').forEach((b) => (b.onclick = () => {
       const p = PRE[b.dataset.preset];
       $('k-t').value = p.target; $('k-kappa').value = p.kappa; $('k-T').value = p.T; $('k-eps').value = Math.log10(p.eps);
@@ -909,8 +924,8 @@
       };
     }
     const succ = chart($('scale-succ'), 1, [0, 0.5, 1], 'success');
-    // headless sweep: SGS at 512 envs ≈ 55 frontier eps/s, uniform ≈ 20
-    const rate = chart($('scale-rate'), 60, [0, 30, 60], 'eps / s');
+    // headless sweep (kappa = 10): SGS at 512 envs ≈ 77 frontier eps/s, uniform ≈ 24
+    const rate = chart($('scale-rate'), 90, [0, 45, 90], 'eps / s');
 
     let jobs = [], ticks = 0, running = false;
     function start() {

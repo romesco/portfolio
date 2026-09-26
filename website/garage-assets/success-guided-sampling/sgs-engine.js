@@ -211,6 +211,9 @@
     paper: { target: 0.5, kappa: 1.0, T: 2.0, eps: 1e-8, H: 100, label: 'paper (§3.2)' },
     loco:  { target: 0.66, kappa: 5.0, T: 2.0, eps: 1e-8, H: 100, label: 'LOCO_POSITION' },
     manip: { target: 0.5, kappa: 1.0, T: 2.0, eps: 1e-4, H: 100, label: 'FACTORY_V2' },
+    // the explainer's setting: sharper than the paper's kappa=1, and the best of the
+    // kernels tried on this toy's uniform-vs-SGS race (see STORY.md)
+    page:  { target: 0.5, kappa: 10.0, T: 2.0, eps: 1e-8, H: 100, label: 'this page' },
   };
 
   function betaWeight(p, cfg) {
@@ -275,7 +278,7 @@
       opts = opts || {};
       this.world = opts.world || makeWorld();
       this.mode = opts.mode || 'sgs';
-      this.cfg = Object.assign({}, PRESETS.paper, { H: 16 }, opts.cfg || {});
+      this.cfg = Object.assign({}, PRESETS.page, { H: 16 }, opts.cfg || {});
       this.learn = Object.assign({}, LEARN, opts.learn || {});
       this.P = Object.assign({}, PHYS, opts.phys || {});
       this.E = opts.envs || 64;

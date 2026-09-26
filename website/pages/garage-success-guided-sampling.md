@@ -10,8 +10,8 @@ scripts: |
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
-  <script src="./garage-assets/success-guided-sampling/sgs-engine.js?v=d5a22339"></script>
-  <script src="./garage-assets/success-guided-sampling/viz.js?v=6c7227f7"></script>
+  <script src="./garage-assets/success-guided-sampling/sgs-engine.js?v=1b772d6e"></script>
+  <script src="./garage-assets/success-guided-sampling/viz.js?v=20b7ef00"></script>
 ---
 
 # Success Guided Sampling
@@ -37,7 +37,7 @@ scripts: |
       <svg class="grid" id="hero-grid"></svg>
     </div>
     <div>
-      <div class="panel-title"><span>goals by success rate · <span style="color:var(--prob)">sampler</span></span><span id="inlay-mass"></span></div>
+      <div class="panel-title"><span>goals by success rate · <span style="color:var(--prob)">sampler, κ = 10</span></span><span id="inlay-mass"></span></div>
       <svg class="plot" id="hero-inlay" viewBox="0 0 300 104"></svg>
       <div class="inlay-cap">Bars: how many goals sit at each $\hat p$ (hover a bar to find them on the map). Curve: the Beta sampler&#39;s relative probability for a goal at that $\hat p$.</div>
       <div class="panel-title"><span>key</span><span style="color:var(--fg-faint)">hover for details</span></div>
@@ -84,7 +84,7 @@ scripts: |
   <figcaption class="wide"><strong>Figure 0.</strong> SGS training live: 48 parallel robots, all running the same policy $\pi$.
 The blue basin around $s_0$ holds the goals the policy can already reach. Its edge is the
 <strong>frontier of capability</strong>, where the sampling mass is focused. As the policy improves, the basin grows and the
-frontier moves outward, with the sampling mass following it. The figure opens 2,500 episodes into training, after the cold start.</figcaption>
+frontier moves outward, with the sampling mass following it. The figure opens 2,500 episodes into training, after the cold start. Like every figure on this page, the sampler uses $\kappa = 10$, sharper than the paper&#39;s default of $1$ (§5).</figcaption>
 </figure>
 ```
 
@@ -213,7 +213,10 @@ think of the cell shade as a reach-probability field and the frontier as its mid
     </div>
   </div>
   <figcaption><strong>Figure 3.</strong> Success rates here are ground truth: 8 fresh rollouts per cell, no learning. The bars
-compare uniform sampling with SGS at the paper&#39;s settings, applied to the same success rates.</figcaption>
+show where each sampler actually spends its next 3,000 episodes if it takes over from this snapshot: same policy
+(learning paused, so these success rates stay true), same starting estimates, each episode binned by its cell&#39;s
+true success rate. SGS chooses using its own lagging estimates $\hat p$, so a cell that has just been mastered
+still draws some episodes until its window catches up.</figcaption>
 </figure>
 ```
 
@@ -263,6 +266,10 @@ $$P(i)=\frac{\exp(\ell_i/T)}{\sum_{j=1}^{N} \exp(\ell_j/T)}.$$
 
 The floor $\epsilon$ keeps every configuration reachable. Unsolved cells are still sampled now and then, so
 their estimates can change the moment the robot gets lucky. The temperature $T$ flattens the whole thing further.
+Every figure on this page uses $t = 0.5$, $\kappa = 10$, $T = 2$. The paper uses a gentler $\kappa = 1$ at
+$N = 32{,}768$ configurations; on this 145-cell toy, the sharper kernel is both easier to see and slightly
+better (mean success 0.94 vs 0.92 after 40,000 episodes). Sharper still backfires: at $T = 1$ the sampler
+revisits too few cells to keep their estimates fresh.
 The dots on the curve are the live $\hat p_i$ from Figure 4.
 
 ```{=web}
@@ -273,13 +280,14 @@ The dots on the curve are the live $\hat p_i$ from Figure 4.
       <svg class="plot" id="k-plot" viewBox="0 0 420 250"></svg>
       <div class="controls">
         <label>target t <input type="range" id="k-t" min="0.05" max="0.95" step="0.01" value="0.5"><output id="k-t-out"></output></label>
-        <label>κ <input type="range" id="k-kappa" min="0" max="30" step="0.5" value="1"><output id="k-kappa-out"></output></label>
+        <label>κ <input type="range" id="k-kappa" min="0" max="30" step="0.5" value="10"><output id="k-kappa-out"></output></label>
         <label>T <input type="range" id="k-T" min="0.25" max="6" step="0.05" value="2"><output id="k-T-out"></output></label>
         <label>log₁₀ ε <input type="range" id="k-eps" min="-10" max="-1" step="0.5" value="-8"><output id="k-eps-out"></output></label>
       </div>
       <div class="controls">
         <span>presets</span>
-        <button class="btn" data-preset="paper">paper</button>
+        <button class="btn" data-preset="page">this page (κ=10)</button>
+        <button class="btn" data-preset="paper">paper (κ=1)</button>
         <button class="btn" data-preset="loco">loco (κ=5, t=.66)</button>
         <button class="btn" data-preset="manip">manip (ε=1e-4)</button>
         <button class="btn" data-preset="sharp">sharp (κ=20)</button>
@@ -297,8 +305,8 @@ The dots on the curve are the live $\hat p_i$ from Figure 4.
   </div>
   <figcaption><strong>Figure 5.</strong> Solid: kernel weight $w(p)$ rescaled to its peak. Vermilion: the relative
 sampling probability after the log, softmax, and temperature, which is proportional to $(w+\epsilon)^{1/T}$.
-At the paper&#39;s settings ($t{=}0.5,\ \kappa{=}1,\ T{=}2$) the preference is gentle: a frontier cell is about
-70× likelier than an unsolved one, not infinitely likelier. The effective number of configs is
+At this page&#39;s settings ($t{=}0.5,\ \kappa{=}10,\ T{=}2$) a frontier cell is about 220× likelier to be sampled
+than an unsolved one, not infinitely likelier; at the paper&#39;s gentler $\kappa{=}1$ it is about 70×. The effective number of configs is
 $\exp(\text{entropy})$. These sliders only change this figure; they do not affect the live training in Figure 4.</figcaption>
 </figure>
 ```
