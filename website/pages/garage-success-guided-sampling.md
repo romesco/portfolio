@@ -293,11 +293,3 @@ step with the real episode ends in Figure 4.
 Evaluation bypasses SGS entirely: success is always measured on the fixed set, uniformly.</figcaption>
 </figure>
 ```
-
-## What the toy leaves out
-
-> The policy here is **not trained with PPO**. It is a per-cell competence map. When an episode succeeds,
-> competence rises along the cells the robot visited, scaled by the advantage $1 - V_i$ from a critic-like running
-> average. That keeps the one property SGS relies on: expected signal ∝ $p(1-p)$. Everything else on this page matches
-> production: the kernel expression, the ε floor, the softmax temperature, per-configuration ring buffers,
-> multinomial initial-condition sampling, and evaluation that bypasses SGS.
