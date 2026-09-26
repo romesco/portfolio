@@ -165,6 +165,12 @@
     }
     restart();
     $('hero-restart').onclick = restart;
+    // playback speed in simulated seconds per real second: 1x is real time
+    let heroSpeed = 1, heroAcc = 0;
+    document.querySelectorAll('[data-hero-speed]').forEach((btn, _, all) => (btn.onclick = () => {
+      heroSpeed = +btn.dataset.heroSpeed;
+      all.forEach((b) => b.setAttribute('aria-pressed', b === btn));
+    }));
 
     // inlay: histogram of tracked p-hat over goals, overlaid with the sampler curve
     const inlay = $('hero-inlay'), NB = 10;
@@ -233,8 +239,10 @@
       $('key-home').setAttribute('fill', neutralColor(0));
     };
     setRamp(); themeHooks.push(setRamp);
-    register($('fig-hero'), () => {
-      for (let i = 0; i < 3; i++) tr.tick(true);
+    register($('fig-hero'), (dt) => {
+      // cap the backlog at 2 s of sim per frame (enough headroom for 100x at 60 fps)
+      heroAcc = Math.min(heroAcc + dt * heroSpeed, 2);
+      while (heroAcc >= E.PHYS.dt) { tr.tick(true); heroAcc -= E.PHYS.dt; }
       if (tr.episodes > 36000) restart();
       grid.fill((i) => succColor(tr.monitor.rate[i]));
       grid.setDots(tr.probs);
@@ -245,33 +253,41 @@
   })();
 
   // ============================================================ 1 · robot
+  // Gaussian policy view: the PD law is the mean action, sigma the noise scale.
+  // "8 rollouts" runs independent samples from the same start, goal and gains.
   (function robot() {
     if (!$('fig-robot')) return;   // figure not on this page (e.g. held from the garage post)
     const grid = makeGrid($('robot-grid'), world);
     grid.fill(() => neutralColor(0));
     const W = world.cols;
-    const k = new Float64Array(world.rows * W);
+    const K = new Float64Array(world.rows * W);
     const rng = E.mulberry32(3);
     let goal = world.goalIndexOfCell[5 * W + 8];
-    let s, pts, speeds, prevSpeeds = [], done = 0, hold = 0, tried = 0, reached = 0, acc = 0;
+    let M = 1, bots = [], hold = 0, tried = 0, reached = 0, acc = 0, prevSpeeds = [];
+    const P = Object.assign({}, E.PHYS);
     const pathEl = el('polyline', { class: 'path' }, grid.paths);
-    const trail = el('polyline', { class: 'trail', style: 'opacity:.55' }, grid.paths);
     const ring = el('circle', { r: E.PHYS.goalTol, class: 'goal-ring' }, grid.paths);
+    const trailG = el('g', {}, grid.paths), botG = el('g', {}, grid.robots);
     const force = el('line', { class: 'force' }, grid.robots);
     const vel = el('line', { class: 'vel' }, grid.robots);
-    const dot = el('circle', { r: E.PHYS.radius, class: 'robot' }, grid.robots);
 
-    // speed plot
+    // speed plot: first rollout bold, the other samples faint
     const sp = $('robot-speed'), box = { l: 28, r: 6, t: 12, b: 18, w: 300, h: 120 };
     const S = scales(0, 8, 0, 3, box);
     axes(sp, S, box, [0, 2, 4, 6, 8], [0, 1, 2, 3], 't (s)', '|v|');
     const prevLine = el('polyline', { class: 'curve-muted' }, sp);
+    const sampleG = el('g', {}, sp);
     const line = el('polyline', { class: 'curve-accent' }, sp);
 
     function setK() {
       const v = +$('robot-k').value;
-      $('robot-k-out').textContent = fmt(v);
-      for (let c = 0; c < k.length; c++) k[c] = world.blocked[c] ? 0 : v;
+      $('robot-k-out').textContent = fmt(v, 1);
+      $('robot-kd').innerHTML = `K<sub>d</sub> = 2√K<sub>p</sub> = ${fmt(2 * Math.sqrt(v), 1)}`;
+      for (let c = 0; c < K.length; c++) K[c] = world.blocked[c] ? 0 : v;
+    }
+    function setSigma() {
+      P.noise = +$('robot-sigma').value;
+      $('robot-sigma-out').textContent = fmt(P.noise, 1) + (P.noise === E.PHYS.noise ? ' (training)' : P.noise === 0 ? ' (deterministic)' : '');
     }
     function drawPath() {
       let u = world.home, p = [];
@@ -284,52 +300,81 @@
       ring.setAttribute('cx', (g % W) + 0.5); ring.setAttribute('cy', ((g / W) | 0) + 0.5);
     }
     function start() {
-      s = E.newState(world, rng); pts = []; speeds = []; done = 0; hold = 0;
+      trailG.replaceChildren(); botG.replaceChildren(); sampleG.replaceChildren();
+      bots = Array.from({ length: M }, (_, j) => ({
+        s: E.newState(world, rng), pts: [], speeds: [], done: 0,
+        trail: el('polyline', { class: 'trail', style: `opacity:${M > 1 ? 0.4 : 0.55}` }, trailG),
+        dot: el('circle', { r: E.PHYS.radius * (M > 1 ? 0.8 : 1), class: 'robot' }, botG),
+        sline: j > 0 ? el('polyline', { class: 'curve-accent', style: 'stroke-width:1;opacity:.3' }, sampleG) : null,
+      }));
+      hold = 0;
       $('robot-status').textContent = 'running';
     }
-    setK(); drawPath(); start();
+    // debug: ?rollouts=8 opens in the fan view (review screenshots)
+    if (+new URLSearchParams(location.search).get('rollouts') > 1) {
+      M = 8; document.querySelectorAll('[data-robot-n]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.robotN === '8'));
+    }
+    setK(); setSigma(); drawPath(); start();
     $('robot-k').oninput = setK;
+    $('robot-sigma').oninput = setSigma;
+    document.querySelectorAll('[data-robot-n]').forEach((btn, _, all) => (btn.onclick = () => {
+      M = +btn.dataset.robotN;
+      all.forEach((b) => b.setAttribute('aria-pressed', b === btn));
+      prevSpeeds = []; start();
+    }));
     $('robot-grid').addEventListener('click', (e) => {
       const c = grid.cellAt(e);
       if (c >= 0 && world.goalIndexOfCell[c] >= 0) { goal = world.goalIndexOfCell[c]; tried = reached = 0; prevSpeeds = []; drawPath(); start(); }
     });
     $('robot-grid').style.cursor = 'crosshair';
 
+    const toLine = (a) => { let q = ''; for (let j = 0; j < a.length; j += 2) q += fmt(S.x(a[j]), 1) + ',' + fmt(S.y(Math.min(3, a[j + 1])), 1) + ' '; return q; };
     register($('fig-robot'), (dt) => {
-      if (done) {
+      const allDone = bots.every((b) => b.done);
+      if (allDone) {
         hold -= dt;
-        if (hold <= 0) { prevSpeeds = speeds; start(); }
+        if (hold <= 0) { prevSpeeds = bots[0].speeds; start(); }
         return;
       }
       acc += dt * 1.5;
-      const P = E.PHYS, g = world.goals[goal];
+      const g = world.goals[goal];
       const gx = (g % W) + 0.5, gy = ((g / W) | 0) + 0.5;
-      while (acc >= P.dt && !done) {
+      while (acc >= P.dt) {
         acc -= P.dt;
-        const [ax, ay] = E.policyAccel(world, k, goal, s, rng);
-        E.integrate(world, s, ax, ay);
-        s.t += P.dt;
-        pts.push(s.x, s.y); speeds.push(s.t, Math.hypot(s.vx, s.vy));
-        if (Math.hypot(s.x - gx, s.y - gy) < P.goalTol) done = 1;
-        else if (s.t >= P.horizon) done = 2;
+        for (const b of bots) {
+          if (b.done) continue;
+          const s = b.s;
+          const [ax, ay] = E.policyAccel(world, K, goal, s, rng, P);
+          E.integrate(world, s, ax, ay);
+          s.t += P.dt;
+          b.pts.push(s.x, s.y); b.speeds.push(s.t, Math.hypot(s.vx, s.vy));
+          if (Math.hypot(s.x - gx, s.y - gy) < P.goalTol) b.done = 1;
+          else if (s.t >= P.horizon) b.done = 2;
+          if (b.done) { tried++; if (b.done === 1) reached++; b.dot.setAttribute('opacity', b.done === 1 ? 1 : 0.35); }
+        }
       }
-      if (done) {
-        tried++; if (done === 1) reached++;
-        hold = 0.9;
-        $('robot-status').textContent = done === 1 ? `reached in ${fmt(s.t, 1)} s` : 'timed out';
-        $('robot-rec').textContent = `${reached} / ${tried}`;
+      const nOk = bots.filter((b) => b.done === 1).length, nOut = bots.filter((b) => b.done === 2).length;
+      if (bots.every((b) => b.done)) {
+        hold = 1.1;
+        $('robot-status').textContent = M === 1
+          ? (nOk ? `reached in ${fmt(bots[0].s.t, 1)} s` : 'timed out')
+          : `${nOk} / ${M} reached · ${nOut} timed out`;
+      } else if (M > 1) $('robot-status').textContent = `running · ${nOk} / ${M} reached`;
+      $('robot-rec').textContent = `${reached} / ${tried}`;
+      for (const b of bots) {
+        let str = '';
+        for (let j = 0; j < b.pts.length; j += 2) str += fmt(b.pts[j], 2) + ',' + fmt(b.pts[j + 1], 2) + ' ';
+        b.trail.setAttribute('points', str);
+        b.dot.setAttribute('cx', b.s.x); b.dot.setAttribute('cy', b.s.y);
+        if (b.sline) b.sline.setAttribute('points', toLine(b.speeds));
       }
-      let str = '';
-      for (let j = 0; j < pts.length; j += 2) str += fmt(pts[j], 2) + ',' + fmt(pts[j + 1], 2) + ' ';
-      trail.setAttribute('points', str);
-      dot.setAttribute('cx', s.x); dot.setAttribute('cy', s.y);
+      const s = bots[0].s;
       force.setAttribute('x1', s.x); force.setAttribute('y1', s.y);
       force.setAttribute('x2', s.x + s.ax * 0.09); force.setAttribute('y2', s.y + s.ay * 0.09);
       vel.setAttribute('x1', s.x); vel.setAttribute('y1', s.y);
       vel.setAttribute('x2', s.x + s.vx * 0.35); vel.setAttribute('y2', s.y + s.vy * 0.35);
-      const toLine = (a) => { let q = ''; for (let j = 0; j < a.length; j += 2) q += fmt(S.x(a[j]), 1) + ',' + fmt(S.y(Math.min(3, a[j + 1])), 1) + ' '; return q; };
-      line.setAttribute('points', toLine(speeds));
-      prevLine.setAttribute('points', toLine(prevSpeeds));
+      line.setAttribute('points', toLine(bots[0].speeds));
+      prevLine.setAttribute('points', M === 1 ? toLine(prevSpeeds) : '');
       $('robot-t').textContent = fmt(s.t, 1) + ' s';
       $('robot-v').textContent = fmt(Math.hypot(s.vx, s.vy));
     });
@@ -343,8 +388,8 @@
     const maxL = Math.max(...world.pathLen);
     const paint = () => grid.fill((i) => neutralColor(world.pathLen[i] / maxL));
     paint(); themeHooks.push(paint);
-    const k0 = new Float64Array(world.rows * W);
-    for (let c = 0; c < k0.length; c++) k0[c] = world.blocked[c] ? 0 : E.LEARN.k0;
+    const k0 = new Float64Array(world.rows * W);   // initial gains Kp, before any training
+    for (let c = 0; c < k0.length; c++) k0[c] = world.blocked[c] ? 0 : E.LEARN.K0;
     const pathEl = el('polyline', { class: 'path' }, grid.top);
     const ghostG = el('g', {}, grid.paths);
     const hl = el('rect', { width: 1, height: 1, class: 'hl', visibility: 'hidden' }, grid.top);
@@ -482,17 +527,23 @@
     el('path', { d: `M${xl},${y + bh + 3} V${y + bh + 34} H${xf} V${y + bh + 5}`, class: 'loop-edge' }, svg);
     el('text', { x: VBW / 2, y: y + bh + 30, 'font-size': 11, 'text-anchor': 'middle' }, svg).textContent =
       'rollout: the policy acts until success or timeout (other envs keep running in parallel)';
-    nodes.forEach((n) => (n.el = n.g));
-    let busy = false;
-    return function pulse() {
-      if (busy) return;
-      busy = true;
-      nodes.forEach((n, j) => {
-        setTimeout(() => n.g.classList.add('on'), j * 110);
-        setTimeout(() => n.g.classList.remove('on'), j * 110 + 260);
-      });
-      setTimeout(() => (busy = false), nodes.length * 110 + 300);
-    };
+    const ret = svg.querySelectorAll('.loop-edge');
+    const retEdge = ret[ret.length - 1];
+    retEdge.classList.add('loop-return');
+
+    // One slow wave every PERIOD seconds, driven by the figure clock (so it pauses
+    // off-screen): each box fades in and bumps up, holds, then settles back; the
+    // rollout edge lights last. The wave takes ~8 s, then the diagram rests.
+    const PERIOD = 20, STAGGER = 1.0, HOLD = 1.6;
+    let t = 0;
+    register($('fig-loop'), (dt) => {
+      t += dt;
+      if (t >= PERIOD) t -= PERIOD;
+      nodes.forEach((n, j) => n.g.classList.toggle('on', t >= j * STAGGER && t < j * STAGGER + HOLD));
+      const jr = nodes.length;
+      retEdge.classList.toggle('on', t >= jr * STAGGER && t < jr * STAGGER + HOLD);
+    });
+    return () => {};   // episode ends no longer drive the diagram
   })();
 
   // ============================================================ 4 · monitor + 5 · kernel (shared live trainer)

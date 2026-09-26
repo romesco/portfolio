@@ -87,12 +87,16 @@ button.btn[aria-pressed="true"] { background: var(--fg); color: var(--bg); borde
 .curve-muted { fill: none; stroke: var(--fg-faint); stroke-width: 1.5; stroke-dasharray: 4 3; }
 .bandrect { fill: var(--band); opacity: 0.22; }
 .hl { fill: none; stroke: var(--fg); stroke-width: 0.07; }
-.loop-node rect { fill: var(--panel); stroke: var(--rule); stroke-width: 1; rx: 6; transition: fill 200ms, stroke 200ms; }
+.loop-node { transform-box: fill-box; transform-origin: 50% 50%; transition: transform 800ms cubic-bezier(0.3, 1.5, 0.5, 1); }
+.loop-node.on { transform: translateY(-6px); }
+.loop-node rect { fill: var(--panel); stroke: var(--rule); stroke-width: 1; rx: 6; transition: fill 800ms ease-in-out, stroke 800ms ease-in-out; }
+.loop-return { transition: stroke 800ms ease-in-out, stroke-width 800ms ease-in-out; }
+.loop-return.on { stroke: var(--band); stroke-width: 2.2; }
 .loop-node text { font-size: 12px; fill: var(--fg); text-anchor: middle; dominant-baseline: central; }
 .loop-node .sub { font-family: var(--mono); font-size: 9.5px; fill: var(--fg-muted); }
 .loop-node.on rect { fill: var(--band); stroke: var(--fg-faint); }
 .loop-edge { fill: none; stroke: var(--fg-faint); stroke-width: 1.2; marker-end: url(#arrow-muted); }
-@media (prefers-reduced-motion: reduce) { .loop-node rect { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .loop-node, .loop-node rect, .loop-return { transition: none; } .loop-node.on { transform: none; } }
 
 /* scale small multiples */
 .scale-wrap { overflow-x: auto; }

@@ -5,13 +5,13 @@ authors:
   - Rosario Scalise
 head: |
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
-  <link rel="stylesheet" href="./garage-assets/success-guided-sampling/viz.css?v=47cebe45">
+  <link rel="stylesheet" href="./garage-assets/success-guided-sampling/viz.css?v=2f325e1a">
 scripts: |
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
     onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
-  <script src="./garage-assets/success-guided-sampling/sgs-engine.js?v=d6cb7404"></script>
-  <script src="./garage-assets/success-guided-sampling/viz.js?v=c2d478f9"></script>
+  <script src="./garage-assets/success-guided-sampling/sgs-engine.js?v=d5a22339"></script>
+  <script src="./garage-assets/success-guided-sampling/viz.js?v=6c7227f7"></script>
 ---
 
 # Success Guided Sampling
@@ -73,7 +73,12 @@ scripts: |
           <div class="key-detail" role="tooltip">48 parallel copies of the point mass (§1), all acting under the same policy $\pi$; only their sampled goals differ. The line behind each is its last ~3 s of motion.</div>
         </div>
       </div>
-      <div class="controls"><button class="btn" id="hero-restart">restart</button></div>
+      <div class="controls">
+        <button class="btn" id="hero-restart">reset</button>
+        <button class="btn" data-hero-speed="1" aria-pressed="true">1×</button>
+        <button class="btn" data-hero-speed="10" aria-pressed="false">10×</button>
+        <button class="btn" data-hero-speed="100" aria-pressed="false">100×</button>
+      </div>
     </div>
   </div>
   <figcaption class="wide"><strong>Figure 0.</strong> SGS training live: 48 parallel robots, all running the same policy $\pi$.
@@ -95,9 +100,21 @@ does.
 The task is to *reach the cell within 8 seconds*. The reward is sparse and the policy gets credit only when the
 robot arrives.
 
-In this toy, the policy is summarized by a competence *k*, stored per cell and learned during training. At
-*k* = 1 the policy follows the shortest path cleanly; at *k* = 0 its force is a random walk. Here one
-slider sets *k* everywhere. Click any cell to set a goal.
+In this toy, the policy is a **gain-scheduled PD controller** with exploration noise:
+
+$$a = K_p\,(x_{\text{wp}} - x) - K_d\,v + \sigma n, \qquad K_d = 2\sqrt{K_p},$$
+
+where $x_{\text{wp}}$ is the next waypoint on the shortest path to the goal and $K_d$ keeps the loop critically
+damped. The proportional gain $K_p$ is scheduled by region: each grid cell has its own, and training tunes them.
+The last term is exploration noise: $n$ is a smooth random signal (correlated over time) and $\sigma$ sets its
+size. Read as an RL policy, this is a **Gaussian policy**: the PD law is the mean action and $\sigma$ controls how
+stochastic it is.
+
+Figure 1 lets you try both knobs; here one setting applies to every cell. The **gain** slider sets $K_p$: a low
+gain tracks the path weakly and slowly, so the noise wins and far goals time out, while a high gain tracks it
+stiffly and fast. The **noise** slider sets $\sigma$: at 0 the policy is deterministic, and larger values make
+it wander more (training uses $\sigma = 3$). Switch to **8 rollouts** to run eight robots with the same gain
+and noise level side by side and see how widely their outcomes spread. Click any cell to set a goal.
 
 ```{=web}
 <figure class="fig" id="fig-robot">
@@ -115,7 +132,14 @@ slider sets *k* everywhere. Click any cell to set a goal.
         <div class="stat"><b id="robot-rec">0 / 0</b>reached / tried</div>
       </div>
       <div class="controls">
-        <label>competence k <input type="range" id="robot-k" min="0" max="1" step="0.01" value="0.6"><output id="robot-k-out">0.60</output></label>
+        <label><span>gain K<sub>p</sub></span> <input type="range" id="robot-k" min="0.5" max="25" step="0.5" value="6"><output id="robot-k-out">6.0</output></label><span id="robot-kd"></span>
+      </div>
+      <div class="controls">
+        <label><span>noise σ</span> <input type="range" id="robot-sigma" min="0" max="8" step="0.5" value="3"><output id="robot-sigma-out" style="min-width:8em">3.0</output></label>
+      </div>
+      <div class="controls">
+        <button class="btn" data-robot-n="1" aria-pressed="true">1 rollout</button>
+        <button class="btn" data-robot-n="8" aria-pressed="false">8 rollouts</button>
       </div>
       <div class="legend">
         <span><i style="background:var(--prob)"></i>force (action)</span>
@@ -125,7 +149,8 @@ slider sets *k* everywhere. Click any cell to set a goal.
     </div>
   </div>
   <figcaption><strong>Figure 1.</strong> Double-integrator dynamics: $\dot v = a - c\,v$, with $\|a\| \le a_{\max}$ and inelastic bounces off walls.
-The speed trace shows the robot accelerating, braking at corners, and settling near the goal.</figcaption>
+The speed trace shows the robot accelerating, braking at corners, and settling near the goal; with 8 rollouts,
+the first robot&#39;s trace is bold and the other samples are faint.</figcaption>
 </figure>
 ```
 
@@ -282,8 +307,8 @@ $\exp(\text{entropy})$. These sliders only change this figure; they do not affec
 
 Whenever any parallel environment finishes an episode, SGS records the outcome against
 the configuration it had sampled, rescores every configuration, draws a new one, and hands it to the environment.
-There is no curriculum schedule, no difficulty labels, and no task-specific tuning. The boxes below light up in
-step with the real episode ends in Figure 4.
+There is no curriculum schedule, no difficulty labels, and no task-specific tuning. The diagram below walks through
+one pass of the loop every 20 seconds; during training, a pass runs every time any environment finishes an episode.
 
 ```{=web}
 <figure class="fig" id="fig-loop">

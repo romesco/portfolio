@@ -128,12 +128,11 @@
     dt: 0.05,
     amax: 6.0,      // max |acceleration|
     drag: 0.8,      // linear drag coefficient (1/s)
-    vmax: 2.6,      // controller's cruise speed
     radius: 0.18,
     horizon: 8.0,   // seconds per episode
     goalTol: 0.32,  // success radius around goal center
     restitution: 0.35,
-    vfloor: 0.1,    // cruise speed at k=0, as a fraction of vmax
+    Kmin: 0.5,      // gain used off-grid (never reached in practice)
     noise: 3.0,     // OU exploration noise scale (acceleration units)
   };
 
@@ -171,36 +170,31 @@
   }
 
   // ---------------------------------------------------------------- policy
-  // "Policy" = path-following velocity controller blended with exploration
-  // noise. Per-cell competence k[c] in [0,1] sets the blend in that cell:
-  // k=1 -> clean controller, k=0 -> an Ornstein-Uhlenbeck random walk.
-  // Far goals must cross many cells, so success decays with path length and
-  // wall corners (momentum overshoot): difficulty emerges from dynamics.
-  function policyAccel(w, k, goalIdx, s, rng, P) {
+  // Policy = gain-scheduled PD controller + exploration noise:
+  //   a = Kp (x_wp - x) - Kd v + sigma n,    Kd = 2 sqrt(Kp)  (critically damped)
+  // x_wp is the next cell center on the shortest path to the goal (the goal
+  // center once inside the goal cell). Kp is scheduled by region: K[c] is the
+  // gain used while the robot is in cell c. n is an Ornstein-Uhlenbeck process
+  // (smooth exploration noise) with fixed scale sigma. Low gain: weak, slow
+  // tracking that the noise swamps, so far goals time out. High gain: stiff,
+  // fast tracking (the force cap still applies). Training tunes K region by
+  // region; difficulty emerges from path length, walls, and momentum.
+  function policyAccel(w, K, goalIdx, s, rng, P) {
     P = P || PHYS;
     const u = cellOf(w, s.x, s.y);
     const g = w.goals[goalIdx];
-    const gx = (g % w.cols) + 0.5, gy = ((g / w.cols) | 0) + 0.5;
     let tx, ty;
-    if (u === g) { tx = gx; ty = gy; }
+    if (u === g) { tx = (g % w.cols) + 0.5; ty = ((g / w.cols) | 0) + 0.5; }
     else {
       const v = nextCell(w, goalIdx, u);
       tx = (v % w.cols) + 0.5; ty = ((v / w.cols) | 0) + 0.5;
     }
-    let dx = tx - s.x, dy = ty - s.y;
-    const dn = Math.hypot(dx, dy) || 1;
-    // slow down when close to the final goal
-    const dg = Math.hypot(gx - s.x, gy - s.y);
-    const kc = u >= 0 ? k[u] : 0;
-    // competence sets how fast the policy dares to move through this cell
-    const speed = Math.min(P.vmax * (P.vfloor + (1 - P.vfloor) * kc), 1.6 * dg + 0.3);
-    const vdx = (dx / dn) * speed, vdy = (dy / dn) * speed;
-    const cx = 4.0 * (vdx - s.vx), cy = 4.0 * (vdy - s.vy);
+    const Kp = u >= 0 ? K[u] : P.Kmin, Kd = 2 * Math.sqrt(Kp);
     // OU exploration noise
     const th = 1.2, sig = P.noise;
     s.nx += -th * s.nx * P.dt + sig * Math.sqrt(P.dt) * rng.normal();
     s.ny += -th * s.ny * P.dt + sig * Math.sqrt(P.dt) * rng.normal();
-    return [kc * cx + (1 - kc) * s.nx, kc * cy + (1 - kc) * s.ny];
+    return [Kp * (tx - s.x) - Kd * s.vx + s.nx, Kp * (ty - s.y) - Kd * s.vy + s.ny];
   }
 
   function newState(w, rng) {
@@ -269,10 +263,10 @@
 
   // ---------------------------------------------------------------- trainer
   const LEARN = {
-    k0: 0.25,        // initial competence everywhere
-    alpha: 0.002,    // step size of the advantage-weighted update
+    K0: 1.5,         // initial PD gain Kp in every region
+    alpha: 0.001,    // step size of the advantage-weighted update
     spread: 0.35,    // fraction shared with 4-neighbours (generalization)
-    kmax: 0.97,
+    Kmax: 25,        // gain ceiling the update approaches
     beta: 0.1,       // critic EMA rate for the per-configuration baseline V_i
   };
 
@@ -287,8 +281,8 @@
       this.E = opts.envs || 64;
       this.rng = mulberry32(opts.seed || 1);
       const w = this.world;
-      this.k = new Float64Array(w.rows * w.cols).fill(this.learn.k0);
-      for (let c = 0; c < this.k.length; c++) if (w.blocked[c]) this.k[c] = 0;
+      this.K = new Float64Array(w.rows * w.cols).fill(this.learn.K0);   // Kp per region
+      for (let c = 0; c < this.K.length; c++) if (w.blocked[c]) this.K[c] = 0;
       this.monitor = new Monitor(w.N, this.cfg.H);
       this.V = new Float64Array(w.N);   // learner's critic: EMA of outcomes
       this.probs = new Float64Array(w.N);
@@ -322,7 +316,7 @@
 
     stepEnv(env) {
       const w = this.world, P = this.P, s = env.s;
-      const [ax, ay] = policyAccel(w, this.k, env.goal, s, this.rng, P);
+      const [ax, ay] = policyAccel(w, this.K, env.goal, s, this.rng, P);
       integrate(w, s, ax, ay, P);
       s.t += P.dt;
       const u = cellOf(w, s.x, s.y);
@@ -340,19 +334,19 @@
       this.V[i] += this.learn.beta * (o - this.V[i]);
       this.monitor.update(i, o);
       this.episodes++; this.successes += o;
-      // Advantage-weighted update: only successes push competence up, scaled
+      // Advantage-weighted update: only successes raise the gains, scaled
       // by how surprising they were (1 - baseline).
       const adv = o - baseline;
       if (o === 1 && adv > 0) {
         this.signal += adv;
-        const L = this.learn, w = this.world, k = this.k;
+        const L = this.learn, w = this.world, K = this.K;
         for (const c of env.visited) {
-          k[c] += L.alpha * adv * (L.kmax - k[c]);
+          K[c] += L.alpha * adv * (L.Kmax - K[c]);
           const cc = c % w.cols, cr = (c / w.cols) | 0;
           for (const [dc, dr] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
             if (!passable(w, cc + dc, cr + dr)) continue;
             const n = (cr + dr) * w.cols + cc + dc;
-            k[n] += L.spread * L.alpha * adv * (L.kmax - k[n]);
+            K[n] += L.spread * L.alpha * adv * (L.Kmax - K[n]);
           }
         }
       }
@@ -387,7 +381,7 @@
           const g = w.goals[i];
           const gx = (g % w.cols) + 0.5, gy = ((g / w.cols) | 0) + 0.5;
           while (s.t < this.P.horizon) {
-            const [ax, ay] = policyAccel(w, this.k, i, s, rng, this.P);
+            const [ax, ay] = policyAccel(w, this.K, i, s, rng, this.P);
             integrate(w, s, ax, ay, this.P);
             s.t += this.P.dt;
             if (Math.hypot(s.x - gx, s.y - gy) < this.P.goalTol) { succ++; break; }
@@ -400,7 +394,7 @@
   }
 
   // One standalone rollout (used by the single-robot figure).
-  function rollout(w, k, goalIdx, rng, P) {
+  function rollout(w, K, goalIdx, rng, P) {
     P = P || PHYS;
     const s = newState(w, rng);
     const g = w.goals[goalIdx];
@@ -408,7 +402,7 @@
     const pts = [s.x, s.y];
     let ok = 0;
     while (s.t < P.horizon) {
-      const [ax, ay] = policyAccel(w, k, goalIdx, s, rng, P);
+      const [ax, ay] = policyAccel(w, K, goalIdx, s, rng, P);
       integrate(w, s, ax, ay, P);
       s.t += P.dt;
       pts.push(s.x, s.y);
