@@ -8,5 +8,6 @@ the open. Some of these double as papers.
 
 ## Posts
 
+- [Success Guided Sampling](/garage-success-guided-sampling) · *[WIP]* an interactive explainer of how SGS picks initial conditions on the frontier of capability, on a planar point-mass gridworld.
 - [Compression via Continuous Optimization is Intelligence](/garage-compression-is-intelligence) · *[WIP]* an interactive position paper on compression as an operational definition of intelligence.
 - [Forget about Pre-training, Mid-Training, and Post-Training](/garage-forget-training-phases) · *[stub]* rethinking the pre / mid / post-training taxonomy as one continuous process.
