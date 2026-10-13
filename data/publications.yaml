@@ -39,6 +39,41 @@
 - year: 2026
   type: preprint
   authors:
+    - {name: "O. Zhang", affil: {name: "NVIDIA", favicon: "/img/nvidia.png", url: "https://zoctipus.github.io/"}}
+    - I. Akinola
+    - {name: "R. Scalise", me: true}
+    - M. G. Castro
+    - P. Yin
+    - T. Widmer
+    - M. Macklin
+    - "//"
+    - C. Amevor
+    - D. Turpin
+    - D. Van Gelder
+    - J. Carius
+    - A. Handa
+    - G. State
+    - Y. Guo
+    - Y. Narang
+  featured: true
+  title: "AlphaNIST: Emergent Assembly Skills from Binary Task Rewards"
+  short: AlphaNIST
+  tldr: "A binary success reward alone teaches one policy to assemble the full NIST board, with emergent regrasping and sequencing."
+  venue: Preprint
+  media:
+    - src: https://alpha-nist.github.io/assets/k10-strategies/selected-episodes-fixed.mp4
+      poster: https://alpha-nist.github.io/assets/k10-strategies/poster-fixed.jpg
+      label: Ten-part assembly
+      autoplay: true
+    - src: https://alpha-nist.github.io/assets/research/k1-starting-states.mp4
+      poster: https://alpha-nist.github.io/assets/research/k1-starting-states-poster.jpg
+      label: Single-part tasks
+      autoplay: true
+  links: {arxiv: "2610.13354", project: "https://alpha-nist.github.io"}
+
+- year: 2026
+  type: preprint
+  authors:
     - {name: "O. Zhang", equal: true, affil: {name: "NVIDIA", favicon: "/img/nvidia.png", url: "https://zoctipus.github.io/"}}
     - {name: "M. G. Castro", equal: true}
     - {name: "P. Yin", equal: true}
