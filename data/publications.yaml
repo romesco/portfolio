@@ -70,31 +70,6 @@
       autoplay: true
   links: {arxiv: "2610.13354", project: "https://alpha-nist.github.io"}
 
-- year: 2026
-  type: preprint
-  authors:
-    - {name: "O. Zhang", equal: true, affil: {name: "NVIDIA", favicon: "/img/nvidia.png", url: "https://zoctipus.github.io/"}}
-    - {name: "M. G. Castro", equal: true}
-    - {name: "P. Yin", equal: true}
-    - A. Gupta
-    - {name: "R. Scalise", me: true, equal: true, dagger: true}
-    - {name: "B. Boots", dagger: true}
-  featured: true
-  title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
-  short: SGS
-  tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M parallel rollouts."
-  venue: Preprint
-  media:
-    - src: https://sgs-rl.github.io/manipulation.mp4
-      poster: https://sgs-rl.github.io/manipulation-poster.jpg
-      label: Manipulation
-      autoplay: true
-    - src: https://sgs-rl.github.io/locomotion.mp4
-      poster: https://sgs-rl.github.io/poster.jpg
-      label: Locomotion
-      autoplay: true
-  links: {project: "https://sgs-rl.github.io"}
-
 - year: 2025
   type: preprint
   authors:
@@ -181,6 +156,33 @@
 
 # ---------- Conferences ----------
 #
+- year: 2026
+  type: conference
+  authors:
+    - {name: "O. Zhang", equal: true, affil: {name: "NVIDIA", favicon: "/img/nvidia.png", url: "https://zoctipus.github.io/"}}
+    - {name: "M. G. Castro", equal: true}
+    - {name: "P. Yin", equal: true}
+    - A. Gupta
+    - {name: "R. Scalise", me: true, equal: true, dagger: true}
+    - {name: "B. Boots", dagger: true}
+  featured: true
+  title: "A Balanced Data Diet: Addressing the Bottleneck in Mega-Scale RL for Robot Control"
+  short: SGS
+  tldr: "Balancing the data mix, not just scaling, enables effective learning with >1M parallel rollouts."
+  venue: CoRL
+  venue_full: 2026 Conference on Robot Learning (CoRL)
+  media:
+    - src: https://sgs-rl.github.io/manipulation.mp4
+      poster: https://sgs-rl.github.io/manipulation-poster.jpg
+      label: Manipulation
+      autoplay: true
+    - src: https://sgs-rl.github.io/locomotion.mp4
+      poster: https://sgs-rl.github.io/poster.jpg
+      label: Locomotion
+      autoplay: true
+  links: {project: "https://sgs-rl.github.io"}
+
+
 - year: 2025
   type: conference
   authors:
