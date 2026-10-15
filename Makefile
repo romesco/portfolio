@@ -1,4 +1,4 @@
-.PHONY: all cv site paper serve watch test clean publish-cv
+.PHONY: all cv site paper selected-works serve watch test clean publish-cv
 
 all: cv site
 
@@ -26,6 +26,16 @@ paper: site
 	else \
 		echo ">> generated $$tex (no tectonic/latexmk here; upload to arXiv or compile on the host)"; \
 	fi
+
+# Half-page "selected works" handout (cv/selected-works.pdf), styled like the
+# site, from the homepage's featured works. See scripts/selected_works_pdf.py.
+FONT_DIR := $(HOME)/.cache/selected-works-fonts
+selected-works:
+	@mkdir -p $(FONT_DIR); for s in regular bold italic bolditalic; do \
+		f=$(FONT_DIR)/texgyrepagella-$$s.otf; [ -f $$f ] || \
+		curl -sfL -o $$f https://mirrors.ctan.org/fonts/tex-gyre/opentype/texgyrepagella-$$s.otf; \
+	done
+	uv run --with typst python scripts/selected_works_pdf.py
 
 serve: site
 	cd website && python3 -m http.server 8000 --bind 127.0.0.1
