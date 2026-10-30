@@ -35,6 +35,17 @@
 handle: rosarioscalise
 
 posts:
+  - at: 2026-10-30 03:00:00
+    text: "I will miss you Seattle 🌲🌧️☕🏔️🐟📻"
+    chip: /img/kexp.svg
+    chip_alt: "KEXP 90.3 FM, Seattle"
+    repost:
+      source: youtube
+      author: "KEXP"
+      url: https://www.youtube.com/@kexp   # link back to the channel
+      video: https://www.youtube.com/watch?v=R65wV3K-dw4
+      text: "Mac DeMarco - Chamber of Reflection (Live on KEXP)"
+
   - at: 2026-08-13 16:40:24
     text: "I highly recommend all ML/AI researchers watch this video to appreciate how we got to where we are before proceeding!"
     repost:

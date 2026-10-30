@@ -66,7 +66,7 @@
                 <a class="repost-name repost-link" href="{{ p.repost.url }}">{{ p.repost.author }}</a>
               </span>
               <div class="yt-embed" data-embed="{{ p.repost.embed_src }}">
-                <img class="yt-thumb" src="{{ p.repost.thumb }}" alt="" loading="lazy">
+                <img class="yt-thumb" src="{{ p.repost.thumb }}" alt="" loading="lazy" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src=this.src.replace('maxresdefault','hqdefault')}">
                 <a class="yt-cover" href="{{ p.repost.video_url }}" aria-label="Watch on YouTube" title="Watch on YouTube"><span class="yt-play" aria-hidden="true"></span></a>
               </div>
               {% if p.repost.html %}<div class="repost-text">{{ p.repost.html }}</div>{% endif %}
