@@ -555,7 +555,10 @@ def load_twitter() -> tuple[str, list[dict]]:
                 if vid:
                     embed_src = (f"https://www.youtube.com/embed/{vid}"
                                  f"?start={start}&autoplay=1&mute=1&rel=0&playsinline=1")
-                    thumb = f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg"
+                    # `thumb:` overrides for videos with no maxres cover (YouTube
+                    # then serves a gray 120x90 placeholder, not an error).
+                    thumb = str(rp.get("thumb") or
+                                f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg")
                     video_url = f"https://www.youtube.com/watch?v={vid}&t={start}s"
             repost = {
                 "author": str(rp.get("author") or ""),

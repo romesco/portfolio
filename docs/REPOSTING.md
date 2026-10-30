@@ -81,7 +81,11 @@ The card (`source: youtube`): our chrome (YouTube glyph + channel name linking
 for an inline `<iframe>` that autoplays muted from `start` (the facade JS lives
 in `twitter.html.j2`); on mouseleave it restores the thumbnail. Clicking the
 cover opens the video on YouTube at the timestamp. YAML fields: `url` = channel,
-`video` = watch URL, `start` = seconds, `text` = title. Sizing reuses the shared
+`video` = watch URL, `start` = seconds, `text` = title. Optional `thumb` overrides
+the cover: some videos have no `maxresdefault.jpg`, and YouTube answers with a
+gray 120x90 placeholder (not an error), so set `thumb:` to the video's
+`sddefault.jpg` (the card's `object-fit: cover` crops its letterbox bars). The
+template also swaps to `sddefault` at runtime when it sees that placeholder. Sizing reuses the shared
 `--rp-aspect` / `--rp-max-h` knobs on `.repost-youtube` (default 16:9, 300px cap).
 
 ## Adding non-Instagram reposts

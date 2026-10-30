@@ -44,6 +44,7 @@ posts:
       author: "KEXP"
       url: https://www.youtube.com/@kexp   # link back to the channel
       video: https://www.youtube.com/watch?v=R65wV3K-dw4
+      thumb: https://i.ytimg.com/vi/R65wV3K-dw4/sddefault.jpg   # no maxres cover for this one
       text: "Mac DeMarco - Chamber of Reflection (Live on KEXP)"
 
   - at: 2026-08-13 16:40:24
